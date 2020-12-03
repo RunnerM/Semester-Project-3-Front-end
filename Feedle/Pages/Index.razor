@@ -1,0 +1,33 @@
+﻿@page "/"
+@using Feedle.Data
+@using Feedle.Models
+@using System.Text.Json
+@inject INewsService NewsService;
+
+<p>
+    <u>in development</u>
+</p>
+@if (newsString == null)
+{
+    <label>loading...</label>
+}
+else if (!newsList.Any())
+{
+    <label>there are no news</label>
+}
+else
+{
+    <p>@newsString</p>
+}
+
+@code
+{
+    IList<News> newsList;
+    string newsString;
+
+    protected override async Task OnInitializedAsync()
+    {
+        newsList = await NewsService.GetNewsAsync();
+        newsString = JsonSerializer.Serialize(newsList);
+    }
+}

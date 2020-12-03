@@ -1,0 +1,46 @@
+﻿﻿@page "/Add"
+@using Feedle.Data
+@using Feedle.Models
+@inject INewsService NewsService
+@inject NavigationManager NavigationManager;
+
+<p><u>add news</u></p>
+<form>
+    <div class="form-row">
+        <div class="form-group col">
+            <label>Id</label>
+            <input class="form-control" placeholder="int" @bind="newsId">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <label>Title</label>
+            <input class="form-control" placeholder="string" @bind="newsTitle">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <label>Content</label>
+            <input class="form-control" placeholder="string" @bind="newsContent">
+        </div>
+    </div>
+    <button class="btn btn-outline-dark btn-sm" @onclick="addNews">Add news</button>
+    <label style="color: red">
+        <b>
+            <i>No validation available yet! Please fill in correctly!</i>
+        </b>
+    </label>
+</form>
+
+@code {
+    int? newsId;
+    string newsTitle;
+    string newsContent;
+
+    public async Task addNews()
+    {
+        News newNews = new News {id = (int) newsId, title = newsTitle, content = newsContent};
+        await NewsService.AddNewsAsync(newNews);
+    }
+
+}
