@@ -1,6 +1,6 @@
-﻿<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3 fixed-top">
+﻿<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 fixed-top">
     <div class="container">
-        <a class="navbar-brand text-light" asp-area="" asp-page="/Index">Top Menu</a>
+        <a class="navbar-brand text-dark" asp-area="" asp-page="/Index">Top Menu</a>
         <button class="navbar-toggler" @onclick="ToggleNavMenu" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -8,13 +8,13 @@
         <div class="@NavMenuCssClass navbar-collapse d-sm-inline-flex flex-sm-row-reverse" @onclick="CollapseNavMenu">
             <ul class="navbar-nav flex-grow-1">
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="" Match="NavLinkMatch.All">Home</a>
+                    <a class="nav-link text-dark" href="" Match="NavLinkMatch.All">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="counter">Counter</a>
+                    <a class="nav-link text-dark" href="counter">Counter</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="fetchdata">Fetch data</a>
+                    <a class="nav-link text-dark" href="fetchdata">Fetch data</a>
                 </li>
             </ul>
         </div>
