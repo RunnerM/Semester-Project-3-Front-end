@@ -93,6 +93,8 @@ body {
     top: 0.5rem;
 }
 
+
+/* Log in ********************************************************************/
 .form-signin {
     width: 100%;
     max-width: 330px;
@@ -106,4 +108,14 @@ body {
     margin-right: auto;
     margin-bottom: auto;
     margin-left: auto;
+}
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
 }
