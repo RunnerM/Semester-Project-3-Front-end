@@ -4,4 +4,9 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <None Include="wwwroot\extra\9742 feedle_RB_1.jpg" />
+      <None Include="wwwroot\extra\9742 feedle_RB_1.png" />
+    </ItemGroup>
+
 </Project>
