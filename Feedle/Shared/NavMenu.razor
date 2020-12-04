@@ -14,10 +14,17 @@
                     <a class="nav-link text-dark" href="" Match="NavLinkMatch.All">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="counter">Counter</a>
+                    <a class="nav-link text-dark" href="Test">Test</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" href="fetchdata">Fetch data</a>
+                <li class="nav-justified">
+                    <a class="btn btn-outline-primary btn-sm" href="">
+                        LOG IN
+                    </a>
+                </li>
+                <li class="nav-justified">
+                    <a class="btn btn-primary btn-sm" href="" @onclick="PerformLogout">
+                        LOG OUT
+                    </a>
                 </li>
             </ul>
         </div>
@@ -38,6 +45,10 @@
     void CollapseNavMenu()
     {
         collapseNavMenu = true;
+    }
+
+    private async Task PerformLogout()
+    {
     }
 
 }
