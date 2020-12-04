@@ -12,5 +12,6 @@ namespace Feedle.Models
         public string DisplayedUserName { get; set; }
         public List<Post> UserPosts { get; set; }
         public List<UserConversation> UserConversations { get; set; }
+        public string SecurityLevel { get; set; }
     }
 }

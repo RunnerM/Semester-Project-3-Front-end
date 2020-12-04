@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Feedle.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Feedle.Data;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Feedle
 {
@@ -29,7 +32,16 @@ namespace Feedle
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<INewsService, CloudNewsService>();
-            
+            services.AddScoped<IUserService, CloudUserService>();
+            services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("User", a =>
+                    a.RequireAuthenticatedUser().RequireClaim("Level",  "user"));
+                options.AddPolicy("Admin", a =>
+                    a.RequireAuthenticatedUser().RequireClaim("Level",  "admin"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
