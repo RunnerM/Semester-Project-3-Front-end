@@ -26,6 +26,14 @@
                         SIGN UP
                     </a>
                 </li>
+                <AuthorizeView Policy="Admin">
+                   
+                        <li class="nav-item">
+                            <a class="nav-link text-dark">TestAuth</a>
+                        </li>
+                    
+                </AuthorizeView>
+
             </ul>
         </div>
     </div>
@@ -46,4 +54,5 @@
     {
         collapseNavMenu = true;
     }
+
 }

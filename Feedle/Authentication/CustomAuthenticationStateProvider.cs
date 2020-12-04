@@ -62,7 +62,8 @@ namespace Feedle.Authentication
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                Console.WriteLine(e.Message);
+                
             }
 
             NotifyAuthenticationStateChanged(
@@ -81,7 +82,7 @@ namespace Feedle.Authentication
         {
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Name, user.UserName));
-            claims.Add(new Claim("Level", user.SecurityLevel));
+            claims.Add(new Claim("UserType", user.SecurityLevel));
 
             ClaimsIdentity identity = new ClaimsIdentity(claims, "apiauth_type");
             return identity;

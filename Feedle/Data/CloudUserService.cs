@@ -19,12 +19,12 @@ namespace Feedle.Data
         public async Task<User> ValidateUser(string userName, string password)
         {
             string query = "?username=" + userName + "&password=" + password;
-            string response = await client.GetStringAsync("http://localhost:5002/user" + query);
+            string response = await client.GetStringAsync("http://localhost:5002/feedle/user" + query);
 
             try
             {
                 User user = JsonSerializer.Deserialize<User>(response);
-                if (user.UserName == "User not found" || user.UserName == "Incorrect password")
+                if (user.UserName == "Username or Password is wrong")
                 {
                     throw new Exception(user.UserName);
                 }
