@@ -1,0 +1,37 @@
+﻿@page "/AddPost"
+@using Feedle.Models
+<h3>AddPost</h3>
+
+<form>
+    <div class="form-row">
+        <div class="form-group col">
+            <label>Title</label>
+            <input class="form-control" placeholder="Title [Required]" @bind="postTitle">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <label>Content</label>
+            <textarea class="form-control" rows="5" @bind="postContent"></textarea>
+        </div>
+    </div>
+    <button class="btn btn-outline-dark btn-sm" @onclick="addPost">Add Post</button>
+    <label style="color: red">
+        <b>
+            <i>No validation available yet! Please fill in correctly!</i>
+        </b>
+    </label>
+</form>
+
+@code {
+    string postTitle { get; set; }
+    string postContent { get; set; }
+
+    public async void addPost()
+    {
+        Post post = new Post();
+        post.Title = postTitle;
+        post.Content = postContent;
+    }
+
+}

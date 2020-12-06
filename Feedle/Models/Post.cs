@@ -6,7 +6,7 @@ namespace Feedle.Models
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public string Context { get; set; }
+        public string Content { get; set; }
         public string AuthorUserName { get; set; }
         public int Day { get; set; }
         public int Month { get; set; }
