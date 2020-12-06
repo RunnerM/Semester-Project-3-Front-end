@@ -56,6 +56,7 @@
             ((CustomAuthenticationStateProvider) AuthenticationStateProvider).ValidateLogin(username, password);
             username = "";
             password = "";
+            Console.WriteLine("success");
         } catch (Exception e) {
             errorMessage = e.Message;
         }

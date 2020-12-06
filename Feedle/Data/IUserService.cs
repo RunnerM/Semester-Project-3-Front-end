@@ -5,6 +5,6 @@ namespace Feedle.Data
 {
     public interface IUserService
     {
-        Task<User> ValidateUser(string userName, string password);
+        User ValidateUser(string userName, string password);
     }
 }
