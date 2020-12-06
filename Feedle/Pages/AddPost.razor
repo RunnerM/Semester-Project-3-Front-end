@@ -34,7 +34,7 @@
         Post post = new Post();
         post.Title = postTitle;
         post.Content = postContent;
-        NewsService.AddNewsAsync(post);
+        await NewsService.AddPostAsync(post);
     }
 
 }

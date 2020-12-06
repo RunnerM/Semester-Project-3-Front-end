@@ -1,8 +1,8 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
- using System.IO;
- using System.Linq;
- using System.Net.Http;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -33,47 +33,68 @@ namespace Feedle.Data
         //     StringContent content = new StringContent(newsToSerialize, Encoding.UTF8, "application/json");
         //     HttpResponseMessage response = await client.PostAsync(uri + "/news", content);
         // }
-        
-        
-        //placeholders:
-        private List<Post> posts= new List<Post>();
+
         private string postFile = "posts.json";
+        private IList<Post> posts;
 
         public CloudNewsService()
         {
             if (!File.Exists(postFile))
             {
-                File.Create(postFile);
+                Seed();
+                WritePostsToFile();
             }
             else
             {
-                readPosts();
+                string content = File.ReadAllText(postFile);
+                posts = JsonSerializer.Deserialize<List<Post>>(content);
             }
         }
 
-        private void readPosts()
+        private void Seed()
         {
-            string file = File.ReadAllText(postFile);
-            posts = JsonSerializer.Deserialize<List<Post>>(file);
+            Post[] posts =
+            {
+                new Post
+                {
+                    Title = "a",
+                    Content = "aa"
+                },
+                new Post
+                {
+                    Title = "b",
+                    Content = "bb"
+                },
+                new Post
+                {
+                    Title = "c",
+                    Content = "cc"
+                },
+                new Post
+                {
+                    Title = "d",
+                    Content = "dd"
+                },
+                new Post
+                {
+                    Title = "e",
+                    Content = "ee"
+                }
+            };
+            this.posts = posts;
         }
 
-        public async Task<IList<Post>> GetNewsAsync()
+        private void WritePostsToFile()
         {
-            return posts;
-        }
-        
-
-        public async Task AddNewsAsync(Post post)
-        {
-            posts.Add(post);
-            string fileContent = JsonSerializer.Serialize(posts);
-            File.WriteAllText(postFile, fileContent);
+            string productAsJson = JsonSerializer.Serialize(posts);
+            File.WriteAllText(postFile, productAsJson);
         }
 
-        public async Task<bool> DeletePostAsync(Post post)
+
+        public async Task AddPostAsync(Post post)
         {
-            bool result=posts.Remove(post);
-            return result;
+            this.posts.Add(post);
+            WritePostsToFile();
         }
     }
 }

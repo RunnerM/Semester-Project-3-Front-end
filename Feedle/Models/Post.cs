@@ -1,20 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Feedle.Models
 {
+    [Serializable]
     public class Post
     {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string Content { get; set; }
-        public string AuthorUserName { get; set; }
-        public int Day { get; set; }
-        public int Month { get; set; }
-        public int Year { get; set; }
-        public int Hour { get; set; }
-        public int Minute { get; set; }
-        public int Second { get; set; }
-        // public byte[] images;
-        public List<Comment> Comments { get; set; }
+        [JsonPropertyName("id")] public int Id { get; set; }
+        [JsonPropertyName("title")] public string Title { get; set; }
+        [JsonPropertyName("content")] public string Content { get; set; }
+        [JsonPropertyName("author")] public string AuthorUserName { get; set; }
+        [JsonPropertyName("day")] public int Day { get; set; }
+        [JsonPropertyName("month")] public int Month { get; set; }
+        [JsonPropertyName("year")] public int Year { get; set; }
+        [JsonPropertyName("hour")] public int Hour { get; set; }
+        [JsonPropertyName("minute")] public int Minute { get; set; }
+
+        [JsonPropertyName("second")] public int Second { get; set; }
+
+// public byte[] images;
+        [JsonPropertyName("comments")] public List<Comment> Comments { get; set; }
     }
 }
