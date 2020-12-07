@@ -6,126 +6,131 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject NavigationManager NavigationManager;
 
-<div class="oi oi-person"></div>
-<h3>@currentuser.UserName</h3>
-<p>Passsword ********</p>
-<div>
-    <button @onclick="changePassword" class="btn btn-lg btn-primary btn-block" type="submit">Change Password</button>
-</div>
-
-<div>
-    <button @onclick="deleteProfile" class="btn btn-lg btn-primary btn-block" type="submit">Delete profile</button>
-</div>
 <AuthorizeView>
     <Authorized>
+        <div class="oi oi-person"></div>
+        <h3>@currentUser.UserName</h3>
+        <p>Passsword ********</p>
+        <div>
+            <button @onclick="changePassword" class="btn btn-lg btn-primary btn-block" type="submit">Change Password</button>
+        </div>
+        
+        <div>
+            <button @onclick="deleteProfile" class="btn btn-lg btn-primary btn-block" type="submit">Delete profile</button>
+        </div>
         <button @onclick="PerformLogout" class="btn btn-lg btn-primary btn-block" type="submit">Log out</button>
-    </Authorized>
 
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" @onclick="ToggleList0">
+                            Posts
+                        </button>
+                    </h5>
+                </div>
+        
+                <div id="collapseOne" class="@NavMenuCssClass0" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        @if (testStrings == null)
+                        {
+                            <p>
+                                <em>Loading...</em>
+                            </p>
+                        }
+                        else if (!testStrings.Any())
+                        {
+                            <p>
+                                <em>U have no friends.</em>
+                            </p>
+                        }
+                        else
+                        {
+                            <ul class="list-group">
+                                @foreach (var i in testStrings)
+                                {
+                                    <li class="list-group-item">@i</li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" @onclick="ToggleList1"> Friends </button>
+                    </h5 >
+                </div >
+                <div id="collapseTwo" class="@NavMenuCssClass1" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="card-body">
+                        @if (testStrings == null)
+                        {
+                            <p>
+                                <em>Loading...</em>
+                            </p>
+                        }
+                        else if (!testStrings.Any())
+                        {
+                            <p>
+                                <em>U have no friends.</em>
+                            </p>
+                        }
+                        else
+                        {
+                            <ul class="list-group">
+                                @foreach (var i in testStrings)
+                                {
+                                    <li class="list-group-item">
+                                        @i<a href="OtherProfile">_here</a>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingThree">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" @onclick="ToggleList2">
+                            Subscriptions
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseThree" class="@NavMenuCssClass2" aria-labelledby="headingThree" data-parent="#accordion">
+                    <div class="card-body">
+                        @if (testStrings == null)
+                        {
+                            <p>
+                                <em>Loading...</em>
+                            </p>
+                        }
+                        else if (!testStrings.Any())
+                        {
+                            <p>
+                                <em>U have no friends.</em>
+                            </p>
+                        }
+                        else
+                        {
+                            <ul class="list-group">
+                                @foreach (var i in testStrings)
+                                {
+                                    <li class="list-group-item">@i</li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <Error></Error>
+    </NotAuthorized>
 </AuthorizeView>
 
-<div id="accordion">
-    <div class="card">
-        <div class="card-header" id="headingOne">
-            <h5 class="mb-0">
-                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" @onclick="ToggleList0">
-                    Posts
-                </button>
-            </h5>
-        </div>
-
-        <div id="collapseOne" class="@NavMenuCssClass0" aria-labelledby="headingOne" data-parent="#accordion">
-            <div class="card-body">
-                @if (testStrings == null)
-                {
-                    <p>
-                        <em>Loading...</em>
-                    </p>
-                }
-                else if (!testStrings.Any())
-                {
-                    <p>
-                        <em>U have no friends.</em>
-                    </p>
-                }
-                else
-                {
-                    <ul class="list-group">
-                        @foreach (var i in testStrings)
-                        {
-                            <li class="list-group-item">@i</li>
-                        }
-                    </ul>
-                }
-            </div>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-header" id="headingTwo">
-            <h5 class="mb-0">
-                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" @onclick="ToggleList1"> Friends </button>
-            </h5 >
-        </div >
-        <div id="collapseTwo" class="@NavMenuCssClass1" aria-labelledby="headingTwo" data-parent="#accordion">
-            <div class="card-body">
-                @if (testStrings == null)
-                {
-                    <p>
-                        <em>Loading...</em>
-                    </p>
-                }
-                else if (!testStrings.Any())
-                {
-                    <p>
-                        <em>U have no friends.</em>
-                    </p>
-                }
-                else
-                {
-                    <ul class="list-group">
-                        @foreach (var i in testStrings)
-                        {
-                            <li class="list-group-item">@i<a href="OtherProfile">_here</a></li>
-                        }
-                    </ul>
-                }
-            </div>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-header" id="headingThree">
-            <h5 class="mb-0">
-                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" @onclick="ToggleList2">
-                    Subscriptions
-                </button>
-            </h5>
-        </div>
-        <div id="collapseThree" class="@NavMenuCssClass2" aria-labelledby="headingThree" data-parent="#accordion">
-            <div class="card-body">
-                @if (testStrings == null)
-                {
-                    <p>
-                        <em>Loading...</em>
-                    </p>
-                }
-                else if (!testStrings.Any())
-                {
-                    <p>
-                        <em>U have no friends.</em>
-                    </p>
-                }
-                else
-                {
-                    <ul class="list-group">
-                        @foreach (var i in testStrings)
-                        {
-                            <li class="list-group-item">@i</li>
-                        }
-                    </ul>
-                }
-            </div>
-        </div>
-    </div>
-</div>
 
 
 @code {
@@ -154,16 +159,16 @@
     }
 
     //user data section
-    User currentuser;
+    User currentUser;
     List<Post> posts;
     List<User> fiends;
     List<string> subscritions;
 
     protected override async Task OnInitializedAsync()
     {
-    //currentuser = await UserService.getCachedUSer();
-        currentuser = new User();
-        currentuser.UserName = "username";
+        currentUser = await UserService.GetCurrentUser();
+    //currentuser = new User();
+    //currentuser.UserName = "username";
     }
 
     public async Task editProfile()
@@ -192,6 +197,5 @@
 
     //testing purpose
     List<string> testStrings = new List<string> {"Cupcake", "Cake", "Candy"};
-    //TODO add defaut profile pic
     //TODO check tutporial troesl
 }

@@ -9,6 +9,7 @@ namespace Feedle.Data
     public class InMemoryUserService : IUserService
     {
         private List<User> users;
+        private User currentUser;
 
         public InMemoryUserService()
         {
@@ -28,9 +29,9 @@ namespace Feedle.Data
                 },
                 new User
                 {
-                UserName = "bob2",
-                Password = "123",
-                SecurityLevel = "admin"
+                    UserName = "bob2",
+                    Password = "123",
+                    SecurityLevel = "admin"
                 },
                 new User
                 {
@@ -44,7 +45,7 @@ namespace Feedle.Data
         public async Task<User> ValidateUser(string userName, string password)
         {
             User first = users.FirstOrDefault(user => user.UserName.Equals(userName));
-            
+
             if (first == null)
             {
                 throw new Exception("User not found");
@@ -54,6 +55,8 @@ namespace Feedle.Data
             {
                 throw new Exception("Incorrect password");
             }
+
+            currentUser = first;
 
             return first;
         }
@@ -71,6 +74,11 @@ namespace Feedle.Data
         public async Task<IList<User>> GetFirendsByUserId()
         {
             return users;
+        }
+
+        public async Task<User> GetCurrentUser()
+        {
+            return currentUser;
         }
     }
 }

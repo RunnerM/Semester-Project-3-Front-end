@@ -9,12 +9,13 @@ namespace Feedle.Data
     {
         Task<User> ValidateUser(string userName, string password);
 
-        Task RegisterUser(string userName, string password,string securityLevel);
+        Task RegisterUser(string userName, string password, string securityLevel);
 
         Task<IList<User>> GetFirendsByUserId();
+
+        Task<User> GetCurrentUser();
         // Task saveCachedUser(User user);
         // Task removeCachedUser();
         // Task<User> getCachedUSer();
-
     }
 }
