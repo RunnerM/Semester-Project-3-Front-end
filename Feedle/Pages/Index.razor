@@ -1,6 +1,14 @@
 ﻿@page "/"
 @using Feedle.Models
-<a type="button" class="btn btn-primary" href="AddPost">Add Post</a>
+<AuthorizeView>
+    <Authorized>
+        <a type="button" class="btn btn-primary" href="AddPost">Add Post</a>
+    </Authorized>
+    <NotAuthorized>
+        <a type="button" class="btn btn-outline-secondary" href="LogIn">Add Post</a>
+    </NotAuthorized>
+</AuthorizeView>
+
 <PostView></PostView>
 
 
@@ -12,5 +20,6 @@
     {
         Post = new Post();
     }
+
     //TODO add parameter to to otherProfile
 }
