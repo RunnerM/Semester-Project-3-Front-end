@@ -18,25 +18,49 @@ namespace Feedle.Data
                 {
                     UserName = "bob",
                     Password = "123",
-                    SecurityLevel = "admin"
+                    SecurityLevel = "1"
                 },
                 new User
                 {
                     UserName = "adam",
                     Password = "123",
-                    SecurityLevel = "user"
+                    SecurityLevel = "2"
                 },
                 new User
                 {
                 UserName = "bob2",
                 Password = "123",
-                SecurityLevel = "admin"
+                SecurityLevel = "1"
                 },
                 new User
                 {
                     UserName = "adam2",
                     Password = "123",
-                    SecurityLevel = "user"
+                    SecurityLevel = "2"
+                },
+                new User
+                {
+                    UserName = "bob",
+                    Password = "123",
+                    SecurityLevel = "1"
+                },
+                new User
+                {
+                    UserName = "adam5",
+                    Password = "123",
+                    SecurityLevel = "2"
+                },
+                new User
+                {
+                    UserName = "bob3",
+                    Password = "123",
+                    SecurityLevel = "1"
+                },
+                new User
+                {
+                    UserName = "adam4",
+                    Password = "123",
+                    SecurityLevel = "2"
                 }
             }.ToList();
         }
@@ -63,7 +87,7 @@ namespace Feedle.Data
             User newuser = new User();
             newuser.UserName = username;
             newuser.Password = password;
-            newuser.SecurityLevel = "user";
+            newuser.SecurityLevel = "1";
             users.Add(newuser);
             //this wil work with file
         }

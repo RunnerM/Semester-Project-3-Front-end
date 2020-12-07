@@ -2,41 +2,25 @@
 @using Feedle.Models
 @inject IUserService Userservice;
 
-
-
-@* @do *@
-@* { *@
-@*     i++; *@
-@*     <div class="row"> *@
-@*         @do *@
-@*         { *@
-@*             <div class="col-md-3"> *@
-@*                 <div class="card"> *@
-@*                     <div class="card-body"> *@
-@*                         <h5 class="card-title">@Friends[i].UserName</h5> *@
-@*                         <p class="card-text">@Friends[i].SecurityLevel</p> *@
-@*                     </div> *@
-@*                 </div> *@
-@*             </div> *@
-@*             counter++; *@
-@*             i++; *@
-@*         }while(counter<=3); *@
-@*     </div> *@
-@*     counter = 0; *@
-@* }while(i<=Friends.Count-1); *@
-
-
-@foreach (User u in Friends)
+@do
 {
-    <div class="col-md-3">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">@u.UserName</h5>
-                    <p class="card-text">@u.SecurityLevel</p>
+    <div class="row">
+        @do
+        {
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@Friends[i].UserName</h5>
+                        <p class="card-text">@Friends[i].SecurityLevel</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        }
+            counter++;
+            i++;
+        }while(counter<=3 && i<Friends.Count-1);
+    </div>
+    counter = 0;
+}while(i<Friends.Count);
 
 @code {
     IList<User> Friends;

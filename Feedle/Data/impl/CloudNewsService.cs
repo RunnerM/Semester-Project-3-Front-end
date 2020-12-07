@@ -6,33 +6,64 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Feedle.Data;
 using Feedle.Models;
 
 namespace Feedle.Data
 {
     public class CloudNewsService : INewsService
     {
-        // private string uri = "https://localhost:5003";
-        // private HttpClient client;
-        //
-        // public CloudNewsService()
-        // {
-        //     client = new HttpClient();
-        // }
-        //
-        // public async Task<IList<News>> GetNewsAsync()
-        // {
-        //     string message = await client.GetStringAsync(uri + "/news");
-        //     List<News> result = JsonSerializer.Deserialize<List<News>>(message);
-        //     return result;
-        // }
-        //
-        // public async Task AddNewsAsync(News news)
-        // {
-        //     string newsToSerialize = JsonSerializer.Serialize(news);
-        //     StringContent content = new StringContent(newsToSerialize, Encoding.UTF8, "application/json");
-        //     HttpResponseMessage response = await client.PostAsync(uri + "/news", content);
-        // }
+        //cloud
+//         private Uri uri = new Uri("https://localhost:5003");
+//         private HttpClient client;
+//
+//         public CloudNewsService()
+//         {
+//             client = new HttpClient();
+//         }
+//
+//         public async Task<IList<Post>> GetNewsAsync()
+//         {
+//             string message = await client.GetStringAsync(uri + "/news");
+//             List<Post> result = JsonSerializer.Deserialize<List<Post>>(message);
+//             return result;
+//         }
+//
+//         public async Task AddNewsAsync(Post post)
+//         {
+//             string newsToSerialize = JsonSerializer.Serialize(post);
+//             StringContent content = new StringContent(newsToSerialize, Encoding.UTF8, "application/json");
+//             HttpResponseMessage response = await client.PostAsync(uri + "/news", content);
+//         }
+//
+//         public async Task AddPostAsync(Post post)
+//         {
+//             string sereliazedData = JsonSerializer.Serialize(post);
+//             StringContent content = new StringContent(
+//                 sereliazedData,
+//                 Encoding.UTF8,
+//                 "application/Json"
+//             );
+//             HttpResponseMessage response = await client.PostAsync(uri + "", content);
+//
+//         }
+//
+//         public async Task<IList<Post>> GetAllNews()
+//         {
+//             string response = await client.GetStringAsync(uri + "");
+//             try
+//             {
+//                 IList<Post> posts = JsonSerializer.Deserialize<IList<Post>>(response);
+//                 return posts;
+//             }
+//             catch (Exception e)
+//             {
+//                 throw e;
+//             }
+//         }
+//     }
+// }
+//------Local----------------
 
         private string postFile = "posts.json";
         private IList<Post> posts;

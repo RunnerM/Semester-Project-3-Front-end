@@ -32,15 +32,15 @@ namespace Feedle
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<INewsService, CloudNewsService>();
-            services.AddScoped<IUserService, InMemoryUserService>();
+            services.AddSingleton<IUserService, InMemoryUserService>();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("User", a =>
-                    a.RequireAuthenticatedUser().RequireClaim("UserType", "user"));
+                    a.RequireAuthenticatedUser().RequireClaim("Level", "1"));
                 options.AddPolicy("Admin", a =>
-                    a.RequireAuthenticatedUser().RequireClaim("UserType", "admin"));
+                    a.RequireAuthenticatedUser().RequireClaim("Level", "2"));
             });
         }
 
