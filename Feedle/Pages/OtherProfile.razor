@@ -1,14 +1,17 @@
-@page "/OtherProfile"
+@page "/OtherProfile/{username}"
+
 <h3>OtherProfile</h3>
 <div class="oi oi-person"></div>
-<p>Name</p>
+<p>@username</p>
 <a class="btn btn-outline-secondary">Add friend</a>
 <div class="input-group">
-  <div class="input-group-prepend">
-    <span class="input-group-text">With textarea</span>
-  </div>
-  <textarea class="form-control" aria-label="With textarea" readonly placeholder="Not friends yet"></textarea>
+    <div class="input-group-prepend">
+        <span class="input-group-text">With textarea</span>
+    </div>
+    <textarea class="form-control" aria-label="With textarea" readonly placeholder="Not friends yet"></textarea>
 </div>
-@code {
 
+@code {
+    [Parameter]
+    public string username { get; set; }
 }
