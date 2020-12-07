@@ -34,6 +34,7 @@ namespace Feedle
             services.AddScoped<INewsService, CloudNewsService>();
             services.AddScoped<IUserService, InMemoryUserService>();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+            services.AddTransient<BlazorTimer>();
 
             services.AddAuthorization(options =>
             {

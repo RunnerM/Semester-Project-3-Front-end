@@ -65,10 +65,9 @@ namespace Feedle.Authentication
                 throw e;
             }
 
-           // await userService.saveCachedUser(cachedUser);
+            // await userService.saveCachedUser(cachedUser);
             NotifyAuthenticationStateChanged(
                 Task.FromResult(new AuthenticationState(new ClaimsPrincipal(identity))));
-           
         }
 
         public void Logout()
@@ -89,6 +88,5 @@ namespace Feedle.Authentication
             ClaimsIdentity identity = new ClaimsIdentity(claims, "apiauth_type");
             return identity;
         }
-        
     }
 }

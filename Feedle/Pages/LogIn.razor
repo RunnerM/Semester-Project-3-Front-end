@@ -1,8 +1,11 @@
 ﻿@page "/LogIn"
 @using Feedle.Authentication
+@using Feedle.Data
 
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject NavigationManager NavigationManager;
+@inject BlazorTimer Timer
+
 <div class="text-center">
     <AuthorizeView>
         <NotAuthorized>
@@ -13,16 +16,18 @@
                 <input @bind-value="username" type="text" class="form-control" placeholder="Username" required="" autofocus="">
                 <label for="inputPassword" class="sr-only">Password</label>
                 <input @bind-value="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
-                
-            
-            <div>@errorMessage</div>
-            <button @onclick="PerformLogin" class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+
+
+                <div>@errorMessage</div>
+                <button @onclick="PerformLogin" class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
                 <p>or <a href="SignUp">sign up</a> instead</p>
-                </div>
+            </div>
         </NotAuthorized>
         <Authorized>
-            <p>you are logged in</p>
-            <button @onclick="PerformLogout" class="btn btn-lg btn-primary btn-block" type="submit">Log out</button>
+            <p class="text-muted">
+                You are logged in.
+            </p>
+            <p class="text-muted">Redirecting to front page in 2 seconds ...</p>
         </Authorized>
     </AuthorizeView>
 </div>
@@ -54,27 +59,48 @@
     private string password;
     private string errorMessage;
 
-    public async Task PerformLogin() {
+    public async Task PerformLogin()
+    {
         errorMessage = "";
-        try {
-             ((CustomAuthenticationStateProvider) AuthenticationStateProvider).ValidateLogin(username, password);
+        try
+        {
+            ((CustomAuthenticationStateProvider) AuthenticationStateProvider).ValidateLogin(username, password);
             username = "";
             password = "";
-        } catch (Exception e) {
+            StartTimer();
+        }
+        catch (Exception e)
+        {
             errorMessage = e.Message;
         }
     }
 
-    
 
-    public async Task PerformLogout() {
+    public async Task PerformLogout()
+    {
         errorMessage = "";
         username = "";
         password = "";
-        try {
+        try
+        {
             ((CustomAuthenticationStateProvider) AuthenticationStateProvider).Logout();
             NavigationManager.NavigateTo("/");
-        } catch (Exception e) { }
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    //timer
+    private void StartTimer()
+    {
+        Timer.SetTimer(2500);
+        Timer.OnElapsed += TimerElapsedHandler;
+    }
+
+    private void TimerElapsedHandler()
+    {
+        NavigationManager.NavigateTo("/");
     }
 
 }
