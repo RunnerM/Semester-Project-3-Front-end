@@ -2,28 +2,42 @@
 @using Feedle.Models
 @using Feedle.Data
 @inject INewsService NewsService
-<h3>AddPost</h3>
+<AuthorizeView>
+    <Authorized>
+        <h3>AddPost</h3>
 
-<form>
-    <div class="form-row">
-        <div class="form-group col">
-            <label>Title</label>
-            <input class="form-control" placeholder="Title [Required]" @bind="postTitle">
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col">
-            <label>Content</label>
-            <textarea class="form-control" rows="5" @bind="postContent"></textarea>
-        </div>
-    </div>
-    <button class="btn btn-outline-dark btn-sm" @onclick="addPost">Add Post</button>
-    <label style="color: red">
-        <b>
-            <i>No validation available yet! Please fill in correctly!</i>
-        </b>
-    </label>
-</form>
+        <form>
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Title</label>
+                    <input class="form-control" placeholder="Title [Required]" @bind="postTitle">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Content</label>
+                    <textarea class="form-control" rows="5" @bind="postContent"></textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col">
+                    <label for="exampleFormControlFile1">Example file input</label>
+                    <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                </div>
+            </div>
+            <button class="btn btn-outline-dark btn-sm" @onclick="addPost">Add Post</button>
+            <label style="color: red">
+                <b>
+                    <i>No validation available yet! Please fill in correctly!</i>
+                </b>
+            </label>
+        </form>
+    </Authorized>
+    <NotAuthorized>
+        <p>Its FBI, open up!</p>
+    </NotAuthorized>
+</AuthorizeView>
+
 
 @code {
     string postTitle { get; set; }
@@ -37,4 +51,6 @@
         await NewsService.AddPostAsync(post);
     }
 
+    //TODO add post reference to log in
+    //TODO display the logged in user in the profile section
 }

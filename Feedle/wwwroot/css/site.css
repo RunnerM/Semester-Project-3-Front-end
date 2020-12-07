@@ -9,6 +9,11 @@ nav {
     background-color: #ffffff;
 }
 
+.container
+{
+    width: 66%;
+}
+
 a, .btn-link {
     color: #0366d6;
 }

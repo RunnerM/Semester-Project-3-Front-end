@@ -1,15 +1,16 @@
 ﻿@page "/"
 @using Feedle.Models
-
-<PostView></PostView>
 <a type="button" class="btn btn-primary" href="AddPost">Add Post</a>
+<PostView></PostView>
 
 
 @code
 {
     public Post Post { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         Post = new Post();
     }
+    //TODO add parameter to to otherProfile
 }
