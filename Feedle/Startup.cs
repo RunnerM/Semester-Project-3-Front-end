@@ -38,9 +38,9 @@ namespace Feedle
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("User", a =>
-                    a.RequireAuthenticatedUser().RequireClaim("Level", "1"));
+                    a.RequireAuthenticatedUser().RequireClaim("UserType", "user"));
                 options.AddPolicy("Admin", a =>
-                    a.RequireAuthenticatedUser().RequireClaim("Level", "99"));
+                    a.RequireAuthenticatedUser().RequireClaim("UserType", "admin"));
             });
         }
 

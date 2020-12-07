@@ -1,0 +1,31 @@
+@using Feedle.Models
+@using Feedle.Data
+@inject INewsService NewsService;
+<div>
+    
+    @foreach(Post p in _posts)
+        {
+            
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@p.Title</h5>
+                    <p class="card-text">@p.Content</p>
+                    <div class="card-footer text-muted">
+                        @p.AuthorUserName
+                      </div>
+                </div>
+            </div>
+           
+        }
+
+</div>
+
+
+@code {
+    IList<Post> _posts;
+    protected override async Task OnInitializedAsync()
+    {
+         _posts = await NewsService.GetAllNews();
+    }
+
+}

@@ -57,28 +57,63 @@ namespace Feedle.Data
             {
                 new Post
                 {
-                    Title = "a",
-                    Content = "aa"
+                    Title = "hvljgjblad",
+                    Content = "dadjkblkdablqkdjba",
+                    AuthorUserName = "bob the spammer."
                 },
                 new Post
                 {
-                    Title = "b",
-                    Content = "bb"
+                    Title = "dafadajkbjadf",
+                    Content = "dadasdadaddab",
+                    AuthorUserName = "bob the spammer."
                 },
                 new Post
                 {
                     Title = "c",
-                    Content = "cc"
+                    Content = "cc",
+                    AuthorUserName = "bob the spammer."
                 },
                 new Post
                 {
                     Title = "d",
-                    Content = "dd"
+                    Content = "dd",
+                    AuthorUserName = "bob the spammer."
                 },
                 new Post
                 {
                     Title = "e",
-                    Content = "ee"
+                    Content = "ee",
+                    AuthorUserName = "bob the spammer."
+                },
+                new Post
+                {
+                    Title = "hvljgjblad",
+                    Content = "dadjkblkdablqkdjba",
+                    AuthorUserName = "bob the spammer."
+                },
+                new Post
+                {
+                    Title = "dafadajkbjadf",
+                    Content = "dadasdadaddab",
+                    AuthorUserName = "bob the spammer."
+                },
+                new Post
+                {
+                    Title = "c",
+                    Content = "cc",
+                    AuthorUserName = "bob the spammer."
+                },
+                new Post
+                {
+                    Title = "d",
+                    Content = "dd",
+                    AuthorUserName = "bob the spammer."
+                },
+                new Post
+                {
+                    Title = "e",
+                    Content = "ee",
+                    AuthorUserName = "bob the spammer."
                 }
             };
             this.posts = posts;
@@ -95,6 +130,11 @@ namespace Feedle.Data
         {
             this.posts.Add(post);
             WritePostsToFile();
+        }
+
+        public async Task<IList<Post>> GetAllNews()
+        {
+            return posts;
         }
     }
 }

@@ -1,0 +1,61 @@
+@page "/Profile"
+@using Feedle.Models
+@using Feedle.Data
+@using Feedle.Authentication
+@inject IUserService UserService;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject NavigationManager NavigationManager;
+
+<h3>Picture</h3>
+<h3>@currentuser.UserName</h3> 
+<p>Passsword  ********</p>
+<div>
+    <button @onclick="changePassword" class="btn btn-lg btn-primary btn-block" type="submit">Change Password</button>
+</div>
+
+<div>
+    <button @onclick="deleteProfile" class="btn btn-lg btn-primary btn-block" type="submit">Delete profile</button> 
+</div>
+<AuthorizeView>
+<Authorized>
+    <button @onclick="PerformLogout" class="btn btn-lg btn-primary btn-block" type="submit">Log out</button>
+        </Authorized>
+
+</AuthorizeView>
+
+
+@code {
+    User currentuser;
+    List<Post> posts;
+    List<User> fiends;
+    List<string> subscritions;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //currentuser = await UserService.getCachedUSer();
+        currentuser= new User();
+        currentuser.UserName = "username";
+    }
+
+    public async Task editProfile()
+    {
+        
+    }
+
+    public async Task deleteProfile()
+    {
+        
+    }
+
+    public async Task changePassword()
+    {
+        
+    }
+    
+    public async Task PerformLogout() {
+        try {
+            ((CustomAuthenticationStateProvider) AuthenticationStateProvider).Logout();
+            NavigationManager.NavigateTo("/");
+        } catch (Exception e) { }
+    }
+}

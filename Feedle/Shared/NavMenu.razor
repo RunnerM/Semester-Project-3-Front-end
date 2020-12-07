@@ -10,29 +10,47 @@
         </button>
         <div class="@NavMenuCssClass navbar-collapse d-sm-inline-flex flex-sm-row-reverse" @onclick="CollapseNavMenu">
             <ul class="navbar-nav flex-grow-1">
-                <li class="nav-item">
-                    <a class="nav-link text-dark" href="" Match="NavLinkMatch.All">Home</a>
-                </li>
+                @* <li class="nav-item"> *@
+                @*     <a class="nav-link text-dark" href="" Match="NavLinkMatch.All">Home</a> *@
+                @* </li> *@
                 <li class="nav-item">
                     <a class="nav-link text-dark" href="Test">Test</a>
                 </li>
-                <li class="nav-item">
-                    <a class="btn btn-outline-secondary btn-sm" href="LogIn">
-                        LOG IN
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-primary btn-sm" href="SignUp">
-                        SIGN UP
-                    </a>
-                </li>
-                <AuthorizeView Policy="Admin">
-                   
+                <AuthorizeView>
+                    <NotAuthorized>
                         <li class="nav-item">
-                            <a class="nav-link text-dark">TestAuth</a>
+                            <a class="btn btn-outline-secondary btn-sm" href="LogIn">
+                                LOG IN
+                            </a>
                         </li>
-                    
+                        <li class="nav-item">
+                            <a class="btn btn-primary btn-sm" href="SignUp">
+                                SIGN UP
+                            </a>
+                        </li>
+                    </NotAuthorized>
+                    <Authorized>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark"
+                               href="Friends">
+                                Friends
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark"
+                               href="Profile">
+                                Profile
+                            </a>
+                        </li>
+
+                    </Authorized>
                 </AuthorizeView>
+                <li class="nav-item">
+                    <a class="nav-link text-dark"
+                       href="Friends">
+                        Friends
+                    </a>
+                </li>
 
             </ul>
         </div>

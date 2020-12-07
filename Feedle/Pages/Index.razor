@@ -1,12 +1,15 @@
 ﻿@page "/"
+@using Feedle.Models
 
-<div>
-    Feed here
-</div>
+<PostView></PostView>
 <a type="button" class="btn btn-primary" href="AddPost">Add Post</a>
 
 
 @code
 {
-    
+    public Post Post { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        Post = new Post();
+    }
 }
