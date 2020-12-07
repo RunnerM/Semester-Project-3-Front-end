@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Feedle.Models;
+using Microsoft.AspNetCore.Http;
 
 
 namespace Feedle.Data
@@ -54,7 +56,8 @@ namespace Feedle.Data
                 Encoding.UTF8,
                 "application/Json"
             );
-            HttpResponseMessage response = await client.PostAsync(uri + "", content);
+            HttpResponseMessage response = await client.PostAsync(uri, content);
+            
 
         }
 
@@ -63,6 +66,21 @@ namespace Feedle.Data
 
             return null;
 
+        }
+
+        public async Task<bool> DeleteUser(int id)
+        {
+            string query = "?id=" + id;
+            HttpResponseMessage response= await client.DeleteAsync(uri + query);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
         }
     }
 }
