@@ -10,12 +10,6 @@
         </button>
         <div class="@NavMenuCssClass navbar-collapse d-sm-inline-flex flex-sm-row-reverse" @onclick="CollapseNavMenu">
             <ul class="navbar-nav flex-grow-1">
-                @* <li class="nav-item"> *@
-                @*     <a class="nav-link text-dark" href="" Match="NavLinkMatch.All">Home</a> *@
-                @* </li> *@
-                <li class="nav-item">
-                    <a class="nav-link text-dark" href="Test">Test</a>
-                </li>
                 <AuthorizeView>
                     <NotAuthorized>
                         <li class="nav-item">
@@ -37,21 +31,13 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark"
+                            <a class="nav-link oi oi-person"
                                href="Profile">
-                                Profile
                             </a>
                         </li>
 
                     </Authorized>
                 </AuthorizeView>
-                <li class="nav-item">
-                    <a class="nav-link text-dark"
-                       href="Friends">
-                        Friends
-                    </a>
-                </li>
-
             </ul>
         </div>
     </div>
