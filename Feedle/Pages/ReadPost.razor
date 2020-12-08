@@ -2,6 +2,8 @@
 @inject NavigationManager NavigationManager;
 @using Feedle.Data
 @using Feedle.Models
+@using System.Collections
+@using System.Text.Json
 @inject INewsService NewsService;
 @inject IUserService UserService;
 <h3>ReadPost</h3>
@@ -153,6 +155,7 @@
     Post post;
     User currentUser;
     string commentText;
+    DateTime localDate;
 
     protected override async Task OnInitializedAsync()
     {
@@ -169,12 +172,28 @@
     {
         if (commentText == null || commentText.Equals(""))
         {
-            Console.WriteLine("null or empty");
         }
         else
         {
+            IList<Post> actualPosts = await NewsService.GetAllNews();
+            Post actualPost = actualPosts.FirstOrDefault(i => i.Id == id);
+
+            Comment comment = new Comment();
+            comment.Id = actualPost.Comments.Count;
+            comment.Content = commentText;
+            comment.AuthorId = currentUser.Id;
+            comment.AuthorUserName = currentUser.DisplayedUserName;
+            localDate = DateTime.Now;
+            comment.Second = localDate.Second;
+            comment.Minute = localDate.Minute;
+            comment.Hour = localDate.Hour;
+            comment.Day = localDate.Day;
+            comment.Month = localDate.Month;
+            comment.Year = localDate.Year;
+            post.Comments.Add(comment);
+            await NewsService.UpdatePostAsync(post);
             commentText = "";
-            Console.WriteLine(commentText); 
+            Console.WriteLine(JsonSerializer.Serialize(post));
         }
     }
 

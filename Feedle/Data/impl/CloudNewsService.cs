@@ -44,5 +44,10 @@ namespace Feedle.Data
         {
             throw new NotImplementedException();
         }
+
+        public Task UpdatePostAsync(Post post)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

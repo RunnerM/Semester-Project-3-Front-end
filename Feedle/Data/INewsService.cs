@@ -8,5 +8,6 @@ namespace Feedle.Data
     {
         Task AddPostAsync(Post post);
         Task<IList<Post>> GetAllNews();
+        Task UpdatePostAsync(Post post);
     }
 }
