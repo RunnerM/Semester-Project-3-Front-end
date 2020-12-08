@@ -5,15 +5,17 @@
 
     @foreach (Post p in _posts)
     {
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">@p.Title</h5>
-                <p class="card-text">@p.Content</p>
-                <div class="card-footer text-muted">
-                    @p.AuthorUserName
+        <a href="Error">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@p.Title</h5>
+                    <p class="card-text">@p.Content</p>
+                    <div class="card-footer text-muted">
+                        @p.AuthorUserName
+                    </div>
                 </div>
             </div>
-        </div>
+        </a>
     }
 
 </div>

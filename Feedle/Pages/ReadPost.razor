@@ -1,0 +1,34 @@
+@page "/ReadPost/{id:int}"
+@inject NavigationManager NavigationManager;
+@using Feedle.Data
+@using Feedle.Models
+@inject INewsService NewsService;
+<h3>ReadPost</h3>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@post.Title</h5>
+        <p class="card-text">@post.Content</p>
+        <div class="card-footer text-muted">
+            @post.AuthorUserName
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public int id { get; set; }
+
+    Post post;
+
+    protected override async Task OnInitializedAsync()
+    {
+        IList<Post> posts = await NewsService.GetAllNews();
+        post = posts.FirstOrDefault(i => i.Id == id);
+        if (post == null)
+        {
+            NavigationManager.NavigateTo("/Error");
+        }
+    }
+
+}
