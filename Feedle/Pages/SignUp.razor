@@ -37,9 +37,15 @@
         Console.WriteLine("iam here");
         if (password.Equals(password2))
         {
-            await UserService.RegisterUser(username, password, "user");
-            flag = true;
-            Console.WriteLine("passwords match");
+            User newuser= new User();
+            newuser.UserName = username;
+            newuser.Password = password;
+            newuser.SecurityLevel = 1;
+            bool result= await UserService.RegisterUser(newuser);
+            if (result == true)
+            {
+                flag = true;
+            }
         }
         else
         {
