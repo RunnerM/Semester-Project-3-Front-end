@@ -130,6 +130,9 @@
         </div>
     </div>
 </div>
+
+
+
 <AuthorizeView>
     <Authorized>
         <form>
@@ -156,45 +159,53 @@
     User currentUser;
     string commentText;
     DateTime localDate;
+    IList<Post> posts;
 
     protected override async Task OnInitializedAsync()
     {
-        currentUser = await UserService.GetCurrentUser();
-        IList<Post> posts = await NewsService.GetAllNews();
-        post = posts.FirstOrDefault(i => i.Id == id);
-        if (post == null)
-        {
-            NavigationManager.NavigateTo("/Error");
-        }
+        await loadData();
     }
 
-    private async Task writeComment()
-    {
-        if (commentText == null || commentText.Equals(""))
+    async Task writeComment()
         {
-        }
-        else
-        {
-            IList<Post> actualPosts = await NewsService.GetAllNews();
-            Post actualPost = actualPosts.FirstOrDefault(i => i.Id == id);
+            if (commentText == null || commentText.Equals(""))
+            {
+            }
+            else
+            {
+                IList<Post> actualPosts = await NewsService.GetAllNews();
+                Post actualPost = actualPosts.FirstOrDefault(i => i.Id == id);
 
-            Comment comment = new Comment();
-            comment.Id = actualPost.Comments.Count;
-            comment.Content = commentText;
-            comment.AuthorId = currentUser.Id;
-            comment.AuthorUserName = currentUser.DisplayedUserName;
-            localDate = DateTime.Now;
-            comment.Second = localDate.Second;
-            comment.Minute = localDate.Minute;
-            comment.Hour = localDate.Hour;
-            comment.Day = localDate.Day;
-            comment.Month = localDate.Month;
-            comment.Year = localDate.Year;
-            post.Comments.Add(comment);
-            await NewsService.UpdatePostAsync(post);
-            commentText = "";
-            Console.WriteLine(JsonSerializer.Serialize(post));
+                Comment comment = new Comment();
+                comment.Id = actualPost.Comments.Count;
+                comment.Content = commentText;
+                comment.AuthorId = currentUser.Id;
+                comment.AuthorUserName = currentUser.DisplayedUserName;
+                localDate = DateTime.Now;
+                comment.Second = localDate.Second;
+                comment.Minute = localDate.Minute;
+                comment.Hour = localDate.Hour;
+                comment.Day = localDate.Day;
+                comment.Month = localDate.Month;
+                comment.Year = localDate.Year;
+                post.Comments.Add(comment);
+                await NewsService.UpdatePostAsync(post);
+                commentText = "";
+                Console.WriteLine(JsonSerializer.Serialize(post));
+                await loadData();
+
+            }
         }
+
+        async Task loadData()
+        {
+            currentUser = await UserService.GetCurrentUser();
+            posts = await NewsService.GetAllNews();
+            post = posts.FirstOrDefault(i => i.Id == id);
+            if (post == null)
+            {
+                NavigationManager.NavigateTo("/Error");
+            }
+        }
+
     }
-
-}
