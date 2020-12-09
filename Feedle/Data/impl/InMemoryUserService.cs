@@ -100,5 +100,10 @@ namespace Feedle.Data
         {
             throw new NotImplementedException();
         }
+
+        public Task<UserInformation> GetUserInformationById(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

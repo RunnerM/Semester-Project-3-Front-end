@@ -21,5 +21,8 @@ namespace Feedle.Models
         public List<UserConversation> UserConversations { get; set; }
 
         [JsonPropertyName("securityLevel")] public int SecurityLevel { get; set; }
+        [JsonPropertyName("subscriptionUsersInformation")]
+
+        public List<UserInformation> SubscriptionUsersInformation { get; set; }
     }
 }

@@ -79,5 +79,15 @@ namespace Feedle.Data
         {
             throw new NotImplementedException();
         }
+
+        public async Task<UserInformation> GetUserInformationById(int id)
+        {
+            string message =  await Client.GetStringAsync("http://localhost:5002/feedle/user/userinfo?id="+id);
+            if (message.Length==0)
+            {
+                return new UserInformation();
+            }
+            return JsonSerializer.Deserialize<UserInformation>(message);
+        }
     }
 }
