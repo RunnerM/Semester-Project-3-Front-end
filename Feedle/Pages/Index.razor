@@ -11,6 +11,26 @@
 
 <div class="row">
     <div class="col-sm-8">
+        <div class="form-row">
+            <div class="form-group col">
+                <label>sort by: </label>
+                <select class="form-control" @bind="sortBy" style="background-color: #f7f7f7">
+                    <option selected value="family">Family</option>
+                    <option value="adult">Adult</option>
+                    <option value="child">Child</option>
+                    <option value="pet">Pet</option>
+                </select>
+            </div>
+            <div class="form-group col">
+                <label>filter by: </label>
+                <select class="form-control" @bind="filterBy" style="background-color: #f7f7f7">
+                    <option selected value="family">Family</option>
+                    <option value="adult">Adult</option>
+                    <option value="child">Child</option>
+                    <option value="pet">Pet</option>
+                </select>
+            </div>
+        </div>
         <PostView></PostView>
     </div>
     <div class="col-sm-4">
@@ -53,6 +73,8 @@
 @code
 {
     public Post Post { get; set; }
+    string sortBy;
+    string filterBy;
 
     protected override async Task OnInitializedAsync()
     {
