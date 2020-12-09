@@ -8,8 +8,8 @@ namespace Feedle.Data
 {
     public class InMemoryUserService : IUserService
     {
-        private List<User> users;
-        private User currentUser;
+        public List<User> users { get; set; }
+        public User CurrentUser { get; set; }
 
         public InMemoryUserService()
         {
@@ -56,7 +56,7 @@ namespace Feedle.Data
                 throw new Exception("Incorrect password");
             }
 
-            currentUser = first;
+            CurrentUser = first;
 
             return first;
         }
@@ -80,10 +80,25 @@ namespace Feedle.Data
         {
             return users;
         }
-
-        public async Task<User> GetCurrentUser()
+        
+        public async Task<User> UpdateCurrentUser()
         {
-            return currentUser;
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateCurrentUser(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<User> GetCurrentUser()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<User>> GetFriendsByUserId()
+        {
+            throw new NotImplementedException();
         }
     }
 }
