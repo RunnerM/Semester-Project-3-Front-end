@@ -1,8 +1,8 @@
-@page "/OtherProfile/{username}"
+@page "/OtherProfile/{id:int}"
 
 <h3>OtherProfile</h3>
 <div class="oi oi-person"></div>
-<p>@username</p>
+<p>@id</p>
 <a class="btn btn-outline-secondary">Add friend</a>
 <a class="btn btn-outline-secondary">Subscribe</a>
 <div class="input-group">
@@ -15,6 +15,6 @@
 @code {
 
     [Parameter]
-    public string username { get; set; }
+    public int id { get; set; }
 
 }
