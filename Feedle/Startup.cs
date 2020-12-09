@@ -31,7 +31,8 @@ namespace Feedle
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<INewsService, InMemoryNewsService>();
+            //services.AddSingleton<INewsService, InMemoryNewsService>();
+            services.AddSingleton<INewsService, CloudNewsService>();
             services.AddSingleton<IUserService, CloudUserService>();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
             services.AddTransient<BlazorTimer>();
