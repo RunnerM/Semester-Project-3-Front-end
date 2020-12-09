@@ -6,8 +6,10 @@ namespace Feedle.Data
 {
     public interface INewsService
     {
-        Task AddPostAsync(Post post);
+        Task<bool> AddPostAsync(Post post);
         Task<IList<Post>> GetAllNews();
         Task UpdatePostAsync(Post post);
+
+        Task<List<Post>> GetPostsForRegisteredUser(int id);
     }
 }

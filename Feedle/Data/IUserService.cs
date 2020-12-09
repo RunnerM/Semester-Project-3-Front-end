@@ -13,6 +13,8 @@ namespace Feedle.Data
 
         Task<User> GetCurrentUser();
 
+        Task<UserInformation> GetUserInformationById(int id);
+
         Task<IList<User>> GetFriendsByUserId();
         
         Task UpdateCurrentUser(User user);
