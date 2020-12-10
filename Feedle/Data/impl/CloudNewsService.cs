@@ -12,42 +12,51 @@ namespace Feedle.Data
 {
     public class CloudNewsService : INewsService
     {
-        private string uri = "https://localhost:5003";
-        private HttpClient client;
+        public List<Post> CurrentPosts { get; set; }
+
+        public HttpClient Client { get; set; }
 
         public CloudNewsService()
         {
-            client = new HttpClient();
+            Client = new HttpClient();
+        }
+        public async Task<bool> AddPostAsync(Post post)
+        {
+            string postToSerialize = JsonSerializer.Serialize(post);
+            Console.WriteLine(postToSerialize);
+            StringContent stringContent = new StringContent(
+                postToSerialize,
+                Encoding.UTF8,
+                "application/json"
+            );
+            HttpResponseMessage responseMessage =
+                await Client.PostAsync("http://localhost:5002/feedle/posts", stringContent);
+            return responseMessage.IsSuccessStatusCode;
         }
 
-        public async Task<IList<Post>> GetNewsAsync()
+        public async Task<IList<Post>> GetAllNews()
         {
-            string message = await client.GetStringAsync(uri + "/news");
-            List<Post> result = JsonSerializer.Deserialize<List<Post>>(message);
-            return result;
-        }
-
-        public async Task AddNewsAsync(Post news)
-        {
-            string newsToSerialize = JsonSerializer.Serialize(news);
-            StringContent content = new StringContent(newsToSerialize, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await client.PostAsync(uri + "/news", content);
-        }
-
-
-        public Task AddPostAsync(Post post)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IList<Post>> GetAllNews()
-        {
-            throw new NotImplementedException();
+            String message = await Client.GetStringAsync("http://localhost:5002/feedle/posts");
+            if (message.Length == 0)
+            {
+                return new List<Post>();
+            }
+            return JsonSerializer.Deserialize<List<Post>>(message);
         }
 
         public Task UpdatePostAsync(Post post)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<Post>> GetPostsForRegisteredUser(int id)
+        {
+            String message = await Client.GetStringAsync("http://localhost:5002/feedle/posts/authorized?id="+id);
+            if (message.Length == 0)
+            {
+                return new List<Post>();
+            }
+            return JsonSerializer.Deserialize<List<Post>>(message);
         }
     }
 }

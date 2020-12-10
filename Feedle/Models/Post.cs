@@ -18,6 +18,8 @@ namespace Feedle.Models
         [JsonPropertyName("minute")] public int Minute { get; set; }
 
         [JsonPropertyName("second")] public int Second { get; set; }
+        [JsonPropertyName("approvals")] public int Approvals { get; set; }
+        [JsonPropertyName("disapprovals")] public int Disapprovals { get; set; }
 
 // public byte[] images;
         [JsonPropertyName("comments")] public List<Comment> Comments { get; set; }

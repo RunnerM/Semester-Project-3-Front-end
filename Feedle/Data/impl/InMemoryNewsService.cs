@@ -73,10 +73,11 @@ namespace Feedle.Data
         }
 
 
-        public async Task AddPostAsync(Post post)
+        public async Task<bool> AddPostAsync(Post post)
         {
             this.posts.Add(post);
             WritePostsToFile();
+            return true;
         }
 
         public async Task<IList<Post>> GetAllNews()
@@ -96,6 +97,11 @@ namespace Feedle.Data
                 }
             }
             
+        }
+
+        public Task<List<Post>> GetPostsForRegisteredUser(int id)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

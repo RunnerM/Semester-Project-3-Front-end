@@ -11,9 +11,13 @@ namespace Feedle.Data
 
         Task<bool> RegisterUser(User user);
 
-        Task<IList<User>> GetFirendsByUserId();
-        
         Task<User> GetCurrentUser();
+
+        Task<UserInformation> GetUserInformationById(int id);
+
+        Task<IList<User>> GetFriendsByUserId();
+        
+        Task UpdateCurrentUser(User user);
         // Task saveCachedUser(User user);
         // Task removeCachedUser();
         // Task<User> getCachedUSer();
