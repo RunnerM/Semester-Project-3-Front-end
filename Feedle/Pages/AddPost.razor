@@ -64,6 +64,7 @@
             post.UserId = currentUser.Id;
             post.Comments = new List<Comment>();
             await NewsService.AddPostAsync(post);
+            NavigationManager.NavigateTo("/");
         }
       
     }

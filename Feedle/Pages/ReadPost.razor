@@ -111,7 +111,8 @@
             comment.Year = localDate.Year;
             await NewsService.CommentPost(comment,post.Id);
             commentText = "";
-            Console.WriteLine(JsonSerializer.Serialize(post));
+            IList<Post> posts = await NewsService.GetAllNews();
+            post = posts.FirstOrDefault(i => i.Id == Id);
         }
     }
 
