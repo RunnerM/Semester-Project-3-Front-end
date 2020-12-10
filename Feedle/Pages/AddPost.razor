@@ -59,6 +59,7 @@
             post.Title = postTitle;
             post.Content = postContent;
             post.AuthorUserName = currentUser.UserName;
+            Console.WriteLine(currentUser.Id);
             post.UserId = currentUser.Id;
             post.Comments = new List<Comment>();
             await NewsService.AddPostAsync(post);
