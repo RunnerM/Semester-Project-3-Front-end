@@ -3,6 +3,7 @@
 @using Feedle.Data
 @inject INewsService NewsService
 @inject IUserService UserService
+@inject NavigationManager NavigationManager;
 <AuthorizeView>
     <Authorized>
         <h3>AddPost</h3>
@@ -35,7 +36,7 @@
         </form>
     </Authorized>
     <NotAuthorized>
-        <p>Its FBI, open up!</p>
+        @navigateToError();
     </NotAuthorized>
 </AuthorizeView>
 
@@ -65,4 +66,11 @@
         }
       
     }
+
+    private object navigateToError()
+    {
+        NavigationManager.NavigateTo("/Error");
+        return new object(); //does not need to return anything
+    }
+
 }
