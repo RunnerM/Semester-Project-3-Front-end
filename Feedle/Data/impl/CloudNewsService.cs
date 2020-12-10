@@ -37,7 +37,7 @@ namespace Feedle.Data
         public async Task<IList<Post>> GetAllNews()
         {
             String message = await Client.GetStringAsync("http://localhost:5002/feedle/posts");
-            if (message.Length == 0)
+            if (JsonSerializer.Deserialize<List<Post>>(message) == null)
             {
                 return new List<Post>();
             }

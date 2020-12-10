@@ -10,7 +10,7 @@ namespace Feedle.Models
         [JsonPropertyName("id")] public int Id { get; set; }
         [JsonPropertyName("title")] public string Title { get; set; }
         [JsonPropertyName("content")] public string Content { get; set; }
-        [JsonPropertyName("author")] public string AuthorUserName { get; set; }
+        [JsonPropertyName("authorUserName")] public string AuthorUserName { get; set; }
         [JsonPropertyName("day")] public int Day { get; set; }
         [JsonPropertyName("month")] public int Month { get; set; }
         [JsonPropertyName("year")] public int Year { get; set; }
