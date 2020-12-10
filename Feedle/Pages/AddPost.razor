@@ -2,6 +2,7 @@
 @using Feedle.Models
 @using Feedle.Data
 @inject INewsService NewsService
+@inject IUserService UserService
 <AuthorizeView>
     <Authorized>
         <h3>AddPost</h3>
@@ -42,12 +43,24 @@
 @code {
     string postTitle { get; set; }
     string postContent { get; set; }
+    User currentUser { get; set; }
 
     public async void addPost()
     {
-        Post post = new Post();
-        post.Title = postTitle;
-        post.Content = postContent;
-        await NewsService.AddPostAsync(post);
+        currentUser = await UserService.GetCurrentUser();
+        if (currentUser == null)
+        {
+            
+        }
+        else
+        {
+            Post post = new Post();
+            post.Title = postTitle;
+            post.Content = postContent;
+            post.AuthorUserName = currentUser.UserName;
+            post.Comments = new List<Comment>();
+            await NewsService.AddPostAsync(post);
+        }
+      
     }
 }

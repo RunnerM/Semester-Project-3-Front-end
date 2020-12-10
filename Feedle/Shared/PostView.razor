@@ -3,21 +3,24 @@
 @inject INewsService NewsService;
 <div>
 
-    @foreach (Post p in _posts)
+    @if (_posts != null)
     {
-        <a href="ReadPost/@p.Id">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">@p.Title</h5>
-                    <p class="card-text">@p.Content</p>
-                    <span class="oi oi-thumb-up"></span>
-                    <span class="oi oi-thumb-down"></span>
-                    <div class="card-footer text-muted">
-                        @p.AuthorUserName
+        @foreach (Post p in _posts)
+        {
+            <a href="ReadPost/@p.Id">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@p.Title</h5>
+                        <p class="card-text">@p.Content</p>
+                        <span class="oi oi-thumb-up"></span>
+                        <span class="oi oi-thumb-down"></span>
+                        <div class="card-footer text-muted">
+                            @p.AuthorUserName
+                        </div>
                     </div>
                 </div>
-            </div>
-        </a>
+            </a>
+        }
     }
 
 </div>
@@ -25,6 +28,7 @@
 
 @code {
     IList<Post> _posts;
+    User currentUser;
 
     protected override async Task OnInitializedAsync()
     {
