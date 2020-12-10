@@ -103,5 +103,10 @@ namespace Feedle.Data
         {
             throw new System.NotImplementedException();
         }
+
+        public Task<bool> CommentPost(Comment comment, int postId)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

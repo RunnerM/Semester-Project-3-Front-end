@@ -8,6 +8,7 @@ namespace Feedle.Models
     public class Post
     {
         [JsonPropertyName("id")] public int Id { get; set; }
+        [JsonPropertyName("userId")] public int UserId { get; set; }
         [JsonPropertyName("title")] public string Title { get; set; }
         [JsonPropertyName("content")] public string Content { get; set; }
         [JsonPropertyName("authorUserName")] public string AuthorUserName { get; set; }
@@ -23,5 +24,10 @@ namespace Feedle.Models
 
 // public byte[] images;
         [JsonPropertyName("comments")] public List<Comment> Comments { get; set; }
+
+        public Post()
+        {
+            Comments = new List<Comment>();
+        }
     }
 }

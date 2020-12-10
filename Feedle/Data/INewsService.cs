@@ -11,5 +11,7 @@ namespace Feedle.Data
         Task UpdatePostAsync(Post post);
 
         Task<List<Post>> GetPostsForRegisteredUser(int id);
+
+        Task<bool> CommentPost(Comment comment, int postId);
     }
 }

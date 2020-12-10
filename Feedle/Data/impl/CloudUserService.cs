@@ -23,7 +23,8 @@ namespace Feedle.Data
         {
             string message =
                 await Client.GetStringAsync("http://localhost:5002/feedle/user?username=" + userName + "&password=" + password);
-            if (message.Length == 0)
+            Console.WriteLine(message);
+            if (JsonSerializer.Deserialize<User>(message) == null)
             {
                 CurrentUser = null;
                 return null;
@@ -56,7 +57,11 @@ namespace Feedle.Data
 
         public async Task<User> GetCurrentUser()
         {
-            return CurrentUser;
+            if (CurrentUser != null)
+            {
+                return await ValidateUser(CurrentUser.UserName, CurrentUser.Password);
+            }
+            else return null;
         }
 
         public async Task UpdateCurrentUser(User user)
