@@ -24,5 +24,7 @@ namespace Feedle.Models
         public int Minute { get; set; }
         [JsonPropertyName("second")]
         public int Second { get; set; }
+        [JsonPropertyName("conversationId")]
+        public int ConversationId { get; set; }
     }
 }
