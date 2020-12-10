@@ -7,46 +7,51 @@
 @inject INewsService NewsService;
 @inject IUserService UserService;
 <h3>ReadPost</h3>
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">@post.Title</h5>
-        <p class="card-text">@post.Content</p>
-        <div class="card-footer text-muted">
-            @post.AuthorUserName
+@if (post != null)
+{
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">@post.Title</h5>
+            <p class="card-text">@post.Content</p>
+            <div class="card-footer text-muted">
+                @post.AuthorUserName
+            </div>
         </div>
     </div>
-</div>
-<div class=" justify-content-center mt-100 mb-100">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Recent Comments</h4>
-                    <h6 class="card-subtitle">Latest Comments section by users</h6>
-                </div>
-                <div class="comment-widgets m-b-20">
-                    @for (int i = 0; i < post.Comments.Count; i++)
-                    {
-                        <div class="d-flex flex-row comment-row">
-                            <div class="p-2">
-                                <span class="round">
-                                    <a href="OtherProfile/@post.Comments[i].AuthorId"><img src="extra/user-empty-avatar.png" alt="user" width="50"></a>
-                                </span>
-                            </div>
-                            <div class="comment-text w-100">
-                                <h5>kek</h5>
-                                <div class="comment-footer">
-                                    <span class="label label-info">Published</span><span class="date">@post.Comments[i].Year</span>
+    <div class=" justify-content-center mt-100 mb-100">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Recent Comments</h4>
+                        <h6 class="card-subtitle">Latest Comments section by users</h6>
+                    </div>
+                    <div class="comment-widgets m-b-20">
+                        @if (post.Comments != null)
+                        {
+                            @for (int i = 0; i < post.Comments.Count; i++)
+                            {
+                                <div class="d-flex flex-row comment-row">
+                                    <div class="p-2">
+                                        <span class="round">
+                                            <a href="OtherProfile/@post.Comments[i].AuthorId"><img src="extra/user-empty-avatar.png" alt="user" width="50"></a>
+                                        </span>
+                                    </div>
+                                    <div class="comment-text w-100">
+                                        <h5>kek</h5>
+                                        <div class="comment-footer">
+                                            <span class="label label-info">Published</span><span class="date">@post.Comments[i].Year</span>
+                                        </div>
+                                        <p class="m-b-5 m-t-10">@post.Comments[i].Content</p>
+                                    </div>
                                 </div>
-                                <p class="m-b-5 m-t-10">@post.Comments[i].Content</p>
-                            </div>
-                        </div>
-                    }
+                            }
+                        }
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 <AuthorizeView>
     <Authorized>
         <form>
@@ -62,23 +67,24 @@
         <a href="LogIn">To write a comment log in first</a>
     </NotAuthorized>
 </AuthorizeView>
+}
 
 
 @code {
 
-    [Parameter]
-    public int id { get; set; }
+    [Parameter] public int Id { get; set; }
 
-    Post post;
-    User currentUser;
-    string commentText;
-    DateTime localDate;
+    private Post post;
+    private User currentUser;
+    private string commentText;
+    private DateTime localDate;
 
     protected override async Task OnInitializedAsync()
     {
         currentUser = await UserService.GetCurrentUser();
         IList<Post> posts = await NewsService.GetAllNews();
-        post = posts.FirstOrDefault(i => i.Id == id);
+        localDate = new DateTime();
+        post = posts.FirstOrDefault(i => i.Id == Id);
         if (post == null)
         {
             NavigationManager.NavigateTo("/Error");
@@ -92,11 +98,7 @@
         }
         else
         {
-            IList<Post> actualPosts = await NewsService.GetAllNews();
-            Post actualPost = actualPosts.FirstOrDefault(i => i.Id == id);
-
             Comment comment = new Comment();
-            comment.Id = actualPost.Comments.Count;
             comment.Content = commentText;
             comment.AuthorId = currentUser.Id;
             comment.AuthorUserName = currentUser.DisplayedUserName;

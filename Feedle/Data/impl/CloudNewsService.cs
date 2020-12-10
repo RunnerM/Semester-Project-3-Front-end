@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Feedle.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Feedle.Data
 {
@@ -44,9 +45,20 @@ namespace Feedle.Data
             return JsonSerializer.Deserialize<List<Post>>(message);
         }
 
-        public Task UpdatePostAsync(Post post)
+        public async Task UpdatePostAsync(Post post)
         {
-            throw new NotImplementedException();
+            string postToSerialize = JsonSerializer.Serialize(post);
+            Console.WriteLine(postToSerialize);
+            StringContent stringContent = new StringContent(
+                postToSerialize,
+                Encoding.UTF8,
+                "application/json");
+            HttpResponseMessage httpResponseMessage=
+                await Client.PatchAsync("http://localhost:5002/feedle/posts", stringContent);
+            if (httpResponseMessage.IsSuccessStatusCode)
+            {
+               
+            }
         }
 
         public async Task<List<Post>> GetPostsForRegisteredUser(int id)
@@ -57,6 +69,19 @@ namespace Feedle.Data
                 return new List<Post>();
             }
             return JsonSerializer.Deserialize<List<Post>>(message);
+        }
+
+        public async Task<bool> CommentPost(Comment comment, int postId)
+        {
+            String commentAsJson = JsonSerializer.Serialize(comment);
+            StringContent stringContent = new StringContent(
+                commentAsJson,
+                Encoding.UTF8,
+                "application/json"
+            );
+            HttpResponseMessage responseMessage =
+                await Client.PostAsync("http://localhost:5002/feedle/posts/comment?Id=" + postId, stringContent);
+            return responseMessage.IsSuccessStatusCode;
         }
     }
 }

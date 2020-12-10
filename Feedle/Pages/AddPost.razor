@@ -48,6 +48,7 @@
     public async void addPost()
     {
         currentUser = await UserService.GetCurrentUser();
+        Console.WriteLine(currentUser.Id);
         if (currentUser == null)
         {
             
@@ -58,6 +59,7 @@
             post.Title = postTitle;
             post.Content = postContent;
             post.AuthorUserName = currentUser.UserName;
+            post.UserId = currentUser.Id;
             post.Comments = new List<Comment>();
             await NewsService.AddPostAsync(post);
         }

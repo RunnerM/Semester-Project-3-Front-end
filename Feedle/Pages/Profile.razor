@@ -9,7 +9,7 @@
 <AuthorizeView>
     <Authorized>
         <div class="oi oi-person"></div>
-        <h3>@currentUser.UserName</h3>
+        <h3>@GetUserName()</h3>
         <div>
             <button @onclick="changePassword" class="btn btn-lg btn-primary btn-block" type="submit">Change Password</button>
         </div>
@@ -158,16 +158,26 @@
     }
 
     //user data section
-    User currentUser;
-    List<Post> posts;
-    List<User> fiends;
-    List<string> subscritions;
+    private User currentUser;
+    private List<Post> posts;
+    private List<User> fiends;
+    private List<string> subscritions;
 
     protected override async Task OnInitializedAsync()
     {
         currentUser =  await UserService.GetCurrentUser();
-    //currentuser = new User();
-    //currentuser.UserName = "username";
+    }
+
+    public String GetUserName()
+    {
+        if (currentUser == null)
+        {
+            return "unknown";
+        }
+        else
+        {
+            return currentUser.UserName;
+        }
     }
 
     public async Task editProfile()
