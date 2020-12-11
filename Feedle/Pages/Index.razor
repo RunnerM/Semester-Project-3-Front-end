@@ -72,12 +72,14 @@
 
 @code
 {
-    public Post Post { get; set; }
     string sortBy;
     string filterBy;
 
     protected override async Task OnInitializedAsync()
     {
-        Post = new Post();
+    //TODO: do we even need this?
     }
+
+    //TODO: implement filters
+    //TODO: implement sort by
 }
