@@ -1,11 +1,23 @@
 @using Feedle.Models
 @using Feedle.Data
 @inject INewsService NewsService;
-<div>
 
-    @if (_posts != null)
+<div>
+    @if (posts == null)
     {
-        @foreach (Post p in _posts)
+        <p>
+            <em>Loading...</em>
+        </p>
+    }
+    else if (!posts.Any())
+    {
+        <p>
+            <em>There are no posts.</em>
+        </p>
+    }
+    else
+    {
+        @foreach (Post p in posts)
         {
             <a href="ReadPost/@p.Id">
                 <div class="card">
@@ -22,17 +34,16 @@
             </a>
         }
     }
-
 </div>
 
 
 @code {
-    IList<Post> _posts;
+    IList<Post> posts;
     User currentUser;
 
     protected override async Task OnInitializedAsync()
     {
-        _posts = await NewsService.GetAllNews();
+        posts = await NewsService.GetAllNews();
     }
 
 }

@@ -3,6 +3,7 @@
 @using Feedle.Data
 @inject INewsService NewsService
 @inject IUserService UserService
+@inject NavigationManager NavigationManager;
 <AuthorizeView>
     <Authorized>
         <h3>AddPost</h3>
@@ -35,7 +36,7 @@
         </form>
     </Authorized>
     <NotAuthorized>
-        <p>Its FBI, open up!</p>
+        @navigateToError();
     </NotAuthorized>
 </AuthorizeView>
 
@@ -59,10 +60,19 @@
             post.Title = postTitle;
             post.Content = postContent;
             post.AuthorUserName = currentUser.UserName;
+            Console.WriteLine(currentUser.Id);
             post.UserId = currentUser.Id;
             post.Comments = new List<Comment>();
             await NewsService.AddPostAsync(post);
+            NavigationManager.NavigateTo("/");
         }
       
     }
+
+    private object navigateToError()
+    {
+        NavigationManager.NavigateTo("/Error");
+        return new object(); //does not need to return anything
+    }
+
 }

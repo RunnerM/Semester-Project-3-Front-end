@@ -34,7 +34,7 @@
                                 <div class="d-flex flex-row comment-row">
                                     <div class="p-2">
                                         <span class="round">
-                                            <a href="OtherProfile/@post.Comments[i].AuthorId"><img src="extra/user-empty-avatar.png" alt="user" width="50"></a>
+                                            <a href="OtherProfile/@post.Comments[i].UserId"><img src="extra/user-empty-avatar.png" alt="user" width="50"></a>
                                         </span>
                                     </div>
                                     <div class="comment-text w-100">
@@ -100,7 +100,7 @@
         {
             Comment comment = new Comment();
             comment.Content = commentText;
-            comment.AuthorId = currentUser.Id;
+            comment.UserId = currentUser.Id;
             comment.AuthorUserName = currentUser.DisplayedUserName;
             localDate = DateTime.Now;
             comment.Second = localDate.Second;
@@ -109,10 +109,10 @@
             comment.Day = localDate.Day;
             comment.Month = localDate.Month;
             comment.Year = localDate.Year;
-            post.Comments.Add(comment);
-            await NewsService.UpdatePostAsync(post);
+            await NewsService.CommentPost(comment,post.Id);
             commentText = "";
-            Console.WriteLine(JsonSerializer.Serialize(post));
+            IList<Post> posts = await NewsService.GetAllNews();
+            post = posts.FirstOrDefault(i => i.Id == Id);
         }
     }
 
