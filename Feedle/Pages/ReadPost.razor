@@ -2,17 +2,16 @@
 @inject NavigationManager NavigationManager;
 @using Feedle.Data
 @using Feedle.Models
-@using System.Collections
-@using System.Text.Json
 @inject INewsService NewsService;
 @inject IUserService UserService;
-<h3>ReadPost</h3>
+
 @if (post != null)
 {
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">@post.Title</h5>
             <p class="card-text">@post.Content</p>
+            <span>@GetTime(post)</span>
             <div class="card-footer text-muted">
                 @post.AuthorUserName
             </div>
@@ -27,14 +26,28 @@
                         <h6 class="card-subtitle">Latest Comments section by users</h6>
                     </div>
                     <div class="comment-widgets m-b-20">
-                        @if (post.Comments != null)
+                        @if (post.Comments == null)
+                        {
+                            <p>
+                                <em>Loading...</em>
+                            </p>
+                        }
+                        else if (!post.Comments.Any())
+                        {
+                            <p>
+                                <em>There are no comments for this post yet.</em>
+                            </p>
+                        }
+                        else
                         {
                             @for (int i = 0; i < post.Comments.Count; i++)
                             {
                                 <div class="d-flex flex-row comment-row">
                                     <div class="p-2">
                                         <span class="round">
-                                            <a href="OtherProfile/@post.Comments[i].UserId"><img src="extra/user-empty-avatar.png" alt="user" width="50"></a>
+                                            <a href="OtherProfile/@post.Comments[i].UserId">
+                                                <img src="extra/user-empty-avatar.png" alt="user" width="50">
+                                            </a>
                                         </span>
                                     </div>
                                     <div class="comment-text w-100">
@@ -43,6 +56,7 @@
                                             <span class="label label-info">Published</span><span class="date">@post.Comments[i].Year</span>
                                         </div>
                                         <p class="m-b-5 m-t-10">@post.Comments[i].Content</p>
+                                        <span>@GetTime(post.Comments[i])</span>
                                     </div>
                                 </div>
                             }
@@ -72,18 +86,18 @@
 
 @code {
 
-    [Parameter] public int Id { get; set; }
+    [Parameter]
+    public int Id { get; set; }
 
     private Post post;
     private User currentUser;
     private string commentText;
-    private DateTime localDate;
+    DateTime DateTime { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         currentUser = await UserService.GetCurrentUser();
         IList<Post> posts = await NewsService.GetAllNews();
-        localDate = new DateTime();
         post = posts.FirstOrDefault(i => i.Id == Id);
         if (post == null)
         {
@@ -102,18 +116,31 @@
             comment.Content = commentText;
             comment.UserId = currentUser.Id;
             comment.AuthorUserName = currentUser.DisplayedUserName;
-            localDate = DateTime.Now;
-            comment.Second = localDate.Second;
-            comment.Minute = localDate.Minute;
-            comment.Hour = localDate.Hour;
-            comment.Day = localDate.Day;
-            comment.Month = localDate.Month;
-            comment.Year = localDate.Year;
-            await NewsService.CommentPost(comment,post.Id);
+            DateTime = DateTime.Now;
+            comment.Second = DateTime.Second;
+            comment.Minute = DateTime.Minute;
+            comment.Hour = DateTime.Hour;
+            comment.Day = DateTime.Day;
+            comment.Month = DateTime.Month;
+            comment.Year = DateTime.Year;
+            await NewsService.CommentPost(comment, post.Id);
             commentText = "";
             IList<Post> posts = await NewsService.GetAllNews();
             post = posts.FirstOrDefault(i => i.Id == Id);
         }
+    }
+
+    public string GetTime(Post post)
+    {
+        Console.WriteLine(post.Hour + ":" + post.Minute + "  " + post.Day + "." + post.Month + "." + post.Year);
+        return post.Hour + ":" + post.Minute + "  " + post.Day + "." + post.Month + "." + post.Year;
+    //TODO: fix time
+    }
+
+    string GetTime(Comment comment)
+    {
+        return post.Hour + ":" + post.Minute + "  " + post.Day + "." + post.Month + "." + post.Year;
+    //TODO: fix time
     }
 
 }
