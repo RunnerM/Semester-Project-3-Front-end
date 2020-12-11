@@ -1,5 +1,6 @@
 @using Feedle.Models
 @using Feedle.Data
+@using System.Text.Json
 @inject INewsService NewsService;
 
 <div>
@@ -17,7 +18,7 @@
     }
     else
     {
-        @foreach (Post p in posts)
+        @foreach (Post p in posts.Reverse())
         {
             <a href="ReadPost/@p.Id">
                 <div class="card">
@@ -49,6 +50,6 @@
 
     string GetTime(Post post)
     {
-       return post.Hour + ":" + post.Minute + "  " + post.Day + "." + post.Month + "." + post.Year;
+        return post.Hour + ":" + post.Minute + "  " + post.Day + "." + post.Month + "." + post.Year;
     }
 }
