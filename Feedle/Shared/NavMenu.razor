@@ -24,6 +24,7 @@
                     </div>
                 </NotAuthorized>
                 <Authorized>
+
                     <li class="nav-item">
                         <a class="nav-link oi oi-person"
                            href="Profile">
@@ -31,12 +32,47 @@
                             {
                                 <h6>Profile</h6>
                             }
-                            </a>
-                        
-                        
+                        </a>
+
+
                     </li>
                 </Authorized>
             </AuthorizeView>
+
+
+            <AuthorizeView>
+                <Authorized>
+                    <RadzenProfileMenu>
+                        <Template>
+                            <RadzenGravatar Email="user@example.com">
+                            </RadzenGravatar>
+                        </Template>
+                        <ChildContent>
+                            <RadzenProfileMenuItem Text="Profile" Path="/Profile" Icon="account_circle"></RadzenProfileMenuItem>
+                            <RadzenProfileMenuItem Text="Chat" Path="/Chat" Icon="chat_bubble"></RadzenProfileMenuItem>
+                            <RadzenProfileMenuItem Text="Notifications" Path="/" Icon="notifications"></RadzenProfileMenuItem>
+
+                        </ChildContent>
+                    </RadzenProfileMenu>
+                </Authorized>
+                <NotAuthorized>
+                    <RadzenProfileMenu>
+                        <Template>
+                            <RadzenGravatar Email="user@example.com">
+                            </RadzenGravatar>
+                        </Template>
+                        <ChildContent>
+                            <RadzenProfileMenuItem Text="Login" Path="/Login" Icon="account_circle"></RadzenProfileMenuItem>
+                            <RadzenProfileMenuItem Text="Sing Up" Path="/SignUP" Icon="how_to_reg"></RadzenProfileMenuItem>
+
+                        </ChildContent>
+                    </RadzenProfileMenu>
+
+                </NotAuthorized>
+
+
+            </AuthorizeView>
+
         </div>
 
     </div>
