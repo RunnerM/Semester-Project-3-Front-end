@@ -45,6 +45,7 @@
     string postTitle { get; set; }
     string postContent { get; set; }
     User currentUser { get; set; }
+    DateTime DateTime { get; set; }
 
     public async void addPost()
     {
@@ -52,7 +53,6 @@
         Console.WriteLine(currentUser.Id);
         if (currentUser == null)
         {
-            
         }
         else
         {
@@ -63,10 +63,18 @@
             Console.WriteLine(currentUser.Id);
             post.UserId = currentUser.Id;
             post.Comments = new List<Comment>();
+
+            DateTime = DateTime.Now;
+            post.Second = DateTime.Second;
+            post.Minute = DateTime.Minute;
+            post.Hour = DateTime.Hour;
+            post.Day = DateTime.Day;
+            post.Month = DateTime.Month;
+            post.Year = DateTime.Year;
+
             await NewsService.AddPostAsync(post);
             NavigationManager.NavigateTo("/");
         }
-      
     }
 
     private object navigateToError()
