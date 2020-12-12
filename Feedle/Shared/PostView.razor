@@ -2,6 +2,7 @@
 @using Feedle.Data
 @using System.Text.Json
 @inject INewsService NewsService;
+@inject IUserService UserService;
 
 <div>
     @if (posts == null)
@@ -28,6 +29,10 @@
                         <span>@GetTime(p)</span>
                         <span class="oi oi-thumb-up"></span>
                         <span class="oi oi-thumb-down"></span>
+                        @if (IsAuthor(p))
+                        {
+                            <span class="oi oi-trash"></span>
+                        }
                         <div class="card-footer text-muted">
                             @p.AuthorUserName
                         </div>
@@ -46,10 +51,21 @@
     protected override async Task OnInitializedAsync()
     {
         posts = await NewsService.GetAllNews();
+        currentUser = await UserService.GetCurrentUser();
     }
 
     string GetTime(Post post)
     {
         return post.Hour + ":" + post.Minute + "  " + post.Day + "." + post.Month + "." + post.Year;
     }
+
+    bool IsAuthor(Post post)
+    {
+        if (currentUser != null)
+        {
+            return currentUser.UserName.Equals(post.AuthorUserName);
+        }
+        return false;
+    }
+
 }

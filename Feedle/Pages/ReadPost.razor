@@ -16,6 +16,10 @@
             <div class="card-footer text-muted">
                 @post.AuthorUserName
             </div>
+            @if (IsAuthor())
+            {
+                <span class="oi oi-trash"></span>
+            }
         </div>
     </div>
     <div class=" justify-content-center mt-100 mb-100">
@@ -139,6 +143,17 @@
     {
         return comment.Hour + ":" + comment.Minute + "  " + comment.Day + "." + comment.Month + "." + comment.Year;
     }
+
+    bool IsAuthor()
+    {
+        if (currentUser != null)
+        {
+            return currentUser.UserName.Equals(post.AuthorUserName);
+        }
+        return false;
+    }
+
+
     //TODO: add delete comment
     //TODO: add delete post
 

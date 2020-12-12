@@ -91,6 +91,11 @@ namespace Feedle.Data
             throw new NotImplementedException();
         }
 
+        public void RemoveCachedUser()
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<User> GetCurrentUser()
         {
             throw new NotImplementedException();

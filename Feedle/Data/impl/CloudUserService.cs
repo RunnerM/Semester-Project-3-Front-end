@@ -80,6 +80,11 @@ namespace Feedle.Data
             }
         }
 
+        public void RemoveCachedUser()
+        {
+            this.CurrentUser = null;
+        }
+
         public Task<IList<User>> GetFriendsByUserId()
         {
             throw new NotImplementedException();
