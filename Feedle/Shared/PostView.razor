@@ -21,24 +21,24 @@
     {
         @foreach (Post p in posts.Reverse())
         {
-            <a href="ReadPost/@p.Id">
-                <div class="card">
-                    <div class="card-body">
+            <div class="card">
+                <div class="card-body">
+                    <a href="ReadPost/@p.Id">
                         <h5 class="card-title">@p.Title</h5>
                         <p class="card-text">@p.Content</p>
-                        <span>@GetTime(p)</span>
-                        <span class="oi oi-thumb-up"></span>
-                        <span class="oi oi-thumb-down"></span>
-                        @if (IsAuthor(p))
-                        {
-                            <span class="oi oi-trash"></span>
-                        }
-                        <div class="card-footer text-muted">
-                            @p.AuthorUserName
-                        </div>
+                    </a>
+                    <span>@GetTime(p)</span>
+                    <span class="oi oi-thumb-up"></span>
+                    <span class="oi oi-thumb-down"></span>
+                    @if (IsAuthor(p))
+                    {
+                        <span class="oi oi-trash" @onclick="DeletePost"></span>
+                    }
+                    <div class="card-footer text-muted">
+                        @p.AuthorUserName
                     </div>
                 </div>
-            </a>
+            </div>
         }
     }
 </div>
@@ -66,6 +66,13 @@
             return currentUser.UserName.Equals(post.AuthorUserName);
         }
         return false;
+    }
+
+    async Task DeletePost()
+    {
+    //await NewsService.DeletePost(post); //TODO connect to web api
+        InvokeAsync(StateHasChanged);
+        Console.WriteLine("button pressed");
     }
 
 }
