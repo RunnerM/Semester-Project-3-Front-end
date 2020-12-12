@@ -2,6 +2,7 @@
 @inject NavigationManager NavigationManager;
 @using Feedle.Data
 @using Feedle.Models
+@using System.Text.Json
 @inject INewsService NewsService;
 @inject IUserService UserService;
 
@@ -51,12 +52,11 @@
                                         </span>
                                     </div>
                                     <div class="comment-text w-100">
-                                        <h5>kek</h5>
+                                        <h5>@post.Comments[i].AuthorUserName</h5>
                                         <div class="comment-footer">
-                                            <span class="label label-info">Published</span><span class="date">@post.Comments[i].Year</span>
+                                            <span class="label label-info">Published_</span><span>@GetTime(post.Comments[i])</span>
                                         </div>
                                         <p class="m-b-5 m-t-10">@post.Comments[i].Content</p>
-                                        <span>@GetTime(post.Comments[i])</span>
                                     </div>
                                 </div>
                             }
@@ -115,7 +115,7 @@
             Comment comment = new Comment();
             comment.Content = commentText;
             comment.UserId = currentUser.Id;
-            comment.AuthorUserName = currentUser.DisplayedUserName;
+            comment.AuthorUserName = currentUser.UserName;
             DateTime = DateTime.Now;
             comment.Second = DateTime.Second;
             comment.Minute = DateTime.Minute;
@@ -137,7 +137,9 @@
 
     string GetTime(Comment comment)
     {
-        return post.Hour + ":" + post.Minute + "  " + post.Day + "." + post.Month + "." + post.Year;
+        return comment.Hour + ":" + comment.Minute + "  " + comment.Day + "." + comment.Month + "." + comment.Year;
     }
-    //TODO: fix comments
+    //TODO: add delete comment
+    //TODO: add delete post
+
 }

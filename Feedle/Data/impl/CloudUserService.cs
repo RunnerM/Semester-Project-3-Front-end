@@ -61,7 +61,7 @@ namespace Feedle.Data
             {
                 return await ValidateUser(CurrentUser.UserName, CurrentUser.Password);
             }
-            else return null;
+            return null;
         }
 
         public async Task UpdateCurrentUser(User user)
