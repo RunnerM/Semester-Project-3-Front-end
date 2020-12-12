@@ -32,7 +32,8 @@
                     <span class="oi oi-thumb-down"></span>
                     @if (IsAuthor(p))
                     {
-                        <span class="oi oi-trash" @onclick="DeletePost"></span>
+                        var copy = p;
+                        <span class="oi oi-trash" @onclick="@(e => DeletePost(copy))"></span>
                     }
                     <div class="card-footer text-muted">
                         @p.AuthorUserName
@@ -68,11 +69,11 @@
         return false;
     }
 
-    async Task DeletePost()
+    async Task DeletePost(Post post)
     {
     //await NewsService.DeletePost(post); //TODO connect to web api
-        InvokeAsync(StateHasChanged);
-        Console.WriteLine("button pressed");
+        //InvokeAsync(StateHasChanged);
+        Console.WriteLine(JsonSerializer.Serialize(post));
     }
 
 }

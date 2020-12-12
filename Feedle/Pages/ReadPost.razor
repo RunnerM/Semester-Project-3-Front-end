@@ -2,6 +2,7 @@
 @inject NavigationManager NavigationManager;
 @using Feedle.Data
 @using Feedle.Models
+@using System.Text.Json
 @inject INewsService NewsService;
 @inject IUserService UserService;
 @inject BlazorTimer Timer
@@ -61,7 +62,14 @@
                                             <div class="comment-footer">
                                                 <span class="label label-info">Published_</span><span>@GetTime(post.Comments[i])</span>
                                             </div>
-                                            <p class="m-b-5 m-t-10">@post.Comments[i].Content</p>
+                                            <p class="m-b-5 m-t-10">
+                                                @post.Comments[i].Content
+                                                @if (IsAuthorOfComment(post.Comments[i]))
+                                                {
+                                                    var copy = post.Comments[i];
+                                                    <span class="oi oi-trash" @onclick="@(e => DeleteComment(copy))"></span>
+                                                }
+                                            </p>
                                         </div>
                                     </div>
                                 }
@@ -165,11 +173,29 @@ else
         return false;
     }
 
+    bool IsAuthorOfComment(Comment comment)
+    {
+        if (currentUser != null)
+        {
+            return currentUser.Id == comment.UserId;
+        }
+        return false;
+    }
+
     async Task DeletePost()
     {
     //postDeletedResult = await NewsService.DeletePost(post); //TODO connect to web api
         postDeletedResult = true;
         StartTimer();
+    }
+
+    async Task DeleteComment(Comment comment)
+    {
+        //Comment comment = post.Comments[i];
+        Console.WriteLine(JsonSerializer.Serialize(comment));
+    //await NewsService.DeleteComment(post, comment.Id);
+
+    //await InvokeAsync(StateHasChanged);
     }
 
     //timer

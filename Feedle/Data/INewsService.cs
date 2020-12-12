@@ -14,5 +14,7 @@ namespace Feedle.Data
 
         Task<bool> CommentPost(Comment comment, int postId);
         Task<bool> DeletePost(Post post);
+
+        Task<bool> DeleteComment(Post post, int commentId);
     }
 }
