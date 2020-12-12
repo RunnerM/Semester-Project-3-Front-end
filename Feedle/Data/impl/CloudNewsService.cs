@@ -83,5 +83,10 @@ namespace Feedle.Data
                 await Client.PostAsync("http://localhost:5002/feedle/posts/comment?Id=" + postId, stringContent);
             return responseMessage.IsSuccessStatusCode;
         }
+
+        public Task<bool> DeletePost(Post post)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
