@@ -1,0 +1,56 @@
+@page "/ChatView/{recepiantuserid}"
+@using Feedle.Models
+@using Feedle.Data
+@using Radzen
+@inject IUserService UserService;
+@inject NavigationManager NavigationManager;
+
+<RadzenButton ButtonStyle="ButtonStyle.Light" Icon="arrow_back" class="mr-auto" Click=@(args => OnBack())></RadzenButton>
+
+@foreach (string s in messages)
+{
+    
+}
+<div class="row">
+    <div class="col-md-1"></div>
+    <RadzenTextBox class="col-md-8" Placeholder="Message....." Change=@(args => OnChange(args))></RadzenTextBox>
+
+    <div class="col-md-2">
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Click=@(args => OnClick())><RadzenIcon Icon="send"></RadzenIcon></RadzenButton>
+    </div>
+
+</div>
+
+
+@code {
+    IList<string> messages= new List<string>();
+    string newMessage;
+    User currentUser;
+    User recepientUser;
+    [Parameter] public string recepiantuserId { get; set; }
+    protected override async void OnInitialized()
+    {
+        currentUser = await UserService.GetCurrentUser();
+        recepientUser = await UserService.GetCurrentUser();//todo: needs recepient
+    }
+
+
+    private void OnChange(string value)
+    {
+        newMessage=value;
+    }
+
+    private void OnClick()
+    {
+        messages.Add(newMessage);
+        
+        //todo: persitance/ delagate to service.
+    }
+
+    private void OnBack()
+    {
+        NavigationManager.NavigateTo("/Chat");
+        
+    }
+
+}

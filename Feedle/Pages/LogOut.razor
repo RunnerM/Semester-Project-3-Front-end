@@ -1,0 +1,24 @@
+@page "/LogOut"
+@using Feedle.Authentication
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject NavigationManager NavigationManager;
+<h6>You are being logged out......</h6>
+
+@code {
+    protected  override async void OnInitialized()
+    {
+       await PerformLogout();
+    }
+    public async Task PerformLogout()
+    {
+        try
+        {
+            ((CustomAuthenticationStateProvider) AuthenticationStateProvider).Logout();
+            NavigationManager.NavigateTo("/");
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+}

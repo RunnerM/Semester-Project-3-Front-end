@@ -21,6 +21,7 @@ namespace Feedle.Data
 
         public async Task<User> ValidateUser(string userName, string password)
         {
+            //todo: fix this.
             string message =
                 await Client.GetStringAsync("http://localhost:5002/feedle/user?username=" + userName + "&password=" + password);
             Console.WriteLine(message);

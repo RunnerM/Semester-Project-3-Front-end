@@ -7,18 +7,18 @@
         <img class="mb-4" src="extra/9742 feedle_RB_1.png" alt width="72">
         <h1 class="h3 mb-3 font-weight-normal">Please sign up</h1>
         <label for="inputEmail" class="sr-only">Email address</label>
-        <input @bind-value="username" class="form-control" placeholder="Email address" required="" autofocus="">
+        <input @bind-value="username" class="form-control" placeholder="Username" required="" autofocus="">
         <label for="inputPassword" class="sr-only">Password</label>
         <input @bind-value="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
         <label for="inputPassword" class="sr-only">Repeat Password</label>
         <input @bind-value="password2" type="password" id="inputPassword2" class="form-control" placeholder="Repeat Password" required="">
         <button @onclick="PerformSignUp" class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
                     <p>or <a href="LogIn">log in</a> instead</p>
-                    @if (flag)
+                    @if (registeredFlag)
                     {
                         <p>You are now registered <a href="LogIn">log in</a></p>
                     }
-                    @if (flag2)
+                    @if (passwordMatchFlag)
                     {
                         <p>Paswords dose not match</p>
                     }
@@ -26,8 +26,8 @@
 </div>
 
 @code {
-    bool flag;
-    bool flag2;
+    bool registeredFlag;
+    bool passwordMatchFlag;
     string username;
     string password;
     string password2;
@@ -43,12 +43,12 @@
             bool result= await UserService.RegisterUser(newuser);
             if (result == true)
             {
-                flag = true;
+                registeredFlag = true;
             }
         }
         else
         {
-            flag2 = true;
+            passwordMatchFlag = true;
         }
     }
 
