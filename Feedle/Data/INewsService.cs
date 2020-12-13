@@ -16,5 +16,7 @@ namespace Feedle.Data
         Task<bool> DeletePost(Post post);
 
         Task<bool> DeleteComment(Post post, int commentId);
+        Task<bool> IsPostThumbUpByUser(Post post, User user);
+        Task<bool> IsPostThumbDownByUser(Post post, User user);
     }
 }

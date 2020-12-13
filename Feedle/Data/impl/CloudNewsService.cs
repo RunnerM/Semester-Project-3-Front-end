@@ -93,5 +93,15 @@ namespace Feedle.Data
         {
             throw new NotImplementedException();
         }
+
+        public Task<bool> IsPostThumbUpByUser(Post post, User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> IsPostThumbDownByUser(Post post, User user)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

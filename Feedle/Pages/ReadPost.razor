@@ -16,7 +16,7 @@
                 <h5 class="card-title">@post.Title</h5>
                 <p class="card-text">@post.Content</p>
                 <span>@GetTime(post)</span>
-                <div class="card-footer text-muted">
+                <div class="card-footer text-muted cursor-pointer" @onclick="NavigateToProfile">
                     @post.AuthorUserName
                 </div>
                 @if (IsAuthor())
@@ -232,6 +232,25 @@ else
         else
         {
             NavigationManager.NavigateTo("/OtherProfile/" + comment.UserId);
+        }
+    }
+    
+    void NavigateToProfile()
+    {
+        if (currentUser != null)
+        {
+            if (currentUser.Id == post.UserId)
+            {
+                NavigationManager.NavigateTo("/Profile");
+            }
+            else
+            {
+                NavigationManager.NavigateTo("/OtherProfile/" + post.UserId);
+            }
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/OtherProfile/" + post.UserId);
         }
     }
 
