@@ -2,6 +2,7 @@
 @using Feedle.Models
 @using Feedle.Data
 @using Feedle.Authentication
+@using System.Text.Json
 @inject IUserService UserService;
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject NavigationManager NavigationManager;
@@ -47,7 +48,11 @@
                                     <ul class="list-group">
                                         @foreach (var i in posts)
                                         {
-                                            <li class="list-group-item">@i.Title</li>
+                                            var copy = i;
+                                            <li class="list-group-item">
+                                                @i.Title
+                                                <span class="oi oi-trash" @onclick="@(e => DeletePost(copy))"></span>
+                                            </li>
                                         }
                                     </ul>
                                 }
@@ -262,6 +267,13 @@
         }
     }
 
+    async Task DeletePost(Post post)
+    {
+    //await NewsService.DeletePost(post); //TODO connect to web api
+    //InvokeAsync(StateHasChanged);
+        Console.WriteLine(post.Title);
+    }
+
     //timer
     private void StartTimer()
     {
@@ -275,4 +287,6 @@
     {
         NavigationManager.NavigateTo("/");
     }
+
+    //TODO: make page for change password
 }
