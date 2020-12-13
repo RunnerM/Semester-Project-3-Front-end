@@ -1,20 +1,49 @@
 @page "/OtherProfile/{id:int}"
+@using Feedle.Models
+@using Feedle.Data
+@inject INewsService NewsService;
+@inject IUserService UserService;
 
-<h3>OtherProfile</h3>
-<div class="oi oi-person"></div>
-<p>@id</p>
-<a class="btn btn-outline-secondary">Add friend</a>
-<a class="btn btn-outline-secondary">Subscribe</a>
-<div class="input-group">
-    <div class="input-group-prepend">
-        <span class="input-group-text">With textarea</span>
-    </div>
-    <textarea class="form-control" aria-label="With textarea" readonly placeholder="Not friends yet"></textarea>
-</div>
+<AuthorizeView>
+    <Authorized>
+        <h3>OtherProfile</h3>
+        <div class="oi oi-person"></div>
+        <p>@id</p>
+        <a class="btn btn-outline-secondary" @onclick="AddFriend">Send friend request</a>
+        <a class="btn btn-outline-secondary" @onclick="Subscribe">Subscribe</a>
+    </Authorized>
+    <NotAuthorized>
+        <h3>OtherProfile</h3>
+        <div class="oi oi-person"></div>
+        <p>@id</p>
+        <a class="btn btn-outline-secondary" href="LogIn">Send friend request</a>
+        <a class="btn btn-outline-secondary" href="LogIn">Subscribe</a>
+        <a class="btn btn-outline-secondary" href="LogIn">Send message</a>
+        <em>To subscribe / send friend request / send message, <a href="LogIn">log in</a> first</em>
+    </NotAuthorized>
+</AuthorizeView>
+
 
 @code {
 
     [Parameter]
     public int id { get; set; }
+
+    User otherUser;
+    User currentUser;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentUser = await UserService.GetCurrentUser();
+    }
+
+    async Task AddFriend()
+    {
+    }
+
+    async Task Subscribe()
+    {
+    }
 
 }
