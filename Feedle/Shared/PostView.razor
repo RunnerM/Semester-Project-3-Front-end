@@ -4,7 +4,8 @@
 @inject INewsService NewsService;
 @inject IUserService UserService;
 @inject NavigationManager NavigationManager;
-
+@page "/PostView"
+@page "/PostView/{text}"
 <div>
     @if (posts == null)
     {

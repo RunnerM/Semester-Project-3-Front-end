@@ -12,21 +12,17 @@
     <div class="col-sm-8">
         <div class="form-row">
             <div class="form-group col">
-                <label>sort by: </label>
+                <label>Sort by: </label>
                 <select class="form-control" @bind="sortBy" style="background-color: #f7f7f7">
-                    <option selected value="family">Family</option>
-                    <option value="adult">Adult</option>
-                    <option value="child">Child</option>
-                    <option value="pet">Pet</option>
+                    <option selected value="newestFirst">Newest first</option>
+                    <option value="oldestFirst">Oldest first</option>
                 </select>
             </div>
             <div class="form-group col">
-                <label>filter by: </label>
+                <label> Filter by: </label>
                 <select class="form-control" @bind="filterBy" style="background-color: #f7f7f7">
-                    <option selected value="family">Family</option>
-                    <option value="adult">Adult</option>
-                    <option value="child">Child</option>
-                    <option value="pet">Pet</option>
+                    <option selected value="all">All</option>
+                    <option value="onlySubscriptions">Subscriptions only</option>
                 </select>
             </div>
         </div>
