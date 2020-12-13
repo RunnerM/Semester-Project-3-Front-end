@@ -96,6 +96,7 @@ namespace Feedle.Data
                     break;
                 }
             }
+            
         }
 
         public Task<List<Post>> GetPostsForRegisteredUser(int id)

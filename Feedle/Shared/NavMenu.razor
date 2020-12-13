@@ -1,55 +1,152 @@
-﻿<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 fixed-top">
-    <div class="container">
+﻿﻿@using Feedle.Pages
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 fixed-top">
+    <div class="col-1"></div>
+    <a class="navbar-brand" href="#">
+        <img src="/extra/9742 feedle_RB_1.png" height="39" class="d-inline-block align-top" alt="" loading="lazy">
+    </a>
 
-        <a class="navbar-brand" href="#">
-            <img src="/extra/9742 feedle_RB_1.png" height="39" class="d-inline-block align-top" alt="" loading="lazy">
-        </a>
-        <button class="navbar-toggler" @onclick="ToggleNavMenu" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="@NavMenuCssClass navbar-collapse d-sm-inline-flex flex-sm-row-reverse" @onclick="CollapseNavMenu">
-            <ul class="navbar-nav mr-auto">
+    <button @onclick="ToggleNavMenu" class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+             aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="@NavMenuCssClass navbar-collapse d-sm-inline-flex flex-sm-row-reverse" @onclick="CollapseNavMenu">
+        <div class="navbar-nav">
+            @if (!collapseNavMenu)
+            {
                 <AuthorizeView>
                     <NotAuthorized>
-                        <li class="nav-item">
-                            <a class="btn btn-outline-secondary btn-sm" href="LogIn">
+                        <div class="navbar-nav mr-auto">
+                            <a style="color: #1b1e21" href="LogIn">
                                 LOG IN
                             </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-primary btn-sm" href="SignUp">
+                            <a style="color: #1b1e21" href="SignUp">
                                 SIGN UP
                             </a>
-                        </li>
+
+                        </div>
                     </NotAuthorized>
                     <Authorized>
+
                         <li class="nav-item">
                             <a class="nav-link oi oi-person"
                                href="Profile">
+                                @if (profileflag)
+                                {
+                                    <h6>Profile</h6>
+                                }
                             </a>
+
+
                         </li>
                     </Authorized>
                 </AuthorizeView>
-            </ul>
+            }
+
+
+                @if (collapseNavMenu)
+            {
+                <AuthorizeView>
+                    <Authorized>
+                        <RadzenMenu>
+                            <RadzenMenuItem Text="" Icon="account_circle">
+                                <RadzenProfileMenuItem Text="Profile" Path="/Profile" Icon="account_circle"></RadzenProfileMenuItem>
+                                <RadzenProfileMenuItem Text="Chat" Path="/Chat" Icon="chat_bubble"></RadzenProfileMenuItem>
+                                <RadzenProfileMenuItem Text="Notifications" Path="/Notifications" Icon="notifications"></RadzenProfileMenuItem>
+                            </RadzenMenuItem>
+                        </RadzenMenu>
+                    </Authorized>
+                    <NotAuthorized>
+
+                        <RadzenMenu>
+                            <RadzenMenuItem Text="" Icon="account_circle">
+                                <RadzenProfileMenuItem Text="Login" Path="/Login" Icon="account_circle"></RadzenProfileMenuItem>
+                                <RadzenProfileMenuItem Text="Sing Up" Path="/SignUP" Icon="how_to_reg"></RadzenProfileMenuItem>
+                            </RadzenMenuItem>
+                        </RadzenMenu>
+                    </NotAuthorized>
+                </AuthorizeView>
+                <div class="col-2"></div>
+            }
         </div>
+
     </div>
 </nav>
 
 
 @code {
     bool collapseNavMenu = true;
+    bool profileflag = false;
 
     string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+        profileflag = !profileflag;
     }
 
     void CollapseNavMenu()
     {
         collapseNavMenu = true;
+        profileflag = false;
     }
 
 }
+
+@* *@
+@* <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 fixed-top"> *@
+@*     <div class="container"> *@
+@* *@
+@*         <a class="navbar-brand" href="#"> *@
+@*             <img src="/extra/9742 feedle_RB_1.png" height="39" class="d-inline-block align-top" alt="" loading="lazy"> *@
+@*         </a> *@
+@*         <button class="navbar-toggler" @onclick="ToggleNavMenu" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent" *@
+@*                 aria-expanded="false" aria-label="Toggle navigation"> *@
+@*             <span class="navbar-toggler-icon"></span> *@
+@*         </button> *@
+@*         <div class="@NavMenuCssClass navbar-collapse d-sm-inline-flex flex-sm-row-reverse" @onclick="CollapseNavMenu"> *@
+@*             <ul class="navbar-nav mr-auto"> *@
+@*                 <AuthorizeView> *@
+@*                     <NotAuthorized> *@
+@*                         <li class="nav-item"> *@
+@*                             <a class="btn btn-outline-secondary btn-sm" href="LogIn"> *@
+@*                                 LOG IN *@
+@*                             </a> *@
+@*                         </li> *@
+@*                         <li class="nav-item"> *@
+@*                             <a class="btn btn-primary btn-sm" href="SignUp"> *@
+@*                                 SIGN UP *@
+@*                             </a> *@
+@*                         </li> *@
+@*                     </NotAuthorized> *@
+@*                     <Authorized> *@
+@*                         <li class="nav-item"> *@
+@*                             <a class="nav-link oi oi-person" *@
+@*                                href="Profile"> *@
+@*                             </a> *@
+@*                         </li> *@
+@*                     </Authorized> *@
+@*                 </AuthorizeView> *@
+@*             </ul> *@
+@*         </div> *@
+@*     </div> *@
+@* </nav> *@
+@* *@
+@* *@
+@* @code { *@
+@*     bool collapseNavMenu = true; *@
+@* *@
+@*     string NavMenuCssClass => collapseNavMenu ? "collapse" : null; *@
+@* *@
+@*     void ToggleNavMenu() *@
+@*     { *@
+@*         collapseNavMenu = !collapseNavMenu; *@
+@*     } *@
+@* *@
+@*     void CollapseNavMenu() *@
+@*     { *@
+@*         collapseNavMenu = true; *@
+@*     } *@
+@* *@
+@* } *@
