@@ -36,39 +36,46 @@
                         </li>
                     </NotAuthorized>
                     <Authorized>
-                        
-                            <li class="nav-item">
-                                <div class="row">
-                                    <RadzenIcon Icon="person">Chat</RadzenIcon>
-                                    <a class="nav-link "
-                                       href="Profile">
-                                        <h6>Profile</h6>
-                                    </a>
-                                </div>
-                            </li>
-                            
-                        
-                        
-                            <li class="nav-item">
-                                <div class="row">
-                                    <RadzenIcon Icon="chat_bubble">Chat</RadzenIcon>
-                                    <a class="nav-link "
-                                       href="Chat">
-                                        <h6>Chat</h6>
-                                    </a>
-                                </div>
-                            </li>
-                        
+
                         <li class="nav-item">
-                                <div class="row">
-                                    <RadzenIcon Icon="notifications">Chat</RadzenIcon>
-                                    <a class="nav-link "
-                                       href="Notifications">
-                                        <h6>Notifications</h6>
-                                    </a>
-                                </div>
-                            </li>
-                        
+                            <div class="row">
+                                <RadzenIcon Icon="person"></RadzenIcon>
+                                <a class="nav-link "
+                                   href="Profile">
+                                    <h6>Profile</h6>
+                                </a>
+                            </div>
+                        </li>
+
+                        <li class="nav-item">
+                            <div class="row">
+                                <RadzenIcon Icon="chat_bubble"></RadzenIcon>
+                                <a class="nav-link "
+                                   href="Chat">
+                                    <h6>Chat</h6>
+                                </a>
+                            </div>
+                        </li>
+
+                        <li class="nav-item">
+                            <div class="row">
+                                <RadzenIcon Icon="notifications"></RadzenIcon>
+                                <a class="nav-link "
+                                   href="Notifications">
+                                    <h6>Notifications</h6>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="row">
+                                <RadzenIcon Icon="lock">LogOut</RadzenIcon>
+                                <a class="nav-link "
+                                   href="LogOut">
+                                    <h6>Log out</h6>
+                                </a>
+                            </div>
+                        </li>
+
                     </Authorized>
                 </AuthorizeView>
             }
@@ -106,20 +113,18 @@
 
 @code {
     bool collapseNavMenu = true;
-    
+
 
     string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
-        
     }
 
     void CollapseNavMenu()
     {
         collapseNavMenu = true;
-     
     }
 
 }
