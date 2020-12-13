@@ -28,12 +28,12 @@
                         <h5 class="card-title">@p.Title</h5>
                         <p class="card-text">@p.Content</p>
                     </a>
-                    <span>@GetTime(p)</span>
-                    <span class="oi oi-thumb-up"></span>
-                    <span class="oi oi-thumb-down"></span>
                     @{
                         var copy = p;
                     }
+                    <span>@GetTime(p)</span>
+                    <span class=@GetDisplayedThumbUp(copy) @onclick="@(e => ThumbUp(copy))"></span>
+                    <span class=@GetDisplayedThumbDown(copy) @onclick="@(e => ThumbDown(copy))"></span>
                     @if (IsAuthor(p))
                     {
                         <span class="oi oi-trash cursor-pointer" @onclick="@(e => DeletePost(copy))"></span>
@@ -99,4 +99,39 @@
             NavigationManager.NavigateTo("/OtherProfile/" + post.UserId);
         }
     }
+
+    async Task ThumbUp(Post post)
+    {
+    }
+
+    async Task ThumbDown(Post post)
+    {
+    }
+
+    async Task<string> GetDisplayedThumbUp(Post post)
+    {
+        if (currentUser != null)
+        {
+            if (await NewsService.IsPostThumbUpByUser(post, currentUser))
+            {
+                return "oi oi-arrow-circle-top cursor-pointer";
+            }
+            return "oi oi-arrow-top cursor-pointer";
+        }
+        return "oi oi-arrow-top cursor-pointer";
+    }
+
+    async Task<string> GetDisplayedThumbDown(Post post)
+    {
+        if (currentUser != null)
+        {
+            if (await NewsService.IsPostThumbDownByUser(post, currentUser))
+            {
+                return "oi oi-arrow-circle-bottom cursor-pointer";
+            }
+            return "oi oi-arrow-bottom cursor-pointer";
+        }
+        return "oi oi-arrow-bottom cursor-pointer";
+    }
+
 }

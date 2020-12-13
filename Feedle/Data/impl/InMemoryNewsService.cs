@@ -118,5 +118,17 @@ namespace Feedle.Data
         {
             throw new System.NotImplementedException();
         }
+
+        public async Task<bool> IsPostThumbUpByUser(Post post, User user)
+        {
+            //TODO: do this
+            return false;
+        }
+
+        public async Task<bool> IsPostThumbDownByUser(Post post, User user)
+        {
+            //TODO: do this
+            return false;
+        }
     }
 }
