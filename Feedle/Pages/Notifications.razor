@@ -1,6 +1,52 @@
 @page "/Notifications"
+@using Radzen
+@using Feedle.Data
+@using Feedle.Models
+@inject IUserService UserService;
+<div class="row">
+    <RadzenIcon Icon="notifications"></RadzenIcon>
 <h3>Notifications</h3>
+</div>
+@foreach (string s in notifications)
+{
+    <RadzenCard>
+        <div class="row">
+            <div>@notifications[1] have sent you a @notifications[2] request</div>
+            <div class="ml-auto">
+                <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="person" Click=@(args => OnAccept())>Accept</RadzenButton>
+
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="person_add" Click=@(args => OnDecline())>Decline</RadzenButton>
+            </div>
+        </div>
+    </RadzenCard>
+}
+
 
 @code {
-    
+    IList<string> notifications;
+    User current;
+
+    protected async override Task OnInitializedAsync()
+    {
+        notifications = new List<string>();
+        string m1 = "jnihhskankjasnk";
+        for (int i = 0; i < 10; i++)
+        {
+            notifications.Add(m1);
+        }
+        current = await UserService.GetCurrentUser();
+    }
+
+    private void OnAccept()
+    {
+        throw new NotImplementedException();
+    //Todo: imlement button logic
+    }
+
+    private void OnDecline()
+    {
+        throw new NotImplementedException();
+    //Todo: imlement button logic
+    }
+
 }
