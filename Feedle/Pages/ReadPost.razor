@@ -147,6 +147,7 @@ else
             comment.Day = DateTime.Day;
             comment.Month = DateTime.Month;
             comment.Year = DateTime.Year;
+            comment.PostId = post.Id;
             await NewsService.CommentPost(comment, post.Id);
             commentText = "";
             IList<Post> posts = await NewsService.GetAllNews();
