@@ -83,6 +83,7 @@
                                 <RadzenProfileMenuItem Text="Profile" Path="/Profile" Icon="person"></RadzenProfileMenuItem>
                                 <RadzenProfileMenuItem Text="Chat" Path="/Chat" Icon="chat_bubble"></RadzenProfileMenuItem>
                                 <RadzenProfileMenuItem Text="Notifications" Path="/Notifications" Icon="notifications"></RadzenProfileMenuItem>
+                                <RadzenProfileMenuItem Text="Log Out" Path="/LogOut" Icon="lock"></RadzenProfileMenuItem>
                             </RadzenMenuItem>
                         </RadzenMenu>
                     </Authorized>
@@ -90,7 +91,7 @@
 
                         <RadzenMenu>
                             <RadzenMenuItem Text="" Icon="person_outline">
-                                <RadzenProfileMenuItem Text="Login" Path="/Login" Icon="person"></RadzenProfileMenuItem>
+                                <RadzenProfileMenuItem Text="Login" Path="/Login" Icon="lock_open"></RadzenProfileMenuItem>
                                 <RadzenProfileMenuItem Text="Sign Up" Path="/SignUP" Icon="how_to_reg"></RadzenProfileMenuItem>
                             </RadzenMenuItem>
                         </RadzenMenu>
@@ -122,60 +123,3 @@
     }
 
 }
-
-@* *@
-@* <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 fixed-top"> *@
-@*     <div class="container"> *@
-@* *@
-@*         <a class="navbar-brand" href="#"> *@
-@*             <img src="/extra/9742 feedle_RB_1.png" height="39" class="d-inline-block align-top" alt="" loading="lazy"> *@
-@*         </a> *@
-@*         <button class="navbar-toggler" @onclick="ToggleNavMenu" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent" *@
-@*                 aria-expanded="false" aria-label="Toggle navigation"> *@
-@*             <span class="navbar-toggler-icon"></span> *@
-@*         </button> *@
-@*         <div class="@NavMenuCssClass navbar-collapse d-sm-inline-flex flex-sm-row-reverse" @onclick="CollapseNavMenu"> *@
-@*             <ul class="navbar-nav mr-auto"> *@
-@*                 <AuthorizeView> *@
-@*                     <NotAuthorized> *@
-@*                         <li class="nav-item"> *@
-@*                             <a class="btn btn-outline-secondary btn-sm" href="LogIn"> *@
-@*                                 LOG IN *@
-@*                             </a> *@
-@*                         </li> *@
-@*                         <li class="nav-item"> *@
-@*                             <a class="btn btn-primary btn-sm" href="SignUp"> *@
-@*                                 SIGN UP *@
-@*                             </a> *@
-@*                         </li> *@
-@*                     </NotAuthorized> *@
-@*                     <Authorized> *@
-@*                         <li class="nav-item"> *@
-@*                             <a class="nav-link oi oi-person" *@
-@*                                href="Profile"> *@
-@*                             </a> *@
-@*                         </li> *@
-@*                     </Authorized> *@
-@*                 </AuthorizeView> *@
-@*             </ul> *@
-@*         </div> *@
-@*     </div> *@
-@* </nav> *@
-@* *@
-@* *@
-@* @code { *@
-@*     bool collapseNavMenu = true; *@
-@* *@
-@*     string NavMenuCssClass => collapseNavMenu ? "collapse" : null; *@
-@* *@
-@*     void ToggleNavMenu() *@
-@*     { *@
-@*         collapseNavMenu = !collapseNavMenu; *@
-@*     } *@
-@* *@
-@*     void CollapseNavMenu() *@
-@*     { *@
-@*         collapseNavMenu = true; *@
-@*     } *@
-@* *@
-@* } *@

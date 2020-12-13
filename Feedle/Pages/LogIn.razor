@@ -32,22 +32,6 @@
         </Authorized>
     </AuthorizeView>
 </div>
-<div class="row">
-    <div class="col-md-3"></div>
-    <div class="col-md-6">
-        <RadzenCard>
-            <div class="text-center">
-            <img class="mb-4" src="extra/9742 feedle_RB_1.png" alt width="100">
-            <RadzenLogin AllowResetPassword="false"
-                         Login=@(args => OnLogin(args, "Login with register"))
-                         Register=@(args => OnRegister("Login with register")) Style="margin-bottom: 20px;"/>
-        </div>
-            </RadzenCard>
-        
-        
-    </div>
-
-</div>
 
 
 @code {
@@ -119,7 +103,7 @@
     //timer
     private void StartTimer()
     {
-        Timer.SetTimer(2500);
+        Timer.SetTimer(1000);
         Timer.OnElapsed += TimerElapsedHandler;
     }
 
@@ -127,20 +111,6 @@
     {
         NavigationManager.NavigateTo("/");
     }
-
-    async void OnLogin(LoginArgs args, string name)
-    {
-        username = args.Username;
-        password = args.Password;
-        await PerformLogin();
-    }
-
-    void OnRegister(string name)
-    {
-        NavigationManager.NavigateTo("/SignUp");
-        
-    }
-    
     public static bool Check(string s)
     {
         return (s == null || s == String.Empty) ? true : false;
