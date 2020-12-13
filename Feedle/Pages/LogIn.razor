@@ -78,18 +78,26 @@
 
     public async Task PerformLogin()
     {
-        errorMessage = "";
-        try
+        if (Check(username) == false && Check(password) == false)
         {
-            ((CustomAuthenticationStateProvider) AuthenticationStateProvider).ValidateLogin(username, password);
-            username = "";
-            password = "";
-            StartTimer();
+            errorMessage = "";
+            try
+            {
+                ((CustomAuthenticationStateProvider) AuthenticationStateProvider).ValidateLogin(username, password);
+                username = "";
+                password = "";
+                StartTimer();
+            }
+            catch (Exception e)
+            {
+                errorMessage = e.Message;
+            }
         }
-        catch (Exception e)
+        else
         {
-            errorMessage = e.Message;
+            errorMessage = "some of the fields are empty";
         }
+        
     }
 
 
@@ -131,6 +139,11 @@
     {
         NavigationManager.NavigateTo("/SignUp");
         
+    }
+    
+    public static bool Check(string s)
+    {
+        return (s == null || s == String.Empty) ? true : false;
     }
 
 }
