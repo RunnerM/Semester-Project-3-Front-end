@@ -1,6 +1,9 @@
 @using Feedle.Models
 @using Feedle.Data
+@using System.Text.Json
 @inject INewsService NewsService;
+@inject IUserService UserService;
+@inject NavigationManager NavigationManager;
 
 <div>
     @if (posts == null)
@@ -17,22 +20,31 @@
     }
     else
     {
-        @foreach (Post p in posts)
+        @foreach (Post p in posts.Reverse())
         {
-            <a href="ReadPost/@p.Id">
-                <div class="card">
-                    <div class="card-body">
+            <div class="card">
+                <div class="card-body">
+                    <a href="ReadPost/@p.Id">
                         <h5 class="card-title">@p.Title</h5>
                         <p class="card-text">@p.Content</p>
-                        <span>@GetTime(p)</span>
-                        <span class="oi oi-thumb-up"></span>
-                        <span class="oi oi-thumb-down"></span>
+                    </a>
+                    <span>@GetTime(p)</span>
+                    <span class="oi oi-thumb-up"></span>
+                    <span class="oi oi-thumb-down"></span>
+                    @{
+                        var copy = p;
+                    }
+                    @if (IsAuthor(p))
+                    {
+                        <span class="oi oi-trash cursor-pointer" @onclick="@(e => DeletePost(copy))"></span>
+                    }
+                    <a @onclick="@(e => NavigateToProfile(copy))" class="cursor-pointer">
                         <div class="card-footer text-muted">
                             @p.AuthorUserName
                         </div>
-                    </div>
+                    </a>
                 </div>
-            </a>
+            </div>
         }
     }
 </div>
@@ -45,10 +57,46 @@
     protected override async Task OnInitializedAsync()
     {
         posts = await NewsService.GetAllNews();
+        currentUser = await UserService.GetCurrentUser();
     }
 
     string GetTime(Post post)
     {
-       return post.Hour + ":" + post.Minute + "  " + post.Day + "." + post.Month + "." + post.Year;
+        return post.Hour + ":" + post.Minute + "  " + post.Day + "." + post.Month + "." + post.Year;
+    }
+
+    bool IsAuthor(Post post)
+    {
+        if (currentUser != null)
+        {
+            return currentUser.UserName.Equals(post.AuthorUserName);
+        }
+        return false;
+    }
+
+    async Task DeletePost(Post post)
+    {
+    //await NewsService.DeletePost(post); //TODO connect to web api
+    //InvokeAsync(StateHasChanged);
+        Console.WriteLine(JsonSerializer.Serialize(post));
+    }
+
+    void NavigateToProfile(Post post)
+    {
+        if (currentUser != null)
+        {
+            if (currentUser.Id == post.UserId)
+            {
+                NavigationManager.NavigateTo("/Profile");
+            }
+            else
+            {
+                NavigationManager.NavigateTo("/OtherProfile/" + post.UserId);
+            }
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/OtherProfile/" + post.UserId);
+        }
     }
 }

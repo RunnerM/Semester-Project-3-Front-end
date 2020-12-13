@@ -2,70 +2,83 @@
 @inject NavigationManager NavigationManager;
 @using Feedle.Data
 @using Feedle.Models
+@using System.Text.Json
 @inject INewsService NewsService;
 @inject IUserService UserService;
-
-@if (post != null)
+@inject BlazorTimer Timer
+@if (!postDeletedResult)
 {
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">@post.Title</h5>
-            <p class="card-text">@post.Content</p>
-            <span>@GetTime(post)</span>
-            <div class="card-footer text-muted">
-                @post.AuthorUserName
+    @if (post != null)
+    {
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">@post.Title</h5>
+                <p class="card-text">@post.Content</p>
+                <span>@GetTime(post)</span>
+                <div class="card-footer text-muted">
+                    @post.AuthorUserName
+                </div>
+                @if (IsAuthor())
+                {
+                    <span class="oi oi-trash" @onclick="DeletePost"></span>
+                }
             </div>
         </div>
-    </div>
-    <div class=" justify-content-center mt-100 mb-100">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Recent Comments</h4>
-                        <h6 class="card-subtitle">Latest Comments section by users</h6>
-                    </div>
-                    <div class="comment-widgets m-b-20">
-                        @if (post.Comments == null)
-                        {
-                            <p>
-                                <em>Loading...</em>
-                            </p>
-                        }
-                        else if (!post.Comments.Any())
-                        {
-                            <p>
-                                <em>There are no comments for this post yet.</em>
-                            </p>
-                        }
-                        else
-                        {
-                            @for (int i = 0; i < post.Comments.Count; i++)
+        <div class=" justify-content-center mt-100 mb-100">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Recent Comments</h4>
+                            <h6 class="card-subtitle">Latest Comments section by users</h6>
+                        </div>
+                        <div class="comment-widgets m-b-20">
+                            @if (post.Comments == null)
                             {
-                                <div class="d-flex flex-row comment-row">
-                                    <div class="p-2">
-                                        <span class="round">
-                                            <a href="OtherProfile/@post.Comments[i].UserId">
-                                                <img src="extra/user-empty-avatar.png" alt="user" width="50">
-                                            </a>
-                                        </span>
-                                    </div>
-                                    <div class="comment-text w-100">
-                                        <h5>kek</h5>
-                                        <div class="comment-footer">
-                                            <span class="label label-info">Published</span><span class="date">@post.Comments[i].Year</span>
-                                        </div>
-                                        <p class="m-b-5 m-t-10">@post.Comments[i].Content</p>
-                                        <span>@GetTime(post.Comments[i])</span>
-                                    </div>
-                                </div>
+                                <p>
+                                    <em>Loading...</em>
+                                </p>
                             }
-                        }
+                            else if (!post.Comments.Any())
+                            {
+                                <p>
+                                    <em>There are no comments for this post yet.</em>
+                                </p>
+                            }
+                            else
+                            {
+                                @for (int i = 0; i < post.Comments.Count; i++)
+                                {
+                                    var copy = post.Comments[i];
+                                    <div class="d-flex flex-row comment-row">
+                                        <div class="p-2">
+                                            <span class="round">
+                                                <a class="cursor-pointer" @onclick="@(e => NavigateToProfile(copy))">
+                                                    <img src="extra/user-empty-avatar.png" alt="user" width="50">
+                                                </a>
+                                            </span>
+                                        </div>
+                                        <div class="comment-text w-100">
+                                            <h5>@post.Comments[i].AuthorUserName</h5>
+                                            <div class="comment-footer">
+                                                <span class="label label-info">Published_</span><span>@GetTime(post.Comments[i])</span>
+                                            </div>
+                                            <p class="m-b-5 m-t-10">
+                                                @post.Comments[i].Content
+                                                @if (IsAuthorOfComment(post.Comments[i]))
+                                                {
+                                                    <span class="oi oi-trash" @onclick="@(e => DeleteComment(copy))"></span>
+                                                }
+                                            </p>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 <AuthorizeView>
     <Authorized>
         <form>
@@ -81,6 +94,16 @@
         <a href="LogIn">To write a comment log in first</a>
     </NotAuthorized>
 </AuthorizeView>
+    }
+}
+else
+{
+    <div class="text-center">
+        <p class="text-muted">
+            The post has been deleted.
+        </p>
+        <p class="text-muted">Redirecting to front page in 1 second ...</p>
+    </div>
 }
 
 
@@ -93,6 +116,7 @@
     private User currentUser;
     private string commentText;
     DateTime DateTime { get; set; }
+    bool postDeletedResult;
 
     protected override async Task OnInitializedAsync()
     {
@@ -115,7 +139,7 @@
             Comment comment = new Comment();
             comment.Content = commentText;
             comment.UserId = currentUser.Id;
-            comment.AuthorUserName = currentUser.DisplayedUserName;
+            comment.AuthorUserName = currentUser.UserName;
             DateTime = DateTime.Now;
             comment.Second = DateTime.Second;
             comment.Minute = DateTime.Minute;
@@ -123,6 +147,7 @@
             comment.Day = DateTime.Day;
             comment.Month = DateTime.Month;
             comment.Year = DateTime.Year;
+            comment.PostId = post.Id;
             await NewsService.CommentPost(comment, post.Id);
             commentText = "";
             IList<Post> posts = await NewsService.GetAllNews();
@@ -132,15 +157,82 @@
 
     public string GetTime(Post post)
     {
-        Console.WriteLine(post.Hour + ":" + post.Minute + "  " + post.Day + "." + post.Month + "." + post.Year);
         return post.Hour + ":" + post.Minute + "  " + post.Day + "." + post.Month + "." + post.Year;
-    //TODO: fix time
     }
 
     string GetTime(Comment comment)
     {
-        return post.Hour + ":" + post.Minute + "  " + post.Day + "." + post.Month + "." + post.Year;
-    //TODO: fix time
+        return comment.Hour + ":" + comment.Minute + "  " + comment.Day + "." + comment.Month + "." + comment.Year;
     }
 
+    bool IsAuthor()
+    {
+        if (currentUser != null)
+        {
+            return currentUser.UserName.Equals(post.AuthorUserName);
+        }
+        return false;
+    }
+
+    bool IsAuthorOfComment(Comment comment)
+    {
+        if (currentUser != null)
+        {
+            return currentUser.Id == comment.UserId;
+        }
+        return false;
+    }
+
+    async Task DeletePost()
+    {
+    //postDeletedResult = await NewsService.DeletePost(post); //TODO connect to web api
+        postDeletedResult = true;
+        StartTimer();
+    }
+
+    async Task DeleteComment(Comment comment)
+    {
+        //Comment comment = post.Comments[i];
+        Console.WriteLine(JsonSerializer.Serialize(comment));
+    //await NewsService.DeleteComment(post, comment.Id);
+
+    //await InvokeAsync(StateHasChanged);
+    }
+
+    //timer
+    private void StartTimer()
+    {
+        InvokeAsync(StateHasChanged);
+        Timer.SetTimer(1500);
+        Timer.OnElapsed += TimerElapsedHandler;
+    }
+
+    private void TimerElapsedHandler()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+    
+    void NavigateToProfile(Comment comment)
+    {
+        if (currentUser != null)
+        {
+            if (currentUser.Id == comment.UserId)
+            {
+                NavigationManager.NavigateTo("/Profile");
+            }
+            else
+            {
+                NavigationManager.NavigateTo("/OtherProfile/" + comment.UserId);
+            }
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/OtherProfile/" + comment.UserId);
+        }
+    }
+
+
+    //TODO: add delete comment
+    //TODO: add delete post
+    //TODO: make case when the profile page is current user
 }

@@ -4,11 +4,13 @@
 @inject INewsService NewsService
 @inject IUserService UserService
 @inject NavigationManager NavigationManager;
-<AuthorizeView>
-    <Authorized>
-        <h3>AddPost</h3>
+@inject BlazorTimer Timer
 
-        <form>
+@if (!postAddedResult)
+{
+    <AuthorizeView>
+        <Authorized>
+            <h3>AddPost</h3>
             <div class="form-row">
                 <div class="form-group col">
                     <label>Title</label>
@@ -27,18 +29,28 @@
                     <input type="file" class="form-control-file" id="exampleFormControlFile1">
                 </div>
             </div>
-            <button class="btn btn-outline-dark btn-sm" @onclick="addPost">Add Post</button>
             <label style="color: red">
                 <b>
                     <i>No validation available yet! Please fill in correctly!</i>
                 </b>
             </label>
-        </form>
-    </Authorized>
-    <NotAuthorized>
-        @navigateToError();
-    </NotAuthorized>
-</AuthorizeView>
+            <button class="btn btn-outline-dark btn-sm" @onclick="addPost" type="submit">Add Post</button>
+        </Authorized>
+        <NotAuthorized>
+            @navigateToError();
+        </NotAuthorized>
+    </AuthorizeView>
+}
+else
+{
+    <div class="text-center">
+        <p class="text-muted">
+            The post has been created.
+        </p>
+        <p class="text-muted">Redirecting to front page in 2 second ...</p>
+    </div>
+}
+
 
 
 @code {
@@ -46,21 +58,21 @@
     string postContent { get; set; }
     User currentUser { get; set; }
     DateTime DateTime { get; set; }
+    bool postAddedResult;
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentUser = await UserService.GetCurrentUser();
+    }
 
     public async void addPost()
     {
-        currentUser = await UserService.GetCurrentUser();
-        Console.WriteLine(currentUser.Id);
-        if (currentUser == null)
-        {
-        }
-        else
+        if (currentUser != null)
         {
             Post post = new Post();
             post.Title = postTitle;
             post.Content = postContent;
             post.AuthorUserName = currentUser.UserName;
-            Console.WriteLine(currentUser.Id);
             post.UserId = currentUser.Id;
             post.Comments = new List<Comment>();
 
@@ -72,8 +84,8 @@
             post.Month = DateTime.Month;
             post.Year = DateTime.Year;
 
-            await NewsService.AddPostAsync(post);
-            NavigationManager.NavigateTo("/");
+            postAddedResult = await NewsService.AddPostAsync(post);
+            StartTimer();
         }
     }
 
@@ -81,6 +93,19 @@
     {
         NavigationManager.NavigateTo("/Error");
         return new object(); //does not need to return anything
+    }
+
+    //timer
+    private void StartTimer()
+    {
+        InvokeAsync(StateHasChanged);
+        Timer.SetTimer(2500);
+        Timer.OnElapsed += TimerElapsedHandler;
+    }
+
+    private void TimerElapsedHandler()
+    {
+        NavigationManager.NavigateTo("/");
     }
 
 }

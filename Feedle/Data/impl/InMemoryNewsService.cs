@@ -108,5 +108,15 @@ namespace Feedle.Data
         {
             throw new System.NotImplementedException();
         }
+
+        public Task<bool> DeletePost(Post post)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<bool> DeleteComment(Post post, int commentId)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

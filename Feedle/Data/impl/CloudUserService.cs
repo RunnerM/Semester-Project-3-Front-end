@@ -61,7 +61,7 @@ namespace Feedle.Data
             {
                 return await ValidateUser(CurrentUser.UserName, CurrentUser.Password);
             }
-            else return null;
+            return null;
         }
 
         public async Task UpdateCurrentUser(User user)
@@ -78,6 +78,11 @@ namespace Feedle.Data
             {
                 ValidateUser(CurrentUser.UserName, CurrentUser.Password);
             }
+        }
+
+        public void RemoveCachedUser()
+        {
+            this.CurrentUser = null;
         }
 
         public Task<IList<User>> GetFriendsByUserId()
