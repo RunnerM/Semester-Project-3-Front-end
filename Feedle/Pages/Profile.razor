@@ -17,7 +17,7 @@
                 <div class="oi oi-person"></div>
                 <h3>@GetUserName()</h3>
                 <button @onclick="changePassword" class="btn btn-primary" type="submit">Change Password</button>
-                <button @onclick="deleteProfile" class="btn btn-primary" type="submit">Delete profile</button>
+                <button @onclick="DeleteProfile" class="btn btn-primary" type="submit">Delete profile</button>
                 <button @onclick="PerformLogout" class="btn btn-primary" type="submit">Log out</button>
                 <div id="accordion">
                     <div class="card">
@@ -179,6 +179,16 @@
         </div>
         break;
     }
+    case "delete":
+    {
+        <div class="text-center">
+            <p class="text-muted">
+                Your account has been deleted.
+            </p>
+            <p class="text-muted">Redirecting to front page in a moment ...</p>
+        </div>
+        break;
+    }
 }
 
 
@@ -245,9 +255,17 @@
         }
     }
 
-    public async Task deleteProfile()
+    public async Task DeleteProfile()
     {
-    //TODO: make delete profile
+        try
+        {
+            //delete account
+            pageState = "delete";
+            StartTimer(2000);
+        }
+        catch (Exception e)
+        {
+        }
     }
 
     public async Task changePassword()
@@ -260,7 +278,8 @@
         try
         {
             ((CustomAuthenticationStateProvider) AuthenticationStateProvider).Logout();
-            StartTimer();
+            pageState = "logout";
+            StartTimer(2000);
         }
         catch (Exception e)
         {
@@ -275,11 +294,10 @@
     }
 
     //timer
-    private void StartTimer()
+    private void StartTimer(int msec)
     {
-        pageState = "logout";
         InvokeAsync(StateHasChanged);
-        Timer.SetTimer(2000);
+        Timer.SetTimer(msec);
         Timer.OnElapsed += TimerElapsedHandler;
     }
 
