@@ -30,13 +30,13 @@
 
                         <div id="collapseOne" class="@NavMenuCssClass0" aria-labelledby="headingOne" data-parent="#accordion">
                             <div class="card-body">
-                                @if (testStrings == null)
+                                @if (posts == null)
                                 {
                                     <p>
                                         <em>Loading...</em>
                                     </p>
                                 }
-                                else if (!testStrings.Any())
+                                else if (!posts.Any())
                                 {
                                     <p>
                                         <em>U have no posts.</em>
@@ -45,9 +45,9 @@
                                 else
                                 {
                                     <ul class="list-group">
-                                        @foreach (var i in testStrings)
+                                        @foreach (var i in posts)
                                         {
-                                            <li class="list-group-item">@i</li>
+                                            <li class="list-group-item">@i.Title</li>
                                         }
                                     </ul>
                                 }
@@ -62,13 +62,13 @@
                         </div >
                         <div id="collapseTwo" class="@NavMenuCssClass1" aria-labelledby="headingTwo" data-parent="#accordion">
                             <div class="card-body">
-                                @if (testStrings == null)
+                                @if (friends == null)
                                 {
                                     <p>
                                         <em>Loading...</em>
                                     </p>
                                 }
-                                else if (!testStrings.Any())
+                                else if (!friends.Any())
                                 {
                                     <p>
                                         <em>U have no friends.</em>
@@ -77,10 +77,10 @@
                                 else
                                 {
                                     <ul class="list-group">
-                                        @foreach (var i in testStrings)
+                                        @foreach (var i in friends)
                                         {
                                             <li class="list-group-item">
-                                                <p>in development</p>
+                                                <p>@i.UserName</p>
                                             </li>
                                         }
                                     </ul>
@@ -98,13 +98,13 @@
                         </div>
                         <div id="collapseThree" class="@NavMenuCssClass2" aria-labelledby="headingThree" data-parent="#accordion">
                             <div class="card-body">
-                                @if (testStrings == null)
+                                @if (subscritions == null)
                                 {
                                     <p>
                                         <em>Loading...</em>
                                     </p>
                                 }
-                                else if (!testStrings.Any())
+                                else if (!subscritions.Any())
                                 {
                                     <p>
                                         <em>U have no subscriptions.</em>
@@ -113,9 +113,43 @@
                                 else
                                 {
                                     <ul class="list-group">
-                                        @foreach (var i in testStrings)
+                                        @foreach (var i in subscritions)
                                         {
-                                            <li class="list-group-item">@i</li>
+                                            <li class="list-group-item">@i.UserName</li>
+                                        }
+                                    </ul>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingFour">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" @onclick="ToggleList3">
+                                    Friend requests
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseFour" class="@NavMenuCssClass3" aria-labelledby="headingFour" data-parent="#accordion">
+                            <div class="card-body">
+                                @if (friendRequests == null)
+                                {
+                                    <p>
+                                        <em>Loading...</em>
+                                    </p>
+                                }
+                                else if (!friendRequests.Any())
+                                {
+                                    <p>
+                                        <em>U have no friends requests.</em>
+                                    </p>
+                                }
+                                else
+                                {
+                                    <ul class="list-group">
+                                        @foreach (var i in friendRequests)
+                                        {
+                                            <li class="list-group-item">@i.UserName</li>
                                         }
                                     </ul>
                                 }
@@ -151,10 +185,12 @@
     bool collapseNavMenu0 = false;
     bool collapseNavMenu1 = true;
     bool collapseNavMenu2 = true;
+    bool collapseNavMenu3 = true;
 
     string NavMenuCssClass0 => collapseNavMenu0 ? "collapse" : null;
     string NavMenuCssClass1 => collapseNavMenu1 ? "collapse" : null;
     string NavMenuCssClass2 => collapseNavMenu2 ? "collapse" : null;
+    string NavMenuCssClass3 => collapseNavMenu3 ? "collapse" : null;
 
     void ToggleList0()
     {
@@ -171,15 +207,25 @@
         collapseNavMenu2 = !collapseNavMenu2;
     }
 
+    void ToggleList3()
+    {
+        collapseNavMenu3 = !collapseNavMenu3;
+    }
+
     //user data section
     private User currentUser;
     private List<Post> posts;
-    private List<User> fiends;
-    private List<string> subscritions;
+    private List<User> friends;
+    private List<UserInformation> subscritions;
+    private List<User> friendRequests;
 
     protected override async Task OnInitializedAsync()
     {
         currentUser = await UserService.GetCurrentUser();
+        posts = currentUser.UserPosts;
+        friends = new List<User>(); //TODO connect to friends list
+        subscritions = currentUser.SubscriptionUsersInformation;
+        friendRequests = new List<User>(); //TODO connect to friends requests list
     }
 
     public String GetUserName()
@@ -196,10 +242,12 @@
 
     public async Task deleteProfile()
     {
+    //TODO: make delete profile
     }
 
     public async Task changePassword()
     {
+    //TODO: make change password
     }
 
     public async Task PerformLogout()
@@ -214,9 +262,6 @@
         }
     }
 
-    //testing purpose
-    List<string> testStrings = new List<string> {"Cupcake", "Cake", "Candy"};
-
     //timer
     private void StartTimer()
     {
@@ -230,5 +275,4 @@
     {
         NavigationManager.NavigateTo("/");
     }
-
 }
