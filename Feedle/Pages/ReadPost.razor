@@ -3,6 +3,7 @@
 @using Feedle.Data
 @using Feedle.Models
 @using System.Text.Json
+@using Radzen
 @inject INewsService NewsService;
 @inject IUserService UserService;
 @inject BlazorTimer Timer
@@ -81,14 +82,17 @@
         </div>
 <AuthorizeView>
     <Authorized>
-        <form>
-            <div class="form-row">
-                <div class="form-group col">
-                    <textarea class="form-control" rows="3" placeholder="Comment here" @bind="commentText"></textarea>
+        
+        <RadzenCard>
+            <div class="row">
+                
+                <RadzenTextBox class="col-md-11" Placeholder="Comment....." Change=@(args => OnChange(args))></RadzenTextBox>
+
+                <div class="col-md-1 mr-auto">
+                    <button class="btn btn-light" @onclick="writeComment"><RadzenIcon Icon="send"></RadzenIcon></button>
                 </div>
             </div>
-        </form>
-        <button @onclick="writeComment">Comment</button>
+        </RadzenCard>
     </Authorized>
     <NotAuthorized>
         <a href="LogIn">To write a comment log in first</a>
@@ -254,4 +258,14 @@ else
     //TODO: add delete comment
     //TODO: add delete post
     //TODO: make case when the profile page is current user
+    private void OnChange(string comment)
+    {
+        commentText = comment;
+    }
+
+    private async void OnClick()
+    {
+         await writeComment();
+    }
+
 }

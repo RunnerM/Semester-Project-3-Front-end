@@ -13,6 +13,8 @@ namespace Feedle.Models
         public User User { get; set; }
         [JsonPropertyName("conversation")]
         public Conversation Conversation { get; set; }
+        [JsonPropertyName("withWhomUserId")]
+        public int WithWhomUserId { get; set; }
         
     }
 }
