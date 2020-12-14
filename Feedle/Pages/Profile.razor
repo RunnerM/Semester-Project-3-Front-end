@@ -3,6 +3,7 @@
 @using Feedle.Data
 @using Feedle.Authentication
 @using System.Text.Json
+@using FeedleDataTier.Models
 @inject INewsService NewsService;
 @inject IUserService UserService;
 @inject AuthenticationStateProvider AuthenticationStateProvider;
@@ -163,7 +164,7 @@
                                     <ul class="list-group">
                                         @foreach (var i in friendRequests)
                                         {
-                                            <li class="list-group-item">@i.UserName</li>
+                                            <li class="list-group-item">@i.PotentialFriendUserName</li>
                                         }
                                     </ul>
                                 }
@@ -239,17 +240,17 @@
     //user data section
     private User currentUser;
     private List<Post> posts;
-    private List<User> friends;
+    private List<UserFriend> friends;
     private List<UserSubscription> subscritions;
-    private List<User> friendRequests;
+    private List<FriendRequestNotification> friendRequests;
 
     protected override async Task OnInitializedAsync()
     {
         currentUser = await UserService.GetCurrentUser();
         posts = currentUser.UserPosts;
-        friends = new List<User>(); //TODO connect to friends list
-        subscritions = currentUser.UserSubscriptions;
-        friendRequests = new List<User>(); //TODO connect to friends requests list
+        friends = new List<UserFriend>(); //TODO connect to friends list
+        //subscritions = currentUser.UserSubscriptions;
+        friendRequests = new List<FriendRequestNotification>(); //TODO connect to friends requests list
        //TODO: bug gets incorrect list of posts
     }
 
