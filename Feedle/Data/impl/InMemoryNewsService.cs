@@ -109,7 +109,7 @@ namespace Feedle.Data
             throw new System.NotImplementedException();
         }
 
-        public Task<bool> DeletePost(Post post)
+        public Task<bool> DeletePost(int postId)
         {
             throw new System.NotImplementedException();
         }
@@ -129,6 +129,11 @@ namespace Feedle.Data
         {
             //TODO: do this
             return false;
+        }
+
+        public Task<bool> DeleteComment(int postId, int commentId)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

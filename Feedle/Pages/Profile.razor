@@ -240,7 +240,7 @@
     private User currentUser;
     private List<Post> posts;
     private List<User> friends;
-    private List<UserInformation> subscritions;
+    private List<UserSubscription> subscritions;
     private List<User> friendRequests;
 
     protected override async Task OnInitializedAsync()
@@ -248,7 +248,7 @@
         currentUser = await UserService.GetCurrentUser();
         posts = currentUser.UserPosts;
         friends = new List<User>(); //TODO connect to friends list
-        subscritions = currentUser.SubscriptionUsersInformation;
+        subscritions = currentUser.UserSubscriptions;
         friendRequests = new List<User>(); //TODO connect to friends requests list
     }
 

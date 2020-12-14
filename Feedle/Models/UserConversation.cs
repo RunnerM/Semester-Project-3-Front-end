@@ -15,6 +15,5 @@ namespace Feedle.Models
         public Conversation Conversation { get; set; }
         [JsonPropertyName("withWhomUserId")]
         public int WithWhomUserId { get; set; }
-        
     }
 }
