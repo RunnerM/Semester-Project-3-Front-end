@@ -2,55 +2,45 @@
 <AuthorizeView>
     <Authorized>
         <a type="button" class="btn btn-primary" href="AddPost">Add Post</a>
+        <div class="row">
+            <div class="col">
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label>Sort by: </label>
+                        <select class="form-control" style="background-color: #f7f7f7" @onchange="SortBySelected">
+                            <option selected value="newestFirst">Newest first</option>
+                            <option value="oldestFirst">Oldest first</option>
+                        </select>
+                    </div>
+                    <div class="form-group col">
+                        <label> Filter by: </label>
+                        <select class="form-control" style="background-color: #f7f7f7" @onchange="FilterBySelected">
+                            <option selected value="all">All</option>
+                            <option value="onlySubscriptions">Subscriptions only</option>
+                        </select>
+                    </div>
+                </div>
+                <PostView filterBy="@filterBy" sortBy="@sortBy"></PostView>
+            </div></div>
     </Authorized>
     <NotAuthorized>
         <a type="button" class="btn btn-outline-secondary" href="LogIn">Add Post</a>
+        <div class="row">
+            <div class="col">
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label>Sort by: </label>
+                        <select class="form-control" style="background-color: #f7f7f7" @onchange="SortBySelected">
+                            <option selected value="newestFirst">Newest first</option>
+                            <option value="oldestFirst">Oldest first</option>
+                        </select>
+                    </div>
+                </div>
+                <PostView filterBy="@filterBy" sortBy="@sortBy"></PostView>
+            </div>
+        </div>
     </NotAuthorized>
 </AuthorizeView>
-
-<div class="row">
-    <div class="col-sm-8">
-        <div class="form-row">
-            <div class="form-group col">
-                <label>Sort by: </label>
-                <select class="form-control" @bind="sortBy" style="background-color: #f7f7f7">
-                    <option selected value="newestFirst">Newest first</option>
-                    <option value="oldestFirst">Oldest first</option>
-                </select>
-            </div>
-            <div class="form-group col">
-                <label> Filter by: </label>
-                <select class="form-control" @bind="filterBy" style="background-color: #f7f7f7">
-                    <option selected value="all">All</option>
-                    <option value="onlySubscriptions">Subscriptions only</option>
-                </select>
-            </div>
-        </div>
-        <PostView></PostView>
-    </div>
-    <div class="col-sm-4">
-        <div class="card">
-            <div class="card-body">
-                <a href="https://www.rolex.com/">Click here (sponsored)</a>
-                <img src="extra/rolex-logo-font-free-download-856x484.jpg" width="100%">
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <a href="https://www.minecraft.net/">Click here (sponsored)</a>
-                <img src="extra/brawl.png" width="100%">
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <a href="https://www.redbull.com/">Click here (sponsored)</a>
-                <img src="extra/redbull.jpg" width="100%">
-            </div>
-        </div>
-    </div>
-</div>
-
-
 @code
 {
     string sortBy;
@@ -58,7 +48,23 @@
 
     protected override async Task OnInitializedAsync()
     {
+        sortBy = "newestFirst";
+        filterBy = "all";
     }
+
+    void FilterBySelected(ChangeEventArgs e)
+    {
+        filterBy = e.Value.ToString();
+        InvokeAsync(StateHasChanged);
+        Console.WriteLine(filterBy);
+    }
+
+    void SortBySelected(ChangeEventArgs e)
+    {
+        sortBy = e.Value.ToString();
+        InvokeAsync(StateHasChanged);
+    }
+
 
     //TODO: implement filters
     //TODO: implement sort by
