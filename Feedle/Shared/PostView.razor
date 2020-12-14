@@ -148,9 +148,10 @@
 
     async Task DeletePost(Post post)
     {
-    //await NewsService.DeletePost(post); //TODO connect to web api
-    //InvokeAsync(StateHasChanged);
-        Console.WriteLine(JsonSerializer.Serialize(post));
+        Console.WriteLine(post.Id);
+        await NewsService.DeletePost(post.Id);
+        posts = await NewsService.GetAllNews();
+    //InvokeAsync(StateHasChanged)
     }
 
     void NavigateToProfile(Post post)

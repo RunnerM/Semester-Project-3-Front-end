@@ -30,6 +30,10 @@ namespace Feedle.Data
         Task<List<UserConversation>> GetMessageUpdate(int lastMessageId, int userId);
 
         Task<UserInformation> GetUserInformationById(int id);
+
+        int GetLastNotificationId();
+
+        int GetLastMessageNotificationId();
         
         Task UpdateCurrentUser(User user);
         // Task saveCachedUser(User user);

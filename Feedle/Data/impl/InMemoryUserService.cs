@@ -150,5 +150,15 @@ namespace Feedle.Data
         {
             throw new NotImplementedException();
         }
+
+        public int GetLastNotificationId()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetLastMessageNotificationId()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
