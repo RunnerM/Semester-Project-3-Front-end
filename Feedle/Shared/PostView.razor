@@ -56,6 +56,8 @@
     IList<Post> posts;
     List<Post> displayedPosts;
     User currentUser;
+    List<UserSubscription> userSubscriptions;
+
 
     [Parameter]
     public string filterBy { get; set; }
@@ -68,6 +70,27 @@
         posts = await NewsService.GetAllNews();
         currentUser = await UserService.GetCurrentUser();
         displayedPosts = (List<Post>) posts;
+        //userSubscriptions = currentUser.UserSubscriptions; //TODO implement
+        userSubscriptions = new List<UserSubscription>();
+    }
+
+    List<Post> GetSubscribedPosts()
+    {
+        List<Post> tmpPosts = new List<Post>();
+        List<int> idsOfUsersSubscriptions = new List<int>();
+        for (int i = 0; i < userSubscriptions.Count; i++)
+        {
+            idsOfUsersSubscriptions.Add(userSubscriptions[i].UserId);
+        }
+
+        for (int i = 0; i < posts.Count; i++)
+        {
+            if (idsOfUsersSubscriptions.Contains(posts[i].UserId))
+            {
+                tmpPosts.Add(posts[i]);
+            }
+        }
+        return tmpPosts;
     }
 
     protected async override void OnParametersSet()
@@ -91,8 +114,20 @@
             }
             case "onlySubscriptions":
             {
+                if (sortBy.Equals("newestFirst"))
+                {
+                    await OnInitializedAsync();
+                    displayedPosts = GetSubscribedPosts();
+                    displayedPosts.Reverse();
+                    InvokeAsync(StateHasChanged);
+                }
+                else
+                {
+                    await OnInitializedAsync();
+                    displayedPosts = GetSubscribedPosts();
+                    InvokeAsync(StateHasChanged);
+                }
                 break;
-                //TODO: subs
             }
         }
     }

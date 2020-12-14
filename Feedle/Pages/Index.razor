@@ -21,7 +21,8 @@
                     </div>
                 </div>
                 <PostView filterBy="@filterBy" sortBy="@sortBy"></PostView>
-            </div></div>
+            </div>
+        </div>
     </Authorized>
     <NotAuthorized>
         <a type="button" class="btn btn-outline-secondary" href="LogIn">Add Post</a>
@@ -41,6 +42,7 @@
         </div>
     </NotAuthorized>
 </AuthorizeView>
+
 @code
 {
     string sortBy;
@@ -56,7 +58,6 @@
     {
         filterBy = e.Value.ToString();
         InvokeAsync(StateHasChanged);
-        Console.WriteLine(filterBy);
     }
 
     void SortBySelected(ChangeEventArgs e)
@@ -64,7 +65,6 @@
         sortBy = e.Value.ToString();
         InvokeAsync(StateHasChanged);
     }
-
 
     //TODO: implement filters
     //TODO: implement sort by
