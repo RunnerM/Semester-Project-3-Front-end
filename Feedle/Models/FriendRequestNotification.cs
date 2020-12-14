@@ -6,9 +6,7 @@ namespace Feedle.Models
     {
         [JsonPropertyName("friendRequestId")]
         public int FriendRequestId { get; set; }
-        
         [JsonPropertyName("creatorId")]
-        
         public int CreatorId { get; set; }
         [JsonPropertyName("potentialFriendUserId")]
         public int PotentialFriendUserId { get; set; }
