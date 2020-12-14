@@ -21,7 +21,7 @@
                 </div>
                 @if (IsAuthor())
                 {
-                    <span class="oi oi-trash" @onclick="DeletePost"></span>
+                    <span class="oi oi-trash cursor-pointer" @onclick="DeletePost"></span>
                 }
             </div>
         </div>
@@ -68,7 +68,7 @@
                                                 @post.Comments[i].Content
                                                 @if (IsAuthorOfComment(post.Comments[i]))
                                                 {
-                                                    <span class="oi oi-trash" @onclick="@(e => DeleteComment(copy))"></span>
+                                                    <span class="oi oi-trash cursor-pointer" @onclick="@(e => DeleteComment(copy))"></span>
                                                 }
                                             </p>
                                         </div>
