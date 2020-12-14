@@ -9,8 +9,46 @@
         <h3>@GetOtherUserUserName()</h3>
         <div class="oi oi-person"></div>
         <p>@id</p>
-        <a class="btn btn-outline-secondary" @onclick="AddFriend">Send friend request</a>
+        @if (isFriend)
+        {
+            <a class="btn btn-outline-secondary" @onclick="RemoveFriend">Remove friend</a>  
+        }
+        else
+        {
+            <a class="btn btn-outline-secondary" @onclick="AddFriend">Send friend request</a>  
+        }
         <a class="btn btn-outline-secondary" @onclick="Subscribe">Subscribe</a>
+        @if (isFriend)
+        {
+            @if (messages == null)
+            {
+                <p>
+                    <em>Loading...</em>
+                </p>
+            }
+            else if (!messages.Any())
+            {
+                <p>
+                    <em>No messages between u 2.</em>
+                </p>
+            }
+            else
+            {
+                <ul class="list-group">
+                    @foreach (var i in messages)
+                    {
+                        <li class="list-group-item">
+                            @i.UserId
+                            <span>--</span>
+                            @i.Content
+                        </li>
+                    }
+                </ul>
+            }
+            <input @bind="messageText" placeholder="type here pidor"/>
+            <button type="button" class="btn btn-primary" @onclick="sendMessage">Send nahui</button>
+        }
+
     </Authorized>
     <NotAuthorized>
         <h3>OtherProfile</h3>
@@ -29,14 +67,28 @@
     [Parameter]
     public int id { get; set; }
 
+    bool isFriend;
     UserInformation otherUser;
     User currentUser;
+    List<Message> messages;
+    string messageText;
 
 
     protected override async Task OnInitializedAsync()
     {
         currentUser = await UserService.GetCurrentUser();
         otherUser = await UserService.GetUserInformationById(id);
+    // if (currentUser != null)
+    //{
+    //TODO check if is friend
+        isFriend = true;
+        messages = new List<Message>();
+        Message tmp = new Message();
+        tmp.Content = "hui";
+        tmp.UserId = 69;
+        messages.Add(tmp);
+    //TODO get the converstation
+    //}
     }
 
     public string GetOtherUserUserName()
@@ -50,20 +102,29 @@
 
     public async Task AddFriend()
     {
-            FriendRequestNotification friendRequestNotification = new FriendRequestNotification();
-            friendRequestNotification.CreatorId = currentUser.Id;
-            friendRequestNotification.PotentialFriendUserId = id;
-            friendRequestNotification.PotentialFriendUserName = otherUser.UserName;
-            bool result = await UserService.MakeFriendRequestNotification(friendRequestNotification);
+        FriendRequestNotification friendRequestNotification = new FriendRequestNotification();
+        friendRequestNotification.CreatorId = currentUser.Id;
+        friendRequestNotification.PotentialFriendUserId = id;
+        friendRequestNotification.PotentialFriendUserName = otherUser.UserName;
+        bool result = await UserService.MakeFriendRequestNotification(friendRequestNotification);
         if (result)
         {
-            
         }
+    }
+
+    public async Task RemoveFriend()
+    {
+        
     }
 
     async Task Subscribe()
     {
-        
+    //TODO implement
+    }
+
+    async Task sendMessage()
+    {
+        messageText = "";
     }
 
 }
