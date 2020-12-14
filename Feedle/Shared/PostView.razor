@@ -4,7 +4,8 @@
 @inject INewsService NewsService;
 @inject IUserService UserService;
 @inject NavigationManager NavigationManager;
-
+@page "/PostView"
+@page "/PostView/{text}"
 <div>
     @if (posts == null)
     {
@@ -102,14 +103,17 @@
 
     async Task ThumbUp(Post post)
     {
+        //TODO: thumb up
     }
 
     async Task ThumbDown(Post post)
     {
+    //TODO: thumb down
     }
 
-    async Task<string> GetDisplayedThumbUp(Post post)
+    string GetDisplayedThumbUp(Post post)
     {
+        /*
         if (currentUser != null)
         {
             if (await NewsService.IsPostThumbUpByUser(post, currentUser))
@@ -118,11 +122,14 @@
             }
             return "oi oi-arrow-top cursor-pointer";
         }
+        */
+    //TODO: display correctly if already rated
         return "oi oi-arrow-top cursor-pointer";
     }
 
-    async Task<string> GetDisplayedThumbDown(Post post)
+    string GetDisplayedThumbDown(Post post)
     {
+    /*
         if (currentUser != null)
         {
             if (await NewsService.IsPostThumbDownByUser(post, currentUser))
@@ -131,6 +138,7 @@
             }
             return "oi oi-arrow-bottom cursor-pointer";
         }
+        */
         return "oi oi-arrow-bottom cursor-pointer";
     }
 
