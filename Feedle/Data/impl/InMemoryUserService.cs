@@ -110,5 +110,45 @@ namespace Feedle.Data
         {
             throw new NotImplementedException();
         }
+
+        public Task<bool> SubscribeToUser(UserSubscription userSubscription)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UnsubscribeFromUser(int userId, int subscriptionId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> MakeFriendRequestNotification(FriendRequestNotification friendRequestNotification)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> RespondToFriendNotification(bool status, FriendRequestNotification friendRequestNotification)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> AddConversation(int creatorId, int withWhomId, Conversation conversation)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> SendMessage(Message message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<FriendRequestNotification>> GetNotificationsUpdate(int lastNotificationId, int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<UserConversation>> GetMessageUpdate(int lastMessageId, int userId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

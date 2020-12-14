@@ -13,10 +13,10 @@ namespace Feedle.Data
         Task<List<Post>> GetPostsForRegisteredUser(int id);
 
         Task<bool> CommentPost(Comment comment, int postId);
-        Task<bool> DeletePost(Post post);
-
-        Task<bool> DeleteComment(Post post, int commentId);
+        Task<bool> DeletePost(int postId);
         Task<bool> IsPostThumbUpByUser(Post post, User user);
         Task<bool> IsPostThumbDownByUser(Post post, User user);
+
+        Task<bool> DeleteComment(int postId, int commentId);
     }
 }

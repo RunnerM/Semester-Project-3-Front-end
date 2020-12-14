@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Feedle.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Feedle.Data
@@ -84,16 +85,13 @@ namespace Feedle.Data
             return responseMessage.IsSuccessStatusCode;
         }
 
-        public Task<bool> DeletePost(Post post)
+        public async Task<bool> DeletePost(int postId)
         {
-            throw new NotImplementedException();
+            HttpResponseMessage httpResponseMessage = 
+                await Client.DeleteAsync("http://localhost:5002/feedle/posts?id="+postId);
+            return httpResponseMessage.IsSuccessStatusCode;
         }
-
-        public Task<bool> DeleteComment(Post post, int commentId)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public Task<bool> IsPostThumbUpByUser(Post post, User user)
         {
             throw new NotImplementedException();
@@ -102,6 +100,13 @@ namespace Feedle.Data
         public Task<bool> IsPostThumbDownByUser(Post post, User user)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<bool> DeleteComment(int postId, int commentId)
+        {
+            HttpResponseMessage httpResponseMessage = await Client.DeleteAsync("http://localhost:5002/feedle/posts/comment?commentId=" +
+                                                       commentId + "&postId=" + postId);
+            return httpResponseMessage.IsSuccessStatusCode;
         }
     }
 }

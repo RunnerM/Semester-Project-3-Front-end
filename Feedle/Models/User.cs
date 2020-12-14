@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using FeedleDataTier.Models;
 
 namespace Feedle.Models
 {
@@ -19,10 +20,14 @@ namespace Feedle.Models
 
         [JsonPropertyName("userConversations")]
         public List<UserConversation> UserConversations { get; set; }
-
         [JsonPropertyName("securityLevel")] public int SecurityLevel { get; set; }
-        [JsonPropertyName("subscriptionUsersInformation")]
+        [JsonPropertyName("userSubscriptions")]
+        public List<UserSubscription> UserSubscriptions { get; set; }
+        [JsonPropertyName("userFriends")]
+        public List<UserFriend> UserFriends { get; set; }
+        [JsonPropertyName("friendRequestNotifications")]
+        public List<FriendRequestNotification> FriendRequestNotifications { get; set; }
 
-        public List<UserInformation> SubscriptionUsersInformation { get; set; }
+        
     }
 }
