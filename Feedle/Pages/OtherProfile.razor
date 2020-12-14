@@ -81,7 +81,7 @@
     // if (currentUser != null)
     //{
     //TODO check if is friend
-        isFriend = true;
+        isFriend = false;
         messages = new List<Message>();
         Message tmp = new Message();
         tmp.Content = "hui";
@@ -103,9 +103,11 @@
     public async Task AddFriend()
     {
         FriendRequestNotification friendRequestNotification = new FriendRequestNotification();
-        friendRequestNotification.CreatorId = currentUser.Id;
-        friendRequestNotification.PotentialFriendUserId = id;
+        friendRequestNotification.UserId = id;
+        friendRequestNotification.PotentialFriendUserId = currentUser.Id;
         friendRequestNotification.PotentialFriendUserName = otherUser.UserName;
+        friendRequestNotification.CreatorUserName = currentUser.UserName;
+        friendRequestNotification.CreatorId = currentUser.Id;
         bool result = await UserService.MakeFriendRequestNotification(friendRequestNotification);
         if (result)
         {

@@ -28,6 +28,16 @@ namespace Feedle.Models
         [JsonPropertyName("friendRequestNotifications")]
         public List<FriendRequestNotification> FriendRequestNotifications { get; set; }
 
+
+        public User()
+        {
+            this.UserConversations = new List<UserConversation>();
+            this.UserSubscriptions = new List<UserSubscription>();
+            this.FriendRequestNotifications = new List<FriendRequestNotification>();
+            this.UserFriends = new List<UserFriend>();
+            this.UserPosts = new List<Post>();
+        }
+
         
     }
 }

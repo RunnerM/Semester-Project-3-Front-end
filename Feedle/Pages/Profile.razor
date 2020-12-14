@@ -248,10 +248,10 @@
     {
         currentUser = await UserService.GetCurrentUser();
         posts = currentUser.UserPosts;
-        friends = new List<UserFriend>(); //TODO connect to friends list
+        friends = currentUser.UserFriends;
         //subscritions = currentUser.UserSubscriptions;
-        friendRequests = new List<FriendRequestNotification>(); //TODO connect to friends requests list
-       //TODO: bug gets incorrect list of posts
+        friendRequests = currentUser.FriendRequestNotifications;
+    //TODO: bug gets incorrect list of posts
     }
 
     public String GetUserName()

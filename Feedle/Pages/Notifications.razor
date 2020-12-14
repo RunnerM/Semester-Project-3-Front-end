@@ -23,7 +23,7 @@
 
 
 @code {
-    IList<FriendRequestNotification> notifications;
+    private IList<FriendRequestNotification> notifications = new List<FriendRequestNotification>();
     private User CurrentUser;
 
     protected async override Task OnInitializedAsync()
@@ -35,8 +35,17 @@
 
     public async Task ReceiveNotification()
     {
-        notifications = await UserService.GetNotificationsUpdate(UserService.GetLastNotificationId(),CurrentUser.Id);
+       /* try
+        {
+            notifications = await UserService.GetNotificationsUpdate(UserService.GetLastNotificationId(),CurrentUser.Id);
+        }
+        catch (Exception e)
+        {
+            ReceiveNotification();
+            throw;
+        }
         ReceiveNotification();
+        */
     }
 
     private async Task OnAccept(FriendRequestNotification friendRequestNotification)

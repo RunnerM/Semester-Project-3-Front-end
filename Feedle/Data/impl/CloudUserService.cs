@@ -136,7 +136,7 @@ namespace Feedle.Data
                 friendNotSerialize,
                 Encoding.UTF8,
                 "application/json");
-            HttpResponseMessage httpResponseMessage= await Client.PatchAsync("http://localhost:5002/feedle/user/respondToFriendNotification?status"+status, stringContent);
+            HttpResponseMessage httpResponseMessage= await Client.PatchAsync("http://localhost:5002/feedle/user/respondToFriendNotification?status="+status.ToString().ToLower(), stringContent);
             return httpResponseMessage.IsSuccessStatusCode;
         }
 
