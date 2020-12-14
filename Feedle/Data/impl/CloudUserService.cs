@@ -197,6 +197,16 @@ namespace Feedle.Data
             return CurrentUser.UserConversations;
         }
 
+        public int GetLastNotificationId()
+        {
+            return LastNotificationId;
+        }
+
+        public int GetLastMessageNotificationId()
+        {
+            return LastMessageId;
+        }
+
         private int GetLastMessageId(List<UserConversation> userConversations)
         {
             int max = -1;

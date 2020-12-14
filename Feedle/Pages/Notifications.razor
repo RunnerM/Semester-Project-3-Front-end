@@ -7,15 +7,15 @@
     <RadzenIcon Icon="notifications"></RadzenIcon>
 <h3>Notifications</h3>
 </div>
-@foreach (string s in notifications)
+@foreach (FriendRequestNotification n in notifications)
 {
     <RadzenCard>
         <div class="row">
-            <div>@notifications[1] have sent you a @notifications[2] request</div>
+            <div>@CurrentUser.UserName have sent you a @n.PotentialFriendUserName request</div>
             <div class="ml-auto">
-                <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="person" Click=@(args => OnAccept())>Accept</RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="person" Click=@(args => OnAccept(n))>Accept</RadzenButton>
 
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="person_add" Click=@(args => OnDecline())>Decline</RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="person_add" Click=@(args => OnDecline(n))>Decline</RadzenButton>
             </div>
         </div>
     </RadzenCard>
@@ -23,30 +23,40 @@
 
 
 @code {
-    IList<string> notifications;
-    User current;
+    IList<FriendRequestNotification> notifications;
+    private User CurrentUser;
 
     protected async override Task OnInitializedAsync()
     {
-        notifications = new List<string>();
-        string m1 = "jnihhskankjasnk";
-        for (int i = 0; i < 10; i++)
+        CurrentUser = await UserService.GetCurrentUser();
+        notifications = CurrentUser.FriendRequestNotifications;
+        await ReceiveNotification();
+    }
+
+    public async Task ReceiveNotification()
+    {
+        notifications = await UserService.GetNotificationsUpdate(UserService.GetLastNotificationId(),CurrentUser.Id);
+        ReceiveNotification();
+    }
+
+    private async Task OnAccept(FriendRequestNotification friendRequestNotification)
+    {
+        bool result = await UserService.RespondToFriendNotification(true, friendRequestNotification);
+        if (result)
         {
-            notifications.Add(m1);
+            CurrentUser = await UserService.GetCurrentUser();
+           notifications = CurrentUser.FriendRequestNotifications;
         }
-        current = await UserService.GetCurrentUser();
     }
 
-    private void OnAccept()
+    private async Task OnDecline(FriendRequestNotification friendRequestNotification)
     {
-        throw new NotImplementedException();
-    //Todo: imlement button logic
-    }
-
-    private void OnDecline()
-    {
-        throw new NotImplementedException();
-    //Todo: imlement button logic
+        bool result = await UserService.RespondToFriendNotification(false, friendRequestNotification);
+        if (result)
+        {
+            CurrentUser = await UserService.GetCurrentUser();
+            notifications = CurrentUser.FriendRequestNotifications;
+        }
     }
 
 }
