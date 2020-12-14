@@ -7,8 +7,6 @@
 @inject NavigationManager NavigationManager;
 
 @page "/PostView/{filterBy}/{sortBy}"
-<h1>@filterBy</h1>
-<h1>@sortBy</h1>
 <div>
     @if (posts == null)
     {
@@ -72,7 +70,7 @@
         displayedPosts = (List<Post>) posts;
     }
 
-    protected override void OnParametersSet()
+    protected async override void OnParametersSet()
     {
         switch (filterBy)
         {
@@ -80,16 +78,13 @@
             {
                 if (sortBy.Equals("newestFirst"))
                 {
-                    List<Post> tmp = (List<Post>) posts;
-                    tmp.Reverse();
-                    displayedPosts = tmp;
-                    Console.WriteLine("newsest");
+                    await OnInitializedAsync();
+                    displayedPosts.Reverse();
                     InvokeAsync(StateHasChanged);
                 }
                 else
                 {
-                    displayedPosts = (List<Post>) posts;
-                    Console.WriteLine("oldest");
+                    await OnInitializedAsync();
                     InvokeAsync(StateHasChanged);
                 }
             }
