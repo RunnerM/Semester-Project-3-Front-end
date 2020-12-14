@@ -1,11 +1,14 @@
 @using Feedle.Models
 @using Feedle.Data
 @using System.Text.Json
+@using System.Collections
 @inject INewsService NewsService;
 @inject IUserService UserService;
 @inject NavigationManager NavigationManager;
-@page "/PostView"
-@page "/PostView/{text}"
+
+@page "/PostView/{filterBy}/{sortBy}"
+<h1>@filterBy</h1>
+<h1>@sortBy</h1>
 <div>
     @if (posts == null)
     {
@@ -21,7 +24,7 @@
     }
     else
     {
-        @foreach (Post p in posts.Reverse())
+        @foreach (Post p in displayedPosts)
         {
             <div class="card">
                 <div class="card-body">
@@ -53,12 +56,47 @@
 
 @code {
     IList<Post> posts;
+    List<Post> displayedPosts;
     User currentUser;
+
+    [Parameter]
+    public string filterBy { get; set; }
+
+    [Parameter]
+    public string sortBy { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         posts = await NewsService.GetAllNews();
         currentUser = await UserService.GetCurrentUser();
+        displayedPosts = (List<Post>) posts;
+    }
+
+    protected override void OnParametersSet()
+    {
+        switch (filterBy)
+        {
+            case "all":
+            {
+                if (sortBy.Equals("newestFirst"))
+                {
+                    List<Post> tmp = (List<Post>) posts;
+                    tmp.Reverse();
+                    displayedPosts = tmp;
+                    Console.WriteLine("newsest");
+                    InvokeAsync(StateHasChanged);
+                }
+                else
+                {
+                    displayedPosts = (List<Post>) posts;
+                    Console.WriteLine("oldest");
+                    InvokeAsync(StateHasChanged);
+                }
+            }
+                break;
+            case "onlySubscriptions":
+                break;
+        }
     }
 
     string GetTime(Post post)
@@ -103,7 +141,7 @@
 
     async Task ThumbUp(Post post)
     {
-        //TODO: thumb up
+    //TODO: thumb up
     }
 
     async Task ThumbDown(Post post)
@@ -113,7 +151,7 @@
 
     string GetDisplayedThumbUp(Post post)
     {
-        /*
+    /*
         if (currentUser != null)
         {
             if (await NewsService.IsPostThumbUpByUser(post, currentUser))
