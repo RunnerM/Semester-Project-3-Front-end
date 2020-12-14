@@ -35,7 +35,9 @@
                     }
                     <span>@GetTime(p)</span>
                     <span class=@GetDisplayedThumbUp(copy) @onclick="@(e => ThumbUp(copy))"></span>
+                    <span>(</span><span>@p.Approvals</span><span>)</span>
                     <span class=@GetDisplayedThumbDown(copy) @onclick="@(e => ThumbDown(copy))"></span>
+                    <span>(</span><span>@p.Disapprovals</span><span>)</span>
                     @if (IsAuthor(p))
                     {
                         <span class="oi oi-trash cursor-pointer" @onclick="@(e => DeletePost(copy))"></span>
@@ -70,7 +72,7 @@
         posts = await NewsService.GetAllNews();
         currentUser = await UserService.GetCurrentUser();
         displayedPosts = (List<Post>) posts;
-        //userSubscriptions = currentUser.UserSubscriptions; //TODO implement
+    //userSubscriptions = currentUser.UserSubscriptions; //TODO implement
         userSubscriptions = new List<UserSubscription>();
     }
 
@@ -148,10 +150,9 @@
 
     async Task DeletePost(Post post)
     {
-        Console.WriteLine(post.Id);
         await NewsService.DeletePost(post.Id);
-        posts = await NewsService.GetAllNews();
-    //InvokeAsync(StateHasChanged)
+        await OnInitializedAsync();
+        InvokeAsync(StateHasChanged);
     }
 
     void NavigateToProfile(Post post)
