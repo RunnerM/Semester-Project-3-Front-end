@@ -189,8 +189,9 @@ else
 
     async Task DeletePost()
     {
-    //postDeletedResult = await NewsService.DeletePost(post); //TODO connect to web api
-        postDeletedResult = true;
+        postDeletedResult = await NewsService.DeletePost(post.Id); 
+        IList<Post> posts = await NewsService.GetAllNews();
+        post = posts.FirstOrDefault(i => i.Id == Id);
         StartTimer();
     }
 
@@ -198,7 +199,10 @@ else
     {
         //Comment comment = post.Comments[i];
         Console.WriteLine(JsonSerializer.Serialize(comment));
-    //await NewsService.DeleteComment(post, comment.Id);
+        await NewsService.DeleteComment(post.Id, comment.Id);
+        IList<Post> posts = await NewsService.GetAllNews();
+        post = posts.FirstOrDefault(i => i.Id == Id);
+        
 
     //await InvokeAsync(StateHasChanged);
     }
