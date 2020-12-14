@@ -1,28 +1,35 @@
 ﻿@page "/SignUp"
 @using Feedle.Data
 @using Feedle.Models
+@using Feedle.Authentication
 @inject IUserService UserService;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject NavigationManager NavigationManager;
+@inject BlazorTimer Timer
 <div class="text-center">
-    <div class="form-signin">
-        <img class="mb-4" src="extra/9742 feedle_RB_1.png" alt width="72">
-        <h1 class="h3 mb-3 font-weight-normal">Please sign up</h1>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input @bind-value="username" class="form-control" placeholder="Username" required="" autofocus="">
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input @bind-value="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
-        <label for="inputPassword" class="sr-only">Repeat Password</label>
-        <input @bind-value="password2" type="password" id="inputPassword2" class="form-control" placeholder="Repeat Password" required="">
-        <button @onclick="PerformSignUp" class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
-                    <p>or <a href="LogIn">log in</a> instead</p>
-                    @if (registeredFlag)
-                    {
-                        <p>You are now registered <a href="LogIn">log in</a></p>
-                    }
-                    @if (passwordMatchFlag)
-                    {
-                        <p>Paswords dose not match</p>
-                    }
-    </div>
+    <AuthorizeView>
+        <Authorized>
+            <p class="text-muted">
+                You have successfully signed up.
+            </p>
+            <p class="text-muted">Redirecting to the front page in a moment ...</p>
+        </Authorized>
+        <NotAuthorized>
+            <div class="form-signin">
+                <img class="mb-4" src="extra/9742 feedle_RB_1.png" alt width="72">
+                <h1 class="h3 mb-3 font-weight-normal">Please sign up</h1>
+                <label for="inputEmail" class="sr-only">Email address</label>
+                <input @bind-value="username" class="form-control" placeholder="Username" required="" autofocus="">
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input @bind-value="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+                <label for="inputPassword" class="sr-only">Repeat Password</label>
+                <input @bind-value="password2" type="password" id="inputPassword2" class="form-control" placeholder="Repeat Password" required="">
+                <button @onclick="PerformSignUp" class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+                <label>@errorLabel</label>
+                <p>or <a href="LogIn">log in</a> instead</p>
+            </div>
+        </NotAuthorized>
+    </AuthorizeView>
 </div>
 
 @code {
@@ -31,25 +38,62 @@
     string username;
     string password;
     string password2;
+    string errorLabel;
 
     public async Task PerformSignUp()
     {
-        if (password.Equals(password2))
+        if (Check(username) == false && Check(password) == false && Check(password2) == false)
         {
-            User newuser= new User();
-            newuser.UserName = username;
-            newuser.Password = password;
-            newuser.SecurityLevel = 1;
-            bool result= await UserService.RegisterUser(newuser);
-            if (result == true)
+            if (password.Equals(password2))
             {
-                registeredFlag = true;
+                User newuser = new User();
+                newuser.UserName = username;
+                newuser.Password = password;
+                newuser.SecurityLevel = 1;
+                bool result = await UserService.RegisterUser(newuser);
+                if (result)
+                {
+                    try
+                    {
+                        ((CustomAuthenticationStateProvider) AuthenticationStateProvider).ValidateLogin(username, password);
+                        username = "";
+                        password = "";
+                        errorLabel = "";
+                        StartTimer();
+                    }
+                    catch (Exception e)
+                    {
+                        errorLabel = e.Message;
+                    }
+                }
+            }
+            else
+            {
+                errorLabel = "Passwords do not match";
+                password = "";
+                password2 = "";
             }
         }
         else
         {
-            passwordMatchFlag = true;
+            errorLabel = "Some of the fields are empty";
         }
     }
 
+    private void StartTimer()
+    {
+        Timer.SetTimer(2000);
+        Timer.OnElapsed += TimerElapsedHandler;
+    }
+
+    private void TimerElapsedHandler()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+    public static bool Check(string s)
+    {
+        return (s == null || s == String.Empty) ? true : false;
+    }
+    //TODO: check if the user already exists in the system before registration
 }

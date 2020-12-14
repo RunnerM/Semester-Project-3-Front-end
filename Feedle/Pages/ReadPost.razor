@@ -82,14 +82,16 @@
         </div>
 <AuthorizeView>
     <Authorized>
-        
+
         <RadzenCard>
             <div class="row">
-                
+
                 <RadzenTextBox class="col-md-11" Placeholder="Comment....." Change=@(args => OnChange(args))></RadzenTextBox>
 
                 <div class="col-md-1 mr-auto">
-                    <button class="btn btn-light" @onclick="writeComment"><RadzenIcon Icon="send"></RadzenIcon></button>
+                    <button class="btn btn-light" @onclick="writeComment">
+                        <RadzenIcon Icon="send"></RadzenIcon>
+                    </button>
                 </div>
             </div>
         </RadzenCard>
@@ -189,7 +191,7 @@ else
 
     async Task DeletePost()
     {
-        postDeletedResult = await NewsService.DeletePost(post.Id); 
+        postDeletedResult = await NewsService.DeletePost(post.Id);
         IList<Post> posts = await NewsService.GetAllNews();
         post = posts.FirstOrDefault(i => i.Id == Id);
         StartTimer();
@@ -197,14 +199,10 @@ else
 
     async Task DeleteComment(Comment comment)
     {
-        //Comment comment = post.Comments[i];
-        Console.WriteLine(JsonSerializer.Serialize(comment));
         await NewsService.DeleteComment(post.Id, comment.Id);
         IList<Post> posts = await NewsService.GetAllNews();
         post = posts.FirstOrDefault(i => i.Id == Id);
-        
-
-    //await InvokeAsync(StateHasChanged);
+        await InvokeAsync(StateHasChanged);
     }
 
     //timer
@@ -219,7 +217,7 @@ else
     {
         NavigationManager.NavigateTo("/");
     }
-    
+
     void NavigateToProfile(Comment comment)
     {
         if (currentUser != null)
@@ -238,7 +236,7 @@ else
             NavigationManager.NavigateTo("/OtherProfile/" + comment.UserId);
         }
     }
-    
+
     void NavigateToProfile()
     {
         if (currentUser != null)
@@ -261,7 +259,7 @@ else
 
     //TODO: add delete comment connect to api
     //TODO: add delete post connect to api
-    
+
     private void OnChange(string comment)
     {
         commentText = comment;
@@ -269,7 +267,7 @@ else
 
     private async void OnClick()
     {
-         await writeComment();
+        await writeComment();
     }
-
+    //TODO: clear field after comment has been posted
 }
