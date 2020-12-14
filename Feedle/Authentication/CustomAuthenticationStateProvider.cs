@@ -45,7 +45,7 @@ namespace Feedle.Authentication
             return await Task.FromResult(new AuthenticationState(cachedClaimsPrincipal));
         }
 
-        public async void ValidateLogin(string username, string password)
+        public async Task ValidateLogin(string username, string password)
         {
             Console.WriteLine("Validating log in");
             if (string.IsNullOrEmpty(username)) throw new Exception("Enter username");
@@ -59,10 +59,9 @@ namespace Feedle.Authentication
                 string serialisedData = JsonSerializer.Serialize(user);
                 await jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "currentUser", serialisedData);
                 cachedUser = user;
-            }
-            catch (Exception e)
+            }catch (Exception e)
             {
-                throw e;
+                throw new Exception(e.Message);
             }
 
             // await userService.saveCachedUser(cachedUser);

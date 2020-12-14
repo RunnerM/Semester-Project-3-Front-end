@@ -32,15 +32,14 @@ namespace Feedle.Data
             string message =
                 await Client.GetStringAsync("http://localhost:5002/feedle/user?username=" + userName + "&password=" + password);
             Console.WriteLine(message);
-            if (JsonSerializer.Deserialize<User>(message) == null)
-            {
-                CurrentUser = null;
-                return null;
-            }
-            else
+            try
             {
                 CurrentUser = JsonSerializer.Deserialize<User>(message);
                 return CurrentUser;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Invalid username or password");
             }
         }
 
