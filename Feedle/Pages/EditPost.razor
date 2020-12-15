@@ -61,11 +61,19 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        posts = await NewsService.GetAllNews();
-        currentPost = posts.FirstOrDefault(p => p.Id == Id);
-        postTitle = currentPost.Title;
-        postContent = currentPost.Content;
+        try
+        {
+            posts = await NewsService.GetAllNews();
+            currentPost = posts.FirstOrDefault(p => p.Id == Id);
+            postTitle = currentPost.Title;
+            postContent = currentPost.Content;
     //postImage = currentPost.Image;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            navigateToError();
+        }
     }
 
     async Task saveChanges()
