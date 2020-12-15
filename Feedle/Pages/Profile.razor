@@ -162,7 +162,7 @@
                                 else
                                 {
                                     <ul class="list-group">
-                                        @foreach (var i in GetFriendRequestNotifications())
+                                        @foreach (var i in GetRightNotifications())
                                         {
                                             @if (CurrentUser.UserName.Equals(i.CreatorUserName))
                                             {
@@ -304,6 +304,23 @@
         {
             return CurrentUser.UserName;
         }
+    }
+    
+    private List<FriendRequestNotification> GetRightNotifications()
+    {
+        if (CurrentUser == null)
+        {
+            return new List<FriendRequestNotification>();
+        }
+        List<FriendRequestNotification> result = new List<FriendRequestNotification>();
+        foreach (var fn in CurrentUser.FriendRequestNotifications)
+        {
+            if (fn.CreatorId != CurrentUser.Id)
+            {
+                result.Add(fn);
+            }
+        }
+        return result;
     }
 
     public async Task DeleteProfile()
