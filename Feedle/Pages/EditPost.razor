@@ -1,4 +1,4 @@
-@page "/EditPost"
+@page "/EditPost/{id:int}"
 @using Feedle.Models
 @using Feedle.Data
 @inject INewsService NewsService
@@ -47,21 +47,48 @@ else
 }
 
 @code {
+
+    [Parameter]
+    public int Id { get; set; }
+
     string errorLabel;
     bool postChangedResult;
     string postTitle;
     string postContent;
     string postImage;
+    IList<Post> posts;
+    Post currentPost;
+
+    protected override async Task OnInitializedAsync()
+    {
+        posts = await NewsService.GetAllNews();
+        currentPost = posts.FirstOrDefault(p => p.Id == Id);
+        postTitle = currentPost.Title;
+        postContent = currentPost.Content;
+    //postImage = currentPost.Image;
+    }
 
     async Task saveChanges()
     {
-        
+        if (Check(postTitle) == false && Check(postContent) == false)
+        {
+            errorLabel = "";
+        }
+        else
+        {
+            errorLabel = "The title or content field is empty";
+        }
     }
 
     private object navigateToError()
     {
         NavigationManager.NavigateTo("/Error");
         return new object(); //does not need to return anything
+    }
+
+    public static bool Check(string s)
+    {
+        return (s == null || s == String.Empty) ? true : false;
     }
 
 }
