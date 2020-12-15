@@ -29,7 +29,7 @@
                     <a href="ReadPost/@p.Id">
                         <h5 class="card-title">@p.Title</h5>
                         <p class="card-text">@p.Content</p>
-                        <img class="img-fluid img-thumbnail"  src="https://picsum.photos/500/300" alt="Image of @p.Title" width="25%">
+                        <img class="img-fluid img-thumbnail" src="https://picsum.photos/500/300" alt="Image of @p.Title" width="25%">
                         <!--<img class="img-fluid img-thumbnail"  src="p.Image" alt="Image of p.Title" width="25%"> -->
                     </a>
                     @{
@@ -43,6 +43,7 @@
                     @if (IsAuthor(p))
                     {
                         <span class="oi oi-trash cursor-pointer" @onclick="@(e => DeletePost(copy))"></span>
+                        <span class="oi oi-pencil cursor-pointer" @onclick="@(e => EditPost(copy))"></span>
                     }
                     <a @onclick="@(e => NavigateToProfile(copy))" class="cursor-pointer">
                         <div class="card-footer text-muted">
@@ -155,6 +156,11 @@
         await NewsService.DeletePost(post.Id);
         await OnInitializedAsync();
         InvokeAsync(StateHasChanged);
+    }
+
+    void EditPost(Post post)
+    {
+        NavigationManager.NavigateTo("/EditPost/" + post.Id);
     }
 
     void NavigateToProfile(Post post)

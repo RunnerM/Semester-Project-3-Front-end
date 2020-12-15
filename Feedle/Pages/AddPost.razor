@@ -29,11 +29,7 @@
                     <input class="form-control" placeholder="Image URL here" @bind="postImage">
                 </div>
             </div>
-            <label style="color: red">
-                <b>
-                    <i>No validation available yet! Please fill in correctly!</i>
-                </b>
-            </label>
+            <label>@errorLabel</label>
             <button class="btn btn-outline-dark btn-sm" @onclick="addPost" type="submit">Add Post</button>
         </Authorized>
         <NotAuthorized>
@@ -60,6 +56,7 @@ else
     User currentUser { get; set; }
     DateTime DateTime { get; set; }
     bool postAddedResult;
+    string errorLabel;
 
     protected override async Task OnInitializedAsync()
     {
@@ -70,24 +67,32 @@ else
     {
         if (currentUser != null)
         {
-            Post post = new Post();
-            post.Title = postTitle;
-            post.Content = postContent;
-            //post.Image = postImage;
-            post.AuthorUserName = currentUser.UserName;
-            post.UserId = currentUser.Id;
-            post.Comments = new List<Comment>();
+            if (Check(postTitle) == false && Check(postContent) == false)
+            {
+                Post post = new Post();
+                post.Title = postTitle;
+                post.Content = postContent;
+    //post.Image = postImage;
+                post.AuthorUserName = currentUser.UserName;
+                post.UserId = currentUser.Id;
+                post.Comments = new List<Comment>();
 
-            DateTime = DateTime.Now;
-            post.Second = DateTime.Second;
-            post.Minute = DateTime.Minute;
-            post.Hour = DateTime.Hour;
-            post.Day = DateTime.Day;
-            post.Month = DateTime.Month;
-            post.Year = DateTime.Year;
+                DateTime = DateTime.Now;
+                post.Second = DateTime.Second;
+                post.Minute = DateTime.Minute;
+                post.Hour = DateTime.Hour;
+                post.Day = DateTime.Day;
+                post.Month = DateTime.Month;
+                post.Year = DateTime.Year;
 
-            postAddedResult = await NewsService.AddPostAsync(post);
-            StartTimer();
+                postAddedResult = await NewsService.AddPostAsync(post);
+                errorLabel = "";
+                StartTimer();
+            }
+            else
+            {
+                errorLabel = "The title or content field is empty";
+            }
         }
     }
 
@@ -108,6 +113,11 @@ else
     private void TimerElapsedHandler()
     {
         NavigationManager.NavigateTo("/");
+    }
+
+    public static bool Check(string s)
+    {
+        return (s == null || s == String.Empty) ? true : false;
     }
 
 }
