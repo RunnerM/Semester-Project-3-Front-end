@@ -47,7 +47,7 @@
                                         <em>Loading...</em>
                                     </p>
                                 }
-                                else if (!GetUserPosts().Any())
+                                else if (!(GetUserPosts()).Any())
                                 {
                                     <p>
                                         <em>U have no posts.</em>
@@ -213,6 +213,11 @@
 @code {
     private string pageState = "default";
     private User CurrentUser;
+    private List<UserFriend> UserFriends;
+    private List<UserSubscription> UserSubscriptions;
+    private List<FriendRequestNotification> FriendRequestNotifications;
+    private List<Post> UserPosts;
+    
 
     //lists section
     bool collapseNavMenu0 = false;
@@ -249,31 +254,48 @@
 
     protected override async Task OnInitializedAsync()
     {
-        GetCurrentUser();
+        CurrentUser = await UserService.GetCurrentUser();
     }
 
     public async Task GetCurrentUser()
     {
-        this.CurrentUser = await UserService.GetCurrentUser();
+        CurrentUser = await UserService.GetCurrentUser();
     }
 
-    public List<UserFriend> GetUserFriend()
+    public  List<UserFriend> GetUserFriend()
     {
+        
+        if (CurrentUser == null)
+        {
+            return new List<UserFriend>();
+        }
         return CurrentUser.UserFriends;
     }
 
     public List<UserSubscription> GetUserSubscriptions()
     {
+        if (CurrentUser == null)
+        {
+            return new List<UserSubscription>();
+        }
         return CurrentUser.UserSubscriptions;
     }
 
     public List<FriendRequestNotification> GetFriendRequestNotifications()
     {
+        if (CurrentUser == null)
+        {
+            return new List<FriendRequestNotification>();
+        }
         return CurrentUser.FriendRequestNotifications;
     }
 
     public List<Post> GetUserPosts()
     {
+        if (CurrentUser == null)
+        {
+            return new List<Post>();
+        }
         return CurrentUser.UserPosts;
     }
 
