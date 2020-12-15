@@ -62,6 +62,7 @@
                                             <li class="list-group-item">
                                                 @i.Title
                                                 <span class="oi oi-trash cursor-pointer" @onclick="@(e => DeletePost(copy))"></span>
+                                                <span class="oi oi-pencil cursor-pointer" @onclick="@(e => EditPost(copy))"></span>
                                             </li>
                                         }
                                     </ul>
@@ -346,6 +347,11 @@
         await NewsService.DeletePost(post.Id);
         await OnInitializedAsync();
         InvokeAsync(StateHasChanged);
+    }
+    
+    void EditPost(Post post)
+    {
+        NavigationManager.NavigateTo("/EditPost/" + post.Id);
     }
 
     //timer

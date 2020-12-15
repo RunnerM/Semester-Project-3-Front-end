@@ -22,6 +22,7 @@
                 @if (IsAuthor())
                 {
                     <span class="oi oi-trash cursor-pointer" @onclick="DeletePost"></span>
+                    <span class="oi oi-pencil cursor-pointer" @onclick="EditPost"></span>
                 }
             </div>
         </div>
@@ -197,6 +198,11 @@ else
         StartTimer();
     }
 
+    void EditPost()
+    {
+        NavigationManager.NavigateTo("/EditPost/" + post.Id);
+    }
+
     async Task DeleteComment(Comment comment)
     {
         await NewsService.DeleteComment(post.Id, comment.Id);
@@ -269,5 +275,6 @@ else
     {
         await writeComment();
     }
+
     //TODO: clear field after comment has been posted
 }
