@@ -1,0 +1,67 @@
+@page "/EditPost"
+@using Feedle.Models
+@using Feedle.Data
+@inject INewsService NewsService
+@inject IUserService UserService
+@inject NavigationManager NavigationManager;
+@inject BlazorTimer Timer
+@if (!postChangedResult)
+{
+    <AuthorizeView>
+        <Authorized>
+            <h3>Edit post</h3>
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Title</label>
+                    <input class="form-control" placeholder="Title [Required]" @bind="postTitle">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Content</label>
+                    <textarea class="form-control" rows="5" @bind="postContent"></textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Image</label>
+                    <input class="form-control" placeholder="Image URL here" @bind="postImage">
+                </div>
+            </div>
+            <label>@errorLabel</label>
+            <button class="btn btn-outline-dark btn-sm" @onclick="saveChanges" type="submit">Save changes</button>
+        </Authorized>
+        <NotAuthorized>
+            @navigateToError();
+        </NotAuthorized>
+    </AuthorizeView>
+}
+else
+{
+    <div class="text-center">
+        <p class="text-muted">
+            The post has been changed.
+        </p>
+        <p class="text-muted">Redirecting to front page in 2 second ...</p>
+    </div>
+}
+
+@code {
+    string errorLabel;
+    bool postChangedResult;
+    string postTitle;
+    string postContent;
+    string postImage;
+
+    async Task saveChanges()
+    {
+        
+    }
+
+    private object navigateToError()
+    {
+        NavigationManager.NavigateTo("/Error");
+        return new object(); //does not need to return anything
+    }
+
+}
