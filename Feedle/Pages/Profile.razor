@@ -41,13 +41,13 @@
 
                         <div id="collapseOne" class="@NavMenuCssClass0" aria-labelledby="headingOne" data-parent="#accordion">
                             <div class="card-body">
-                                @if (posts == null)
+                                @if (GetUserPosts() == null)
                                 {
                                     <p>
                                         <em>Loading...</em>
                                     </p>
                                 }
-                                else if (!posts.Any())
+                                else if (!GetUserPosts().Any())
                                 {
                                     <p>
                                         <em>U have no posts.</em>
@@ -56,7 +56,7 @@
                                 else
                                 {
                                     <ul class="list-group">
-                                        @foreach (var i in posts)
+                                        @foreach (var i in GetUserPosts())
                                         {
                                             var copy = i;
                                             <li class="list-group-item">
@@ -77,13 +77,13 @@
                         </div >
                         <div id="collapseTwo" class="@NavMenuCssClass1" aria-labelledby="headingTwo" data-parent="#accordion">
                             <div class="card-body">
-                                @if (friends == null)
+                                @if (GetUserFriend() == null)
                                 {
                                     <p>
                                         <em>Loading...</em>
                                     </p>
                                 }
-                                else if (!friends.Any())
+                                else if (!GetUserFriend().Any())
                                 {
                                     <p>
                                         <em>U have no friends.</em>
@@ -92,7 +92,7 @@
                                 else
                                 {
                                     <ul class="list-group">
-                                        @foreach (var i in friends)
+                                        @foreach (var i in GetUserFriend())
                                         {
                                             <li class="list-group-item">
                                                 <p>@i.UserName</p>
@@ -113,13 +113,13 @@
                         </div>
                         <div id="collapseThree" class="@NavMenuCssClass2" aria-labelledby="headingThree" data-parent="#accordion">
                             <div class="card-body">
-                                @if (subscritions == null)
+                                @if (GetUserSubscriptions() == null)
                                 {
                                     <p>
                                         <em>Loading...</em>
                                     </p>
                                 }
-                                else if (!subscritions.Any())
+                                else if (!GetUserSubscriptions().Any())
                                 {
                                     <p>
                                         <em>U have no subscriptions.</em>
@@ -128,7 +128,7 @@
                                 else
                                 {
                                     <ul class="list-group">
-                                        @foreach (var i in subscritions)
+                                        @foreach (var i in GetUserSubscriptions())
                                         {
                                             <li class="list-group-item">@i.UserName</li>
                                         }
@@ -147,13 +147,13 @@
                         </div>
                         <div id="collapseFour" class="@NavMenuCssClass3" aria-labelledby="headingFour" data-parent="#accordion">
                             <div class="card-body">
-                                @if (friendRequests == null)
+                                @if (GetFriendRequestNotifications() == null)
                                 {
                                     <p>
                                         <em>Loading...</em>
                                     </p>
                                 }
-                                else if (!friendRequests.Any())
+                                else if (!GetFriendRequestNotifications().Any())
                                 {
                                     <p>
                                         <em>U have no friends requests.</em>
@@ -162,9 +162,16 @@
                                 else
                                 {
                                     <ul class="list-group">
-                                        @foreach (var i in friendRequests)
+                                        @foreach (var i in GetFriendRequestNotifications())
                                         {
-                                            <li class="list-group-item">@i.PotentialFriendUserName</li>
+                                            @if (CurrentUser.UserName.Equals(i.CreatorUserName))
+                                            {
+                                                <li class="list-group-item">Your request to + i.PotentialFriendUserName</li>
+                                            }
+                                            else
+                                            {
+                                                <li class="list-group-item">@i.PotentialFriendUserName</li>
+                                            }
                                         }
                                     </ul>
                                 }
@@ -204,7 +211,8 @@
 
 
 @code {
-    string pageState = "default";
+    private string pageState = "default";
+    private User CurrentUser;
 
     //lists section
     bool collapseNavMenu0 = false;
@@ -238,31 +246,46 @@
     }
 
     //user data section
-    private User currentUser;
-    private List<Post> posts;
-    private List<UserFriend> friends;
-    private List<UserSubscription> subscritions;
-    private List<FriendRequestNotification> friendRequests;
 
     protected override async Task OnInitializedAsync()
     {
-        currentUser = await UserService.GetCurrentUser();
-        posts = currentUser.UserPosts;
-        friends = currentUser.UserFriends;
-        //subscritions = currentUser.UserSubscriptions;
-        friendRequests = currentUser.FriendRequestNotifications;
-    //TODO: bug gets incorrect list of posts
+        GetCurrentUser();
+    }
+
+    public async Task GetCurrentUser()
+    {
+        this.CurrentUser = await UserService.GetCurrentUser();
+    }
+
+    public List<UserFriend> GetUserFriend()
+    {
+        return CurrentUser.UserFriends;
+    }
+
+    public List<UserSubscription> GetUserSubscriptions()
+    {
+        return CurrentUser.UserSubscriptions;
+    }
+
+    public List<FriendRequestNotification> GetFriendRequestNotifications()
+    {
+        return CurrentUser.FriendRequestNotifications;
+    }
+
+    public List<Post> GetUserPosts()
+    {
+        return CurrentUser.UserPosts;
     }
 
     public String GetUserName()
     {
-        if (currentUser == null)
+        if (CurrentUser == null)
         {
             return "unknown";
         }
         else
         {
-            return currentUser.UserName;
+            return CurrentUser.UserName;
         }
     }
 

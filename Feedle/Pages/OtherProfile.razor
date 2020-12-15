@@ -9,16 +9,28 @@
         <h3>@GetOtherUserUserName()</h3>
         <div class="oi oi-person"></div>
         <p>@id</p>
-        @if (isFriend)
+        @if (IsFriendRequestSent())
         {
             <a class="btn btn-outline-secondary" @onclick="RemoveFriend">Remove friend</a>  
+        }
+        else if (IsFriendRequestSent() && !IsFriendRequestSent())
+        {
+            <a class="btn btn-outline-secondary">Friend request sent</a>  
         }
         else
         {
             <a class="btn btn-outline-secondary" @onclick="AddFriend">Send friend request</a>  
         }
-        <a class="btn btn-outline-secondary" @onclick="Subscribe">Subscribe</a>
-        @if (isFriend)
+        @if (IsSubscribed())
+        {
+            <a class="btn btn-outline-secondary" @onclick="Unsubscribe">Unsubscribe</a>
+        }
+        else
+        {
+            <a class="btn btn-outline-secondary" @onclick="Subscribe">Subscribe</a>
+        }
+        
+        @if (GetIsFriend())
         {
             @if (messages == null)
             {
@@ -67,28 +79,23 @@
     [Parameter]
     public int id { get; set; }
 
-    bool isFriend;
-    UserInformation otherUser;
-    User currentUser;
-    List<Message> messages;
-    string messageText;
+    
+    private UserInformation otherUser;
+    private User currentUser;
+    private List<Message> messages;
+    private string messageText;
 
 
     protected override async Task OnInitializedAsync()
     {
         currentUser = await UserService.GetCurrentUser();
         otherUser = await UserService.GetUserInformationById(id);
-    // if (currentUser != null)
-    //{
-    //TODO check if is friend
-        isFriend = false;
         messages = new List<Message>();
         Message tmp = new Message();
         tmp.Content = "hui";
         tmp.UserId = 69;
         messages.Add(tmp);
     //TODO get the converstation
-    //}
     }
 
     public string GetOtherUserUserName()
@@ -111,6 +118,8 @@
         bool result = await UserService.MakeFriendRequestNotification(friendRequestNotification);
         if (result)
         {
+            currentUser = await UserService.GetCurrentUser();
+            otherUser = await UserService.GetUserInformationById(id);
         }
     }
 
@@ -121,12 +130,77 @@
 
     async Task Subscribe()
     {
-    //TODO implement
+      UserSubscription userSubscription = new UserSubscription();
+        userSubscription.UserId = currentUser.Id;
+        userSubscription.SubscriptionId = id;
+        userSubscription.UserName = currentUser.UserName;
+        bool result = await UserService.SubscribeToUser(userSubscription);
+        if (result)
+        {
+            currentUser = await UserService.GetCurrentUser();
+            otherUser = await UserService.GetUserInformationById(id);
+        }
+    }
+
+    async Task Unsubscribe()
+    {
+        bool result = await UserService.UnsubscribeFromUser(currentUser.Id, id);
+        if (result)
+        {
+            currentUser = await UserService.GetCurrentUser();
+            otherUser = await UserService.GetUserInformationById(id);
+        }
     }
 
     async Task sendMessage()
     {
         messageText = "";
+    }
+
+    public bool IsFriendRequestSent()
+    {
+        if (currentUser != null)
+        {
+            foreach (var friendRequestNotification in currentUser.FriendRequestNotifications)
+            {
+                if (friendRequestNotification.PotentialFriendUserId == id)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public bool GetIsFriend()
+    {
+        if (currentUser != null)
+        {
+            foreach (var uc in currentUser.UserFriends)
+            {
+                if (uc.FriendId == id)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public bool IsSubscribed()
+    {
+        if (currentUser != null)
+        {
+            foreach (var us in currentUser.UserSubscriptions)
+            {
+                if (us.SubscriptionId == id)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }
