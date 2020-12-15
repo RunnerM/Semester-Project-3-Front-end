@@ -7,7 +7,7 @@
     <RadzenIcon Icon="notifications"></RadzenIcon>
 <h3>Notifications</h3>
 </div>
-@foreach (FriendRequestNotification n in notifications)
+@foreach (FriendRequestNotification n in GetRightNotifications())
 {
     <RadzenCard>
         <div class="row">
@@ -23,13 +23,11 @@
 
 
 @code {
-    private IList<FriendRequestNotification> notifications = new List<FriendRequestNotification>();
     private User CurrentUser;
 
     protected async override Task OnInitializedAsync()
     {
         CurrentUser = await UserService.GetCurrentUser();
-        notifications = CurrentUser.FriendRequestNotifications;
         await ReceiveNotification();
     }
 
@@ -54,7 +52,6 @@
         if (result)
         {
             CurrentUser = await UserService.GetCurrentUser();
-           notifications = CurrentUser.FriendRequestNotifications;
         }
     }
 
@@ -64,8 +61,24 @@
         if (result)
         {
             CurrentUser = await UserService.GetCurrentUser();
-            notifications = CurrentUser.FriendRequestNotifications;
         }
+    }
+
+    private List<FriendRequestNotification> GetRightNotifications()
+    {
+        if (CurrentUser == null)
+        {
+            return new List<FriendRequestNotification>();
+        }
+        List<FriendRequestNotification> result = new List<FriendRequestNotification>();
+        foreach (var fn in CurrentUser.FriendRequestNotifications)
+        {
+            if (fn.CreatorId != CurrentUser.Id)
+            {
+                result.Add(fn);
+            }
+        }
+        return result;
     }
 
 }

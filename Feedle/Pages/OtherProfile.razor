@@ -9,11 +9,11 @@
         <h3>@GetOtherUserUserName()</h3>
         <div class="oi oi-person"></div>
         <p>@id</p>
-        @if (IsFriendRequestSent())
+        @if (GetIsFriend())
         {
             <a class="btn btn-outline-secondary" @onclick="RemoveFriend">Remove friend</a>  
         }
-        else if (IsFriendRequestSent() && !IsFriendRequestSent())
+        else if (IsFriendRequestSent() && !GetIsFriend())
         {
             <a class="btn btn-outline-secondary">Friend request sent</a>  
         }
