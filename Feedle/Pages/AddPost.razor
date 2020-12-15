@@ -26,7 +26,7 @@
             <div class="form-row">
                 <div class="form-group col">
                     <label for="exampleFormControlFile1">Example file input</label>
-                    <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                    <input class="form-control" placeholder="Image URL here" @bind="postImage">
                 </div>
             </div>
             <label style="color: red">
@@ -55,6 +55,7 @@ else
 
 @code {
     string postTitle { get; set; }
+    string postImage { get; set; }
     string postContent { get; set; }
     User currentUser { get; set; }
     DateTime DateTime { get; set; }
@@ -72,6 +73,7 @@ else
             Post post = new Post();
             post.Title = postTitle;
             post.Content = postContent;
+            //post.Image = postImage;
             post.AuthorUserName = currentUser.UserName;
             post.UserId = currentUser.Id;
             post.Comments = new List<Comment>();
