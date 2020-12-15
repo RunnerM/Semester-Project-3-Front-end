@@ -15,6 +15,7 @@
             <div class="card-body">
                 <h5 class="card-title">@post.Title</h5>
                 <p class="card-text">@post.Content</p>
+                <img class="img-fluid img-thumbnail" src="https://picsum.photos/500/300" alt="Image of @post.Title" width="25%">
                 <span>@GetTime(post)</span>
                 <div class="card-footer text-muted cursor-pointer" @onclick="NavigateToProfile">
                     @post.AuthorUserName
