@@ -127,6 +127,10 @@ else
 
     private bool CheckForPostChange()
     {
+        if (currentPost == null || currentPost.Title == null || currentPost.PostImageSrc == null || currentPost.Content == null)
+        {
+            return false;
+        }
         if (!currentPost.Title.Equals(postTitle) || (!currentPost.Content.Equals(postContent) || (!currentPost.PostImageSrc.Equals(postImage))))
         {
             return true;
