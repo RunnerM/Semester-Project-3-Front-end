@@ -47,7 +47,8 @@
                     }
                     <a @onclick="@(e => NavigateToProfile(copy))" class="cursor-pointer">
                         <div class="card-footer text-muted">
-                            @p.AuthorUserName
+                            <img src="@GetTheImage(copy)" class="avatar">
+                            <span>@p.AuthorUserName</span>
                         </div>
                     </a>
                 </div>
@@ -221,6 +222,11 @@
         }
         */
         return "oi oi-arrow-bottom cursor-pointer";
+    }
+
+    string GetTheImage(Post post)
+    {
+        return "extra/user-empty-avatar.png";
     }
 
 }

@@ -1,0 +1,79 @@
+﻿@page "/ChangeProfileImage"
+@using Feedle.Data
+@using Feedle.Models
+@inject IUserService UserService
+@inject NavigationManager NavigationManager;
+@inject BlazorTimer Timer
+<AuthorizeView>
+    <Authorized>
+        @if (!savedState)
+        {
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Change profile image</label>
+                    <input class="form-control" placeholder="Image URL here" @bind="postImage">
+                </div>
+            </div>
+            <button class="btn btn-outline-dark btn-sm" @onclick="Save" type="submit">Save changes</button>
+        }
+        else
+        {
+            <div class="text-center">
+                <p class="text-muted">
+                    The image profile has been changed.
+                </p>
+                <p class="text-muted">Redirecting to the profile page in a moment ...</p>
+            </div>
+        }
+
+    </Authorized>
+    <NotAuthorized>
+        @navigateToError();
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    string postImage;
+    User currentUser;
+    bool savedState;
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentUser = await UserService.GetCurrentUser();
+    }
+
+    private object navigateToError()
+    {
+        NavigationManager.NavigateTo("/Error");
+        return new object();
+    }
+
+    async Task Save()
+    {
+        try
+        {
+    //savedState = await currentUser.UpdateImage...
+            savedState = true;
+            StartTimer();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            navigateToError();
+        }
+    }
+
+    //timer
+    private void StartTimer()
+    {
+        InvokeAsync(StateHasChanged);
+        Timer.SetTimer(2000);
+        Timer.OnElapsed += TimerElapsedHandler;
+    }
+
+    private void TimerElapsedHandler()
+    {
+        NavigationManager.NavigateTo("/Profile");
+    }
+
+}

@@ -2,8 +2,6 @@
 @inject NavigationManager NavigationManager;
 @using Feedle.Data
 @using Feedle.Models
-@using System.Text.Json
-@using Radzen
 @inject INewsService NewsService;
 @inject IUserService UserService;
 @inject BlazorTimer Timer
@@ -18,7 +16,8 @@
                 <img class="img-fluid img-thumbnail" src="https://picsum.photos/500/300" alt="Image of @post.Title" width="25%">
                 <span>@GetTime(post)</span>
                 <div class="card-footer text-muted cursor-pointer" @onclick="NavigateToProfile">
-                    @post.AuthorUserName
+                    <img src="@GetTheImage()" class="avatar">
+                    <span>@post.AuthorUserName</span>
                 </div>
                 @if (IsAuthor())
                 {
@@ -57,7 +56,7 @@
                                         <div class="p-2">
                                             <span class="round">
                                                 <a class="cursor-pointer" @onclick="@(e => NavigateToProfile(copy))">
-                                                    <img src="extra/user-empty-avatar.png" alt="user" width="50">
+                                                    <img src="@GetTheImageOfCommentAuthor()" alt="user" width="50">
                                                 </a>
                                             </span>
                                         </div>
@@ -278,4 +277,14 @@ else
     }
 
     //TODO: clear field after comment has been posted
+    private string GetTheImage()
+    {
+        return "extra/user-empty-avatar.png";
+    }
+
+    private string GetTheImageOfCommentAuthor()
+    {
+        return "extra/user-empty-avatar.png";
+    }
+
 }

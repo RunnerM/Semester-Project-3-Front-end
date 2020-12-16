@@ -42,7 +42,7 @@ else
         <p class="text-muted">
             The post has been changed.
         </p>
-        <p class="text-muted">Redirecting to front page in 2 second ...</p>
+        <p class="text-muted">Redirecting in a moment.</p>
     </div>
 }
 
@@ -80,7 +80,18 @@ else
     {
         if (Check(postTitle) == false && Check(postContent) == false)
         {
-            errorLabel = "";
+            try
+            {
+                errorLabel = "";
+                postChangedResult = true;
+                //postChangedResult = await NewsService.UpdatePostAsync();
+                StartTimer();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                navigateToError();
+            }
         }
         else
         {
@@ -97,6 +108,19 @@ else
     public static bool Check(string s)
     {
         return (s == null || s == String.Empty) ? true : false;
+    }
+
+    //timer
+    private void StartTimer()
+    {
+        InvokeAsync(StateHasChanged);
+        Timer.SetTimer(2000);
+        Timer.OnElapsed += TimerElapsedHandler;
+    }
+
+    private void TimerElapsedHandler()
+    {
+        NavigationManager.NavigateTo("/ReadPost/" + Id);
     }
 
 }

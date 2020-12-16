@@ -140,3 +140,9 @@ body {
 .cursor-pointer{
     cursor: pointer;
 }
+.avatar {
+    vertical-align: middle;
+    width: 4%;
+    height: 4%;
+    border-radius: 50%;
+}
