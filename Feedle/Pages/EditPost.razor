@@ -80,11 +80,20 @@ else
     {
         if (!Check(postTitle) && !Check(postContent) && CheckForPostChange())
         {
-            errorLabel = "";
-            currentPost.Title = postTitle;
-            currentPost.Content = postContent;
-            currentPost.PostImageSrc = postImage;
-            await NewsService.UpdatePostAsync(currentPost);
+            try
+            {
+                errorLabel = "";
+                currentPost.Title = postTitle;
+                currentPost.Content = postContent;
+                currentPost.PostImageSrc = postImage;
+                postChangedResult = await NewsService.UpdatePostAsync(currentPost);
+                StartTimer();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                NavigateToError();
+            }
         }
         else
         {
@@ -114,6 +123,8 @@ else
     private void TimerElapsedHandler()
     {
         NavigationManager.NavigateTo("/ReadPost/" + Id);
+    }
+
     private bool CheckForPostChange()
     {
         if (!currentPost.Title.Equals(postTitle) || (!currentPost.Content.Equals(postContent) || (!currentPost.PostImageSrc.Equals(postImage))))
