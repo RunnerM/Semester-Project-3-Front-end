@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -85,7 +86,7 @@ namespace Feedle.Data
             return posts;
         }
 
-        public async Task UpdatePostAsync(Post post)
+        public async Task<bool> UpdatePostAsync(Post post)
         {
             for (int i = 0; i < posts.Count; i++)
             {
@@ -96,6 +97,7 @@ namespace Feedle.Data
                     break;
                 }
             }
+            throw new NotImplementedException();
             
         }
 

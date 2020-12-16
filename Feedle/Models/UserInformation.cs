@@ -11,5 +11,6 @@ namespace Feedle.Models
         [JsonPropertyName("userName")] public string UserName { get; set; }
         [JsonPropertyName("userSubscriptions")] public List<UserSubscription> UserSubscriptions { get; set; }
         [JsonPropertyName("userFriends")] public List<UserFriend> UserFriends { get; set; }
+        [JsonPropertyName("userImageSrc")] public string UserImageSrc { get; set; }
     }
 }

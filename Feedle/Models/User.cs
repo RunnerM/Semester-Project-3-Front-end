@@ -27,6 +27,8 @@ namespace Feedle.Models
         public List<UserFriend> UserFriends { get; set; }
         [JsonPropertyName("friendRequestNotifications")]
         public List<FriendRequestNotification> FriendRequestNotifications { get; set; }
+        [JsonPropertyName("userImageSrc")]
+        public string UserImageSrc { get; set; }
 
 
         public User()

@@ -29,10 +29,10 @@
                 </div>
             </div>
             <label>@errorLabel</label>
-            <button class="btn btn-outline-dark btn-sm" @onclick="saveChanges" type="submit">Save changes</button>
+            <button class="btn btn-outline-dark btn-sm" @onclick="SaveChanges" type="submit">Save changes</button>
         </Authorized>
         <NotAuthorized>
-            @navigateToError();
+            @NavigateToError();
         </NotAuthorized>
     </AuthorizeView>
 }
@@ -51,13 +51,13 @@ else
     [Parameter]
     public int Id { get; set; }
 
-    string errorLabel;
-    bool postChangedResult;
-    string postTitle;
-    string postContent;
-    string postImage;
-    IList<Post> posts;
-    Post currentPost;
+    private string errorLabel;
+    private bool postChangedResult;
+    private string postTitle;
+    private string postContent;
+    private string postImage;
+    private IList<Post> posts;
+    private Post currentPost;
 
     protected override async Task OnInitializedAsync()
     {
@@ -72,31 +72,44 @@ else
         catch (Exception e)
         {
             Console.WriteLine(e);
-            navigateToError();
+            NavigateToError();
         }
     }
 
-    async Task saveChanges()
+    private async Task SaveChanges()
     {
-        if (Check(postTitle) == false && Check(postContent) == false)
+        if (!Check(postTitle) && !Check(postContent) && CheckForPostChange())
         {
             errorLabel = "";
+            currentPost.Title = postTitle;
+            currentPost.Content = postContent;
+            currentPost.PostImageSrc = postImage;
+            await NewsService.UpdatePostAsync(currentPost);
         }
         else
         {
-            errorLabel = "The title or content field is empty";
+            errorLabel = "The title or content field is empty/There is nothing to update...";
         }
     }
 
-    private object navigateToError()
+    private object NavigateToError()
     {
         NavigationManager.NavigateTo("/Error");
         return new object(); //does not need to return anything
     }
 
-    public static bool Check(string s)
+    private static bool Check(string s)
     {
         return (s == null || s == String.Empty) ? true : false;
+    }
+
+    private bool CheckForPostChange()
+    {
+        if (!currentPost.Title.Equals(postTitle) || (!currentPost.Content.Equals(postContent) || (!currentPost.PostImageSrc.Equals(postImage))))
+        {
+            return true;
+        }
+        return false;
     }
 
 }
