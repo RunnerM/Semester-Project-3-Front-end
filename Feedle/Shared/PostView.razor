@@ -25,38 +25,39 @@
         @foreach (Post p in displayedPosts)
         {
             <div class="card">
+                <div class="card-header">
+                    <div class="d-flex flex-row align-items-center">
+                        <div>
+                            <img src="@GetTheImage(p)" width="40" style="border-radius: 50%" @onclick="@(e => NavigateToProfile(p))" class="cursor-pointer">
+                        </div>
+                        <div style="margin-left: 1%">@p.AuthorUserName</div>
+                    </div>
+                </div>
+                <img class="img-fluid" src=@p.PostImageSrc alt="Image of @p.Title" width="25%">
                 <div class="card-body">
-                    <a href="ReadPost/@p.Id">
-                        <h5 class="card-title">@p.Title</h5>
-                        <p class="card-text">@p.Content</p>
-                        <img class="img-fluid img-thumbnail" src=@p.PostImageSrc alt="Image of @p.Title" width="25%">
-                        <!--<img class="img-fluid img-thumbnail"  src="p.Image" alt="Image of p.Title" width="25%"> -->
-                    </a>
+                    <h5 class="card-title">@p.Title</h5>
+                    <p class="card-text">@p.Content</p>
+                    <a href="ReadPost/@p.Id" class="btn btn-primary">Go to post</a>
+                </div>
+                <div class="card-footer">
                     @{
-                        var copy = p;
+                        var copy1 = p;
                     }
                     <span>@GetTime(p)</span>
-                    <span class=@GetDisplayedThumbUp(copy) @onclick="@(e => ThumbUp(copy))"></span>
+                    <span class=@GetDisplayedThumbUp(copy1) @onclick="@(e => ThumbUp(copy1))"></span>
                     <span>(</span><span>@p.Approvals</span><span>)</span>
-                    <span class=@GetDisplayedThumbDown(copy) @onclick="@(e => ThumbDown(copy))"></span>
+                    <span class=@GetDisplayedThumbDown(copy1) @onclick="@(e => ThumbDown(copy1))"></span>
                     <span>(</span><span>@p.Disapprovals</span><span>)</span>
                     @if (IsAuthor(p))
                     {
-                        <span class="oi oi-trash cursor-pointer" @onclick="@(e => DeletePost(copy))"></span>
-                        <span class="oi oi-pencil cursor-pointer" @onclick="@(e => EditPost(copy))"></span>
+                        <span class="oi oi-trash cursor-pointer" @onclick="@(e => DeletePost(copy1))"></span>
+                        <span class="oi oi-pencil cursor-pointer" @onclick="@(e => EditPost(copy1))"></span>
                     }
-                    <a @onclick="@(e => NavigateToProfile(copy))" class="cursor-pointer">
-                        <div class="card-footer text-muted">
-                            <img src="@GetTheImage(copy)" class="avatar">
-                            <span>@p.AuthorUserName</span>
-                        </div>
-                    </a>
                 </div>
             </div>
         }
     }
 </div>
-
 
 @code {
     IList<Post> posts;
@@ -77,10 +78,10 @@
         posts = await NewsService.GetAllNews();
         currentUser = await UserService.GetCurrentUser();
         displayedPosts = (List<Post>) posts;
-        // = currentUser.UserSubscriptions;
+    // = currentUser.UserSubscriptions;
         UserInformationList = await GetUserInformation();
     }
-    
+
     public async Task<List<UserInformation>> GetUserInformation()
     {
         List<UserInformation> result = new List<UserInformation>();
