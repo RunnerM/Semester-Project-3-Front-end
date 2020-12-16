@@ -30,7 +30,7 @@
             <a class="btn btn-outline-secondary" @onclick="Subscribe">Subscribe</a>
         }
         
-        @if (GetIsFriend())
+        @if (GetIsFriend() && GetUserConversation() != null)
         {
             @if (messages == null)
             {
@@ -58,7 +58,18 @@
                 </ul>
             }
             <input @bind="messageText" placeholder="type here pidor"/>
-            <button type="button" class="btn btn-primary" @onclick="sendMessage">Send nahui</button>
+            @if (CheckForMessageToBeSent())
+            {
+                <button type="button" class="btn btn-primary" @onclick="SendMessage">Send nahui</button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-primary">Nothing to sent</button>
+            }
+        }
+        else
+        {
+            <button type="button" class="btn btn-primary" @onclick="AddConversation">Start coversation</button>
         }
 
     </Authorized>
@@ -152,9 +163,29 @@
         }
     }
 
-    async Task sendMessage()
+    public async Task SendMessage()
     {
-        messageText = "";
+        Message message = new Message();
+        message.Content = messageText;
+        message.UserId = currentUser.Id;
+        message.ConversationId = GetUserConversation().ConversationId;
+        DateTime dateTime= DateTime.Now;
+        message.Second = dateTime.Second;
+        message.Minute = dateTime.Minute;
+        message.Hour = dateTime.Hour;
+        message.Day = dateTime.Day;
+        message.Month = dateTime.Month;
+        message.Year = dateTime.Year;
+        await UserService.SendMessage(message);
+    }
+
+    public async Task AddConversation()
+    {
+        var result = await UserService.AddConversation(currentUser.Id, id, new Conversation());
+        if (result)
+        {
+            currentUser = await UserService.GetCurrentUser();
+        }
     }
 
     public bool IsFriendRequestSent()
@@ -201,6 +232,29 @@
             }
         }
         return false;
+    }
+
+    public UserConversation GetUserConversation()
+    {
+        if (currentUser == null)
+            return null;
+        foreach (var uc in currentUser.UserConversations)
+        {
+            if (uc.WithWhomUserId == id)
+            {
+                return uc;
+            }
+        }
+        return null;
+    }
+
+    public bool CheckForMessageToBeSent()
+    {
+        if (messageText == null || messageText.Equals(""))
+        {
+            return false;
+        }
+        return true;
     }
 
 }
