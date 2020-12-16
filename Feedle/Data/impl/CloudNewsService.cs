@@ -46,7 +46,7 @@ namespace Feedle.Data
             return JsonSerializer.Deserialize<List<Post>>(message);
         }
 
-        public async Task UpdatePostAsync(Post post)
+        public async Task<bool> UpdatePostAsync(Post post)
         {
             string postToSerialize = JsonSerializer.Serialize(post);
             Console.WriteLine(postToSerialize);
@@ -56,10 +56,7 @@ namespace Feedle.Data
                 "application/json");
             HttpResponseMessage httpResponseMessage=
                 await Client.PatchAsync("http://localhost:5002/feedle/posts", stringContent);
-            if (httpResponseMessage.IsSuccessStatusCode)
-            {
-               
-            }
+            return httpResponseMessage.IsSuccessStatusCode;
         }
 
         public async Task<List<Post>> GetPostsForRegisteredUser(int id)

@@ -29,5 +29,6 @@ namespace Feedle.Models
         {
             Comments = new List<Comment>();
         }
+        [JsonPropertyName("postImageSrc")] public string PostImageSrc { get; set; }
     }
 }

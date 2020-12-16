@@ -8,7 +8,7 @@ namespace Feedle.Data
     {
         Task<bool> AddPostAsync(Post post);
         Task<IList<Post>> GetAllNews();
-        Task UpdatePostAsync(Post post);
+        Task<bool> UpdatePostAsync(Post post);
 
         Task<List<Post>> GetPostsForRegisteredUser(int id);
 
