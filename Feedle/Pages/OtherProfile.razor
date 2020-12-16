@@ -11,23 +11,23 @@
         <p>@id</p>
         @if (GetIsFriend())
         {
-            <a class="btn btn-outline-secondary" @onclick="RemoveFriend">Remove friend</a>  
+            <button type="button" class="btn btn-outline-danger" @onclick="RemoveFriend">Remove friend</button>  
         }
         else if (IsFriendRequestSent() && !GetIsFriend())
         {
-            <a class="btn btn-outline-secondary">Friend request sent</a>  
+            <button type="button" class="btn btn-outline-success">Friend request sent</button>  
         }
         else
         {
-            <a class="btn btn-outline-secondary" @onclick="AddFriend">Send friend request</a>  
+            <button type="button" class="btn btn-success" @onclick="AddFriend">Send friend request</button>  
         }
         @if (IsSubscribed())
         {
-            <a class="btn btn-outline-secondary" @onclick="Unsubscribe">Unsubscribe</a>
+            <button type="button" class="btn btn-outline-warning" @onclick="Unsubscribe">Unsubscribe</button>
         }
         else
         {
-            <a class="btn btn-outline-secondary" @onclick="Subscribe">Subscribe</a>
+            <button class="btn btn-warning" @onclick="Subscribe">Subscribe</button>
         }
         
         @if (GetIsFriend() && GetUserConversation() != null)
