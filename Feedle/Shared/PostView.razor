@@ -63,6 +63,7 @@
     List<Post> displayedPosts;
     User currentUser;
     List<UserSubscription> userSubscriptions;
+    List<UserInformation> UserInformations;
 
 
     [Parameter]
@@ -78,6 +79,10 @@
         displayedPosts = (List<Post>) posts;
     //userSubscriptions = currentUser.UserSubscriptions; //TODO implement
         userSubscriptions = new List<UserSubscription>();
+        for (int i = 0; i < posts.Count; i++)
+        {
+            UserInformations.Add(await UserService.GetUserInformationById(posts[i].UserId));
+        }
     }
 
     List<Post> GetSubscribedPosts()
@@ -226,6 +231,12 @@
 
     string GetTheImage(Post post)
     {
+        int userId = post.UserId;
+        string image = UserInformations.FirstOrDefault(i => i.Id == userId).UserImageSrc;
+        if (image != null)
+        {
+            return image;
+        }
         return "extra/user-empty-avatar.png";
     }
 
