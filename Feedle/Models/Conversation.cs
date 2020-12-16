@@ -13,7 +13,10 @@ namespace Feedle.Models
         public string Title { get; set; }
         [JsonPropertyName("messages")]
         public List<Message> Messages { get; set; }
-        [JsonPropertyName("userConversations")]
-        public List<UserConversation> UserConversations { get; set; }
+
+        public Conversation()
+        {
+            Messages = new List<Message>();
+        }
     }
 }
