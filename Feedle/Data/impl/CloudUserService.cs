@@ -148,7 +148,7 @@ namespace Feedle.Data
                 conversationToSerialize,
                 Encoding.UTF8,
                 "application/json");
-            HttpResponseMessage httpResponseMessage= await Client.PatchAsync("http://localhost:5002/feedle/user/conversation?creatorId="+creatorId+"&withWhomId="+withWhomId, stringContent);
+            HttpResponseMessage httpResponseMessage= await Client.PostAsync("http://localhost:5002/feedle/user/conversation?creatorId="+creatorId+"&withWhomId="+withWhomId, stringContent);
             return httpResponseMessage.IsSuccessStatusCode;
         }
 

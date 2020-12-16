@@ -50,13 +50,13 @@ else
 
 
 @code {
-    string postTitle { get; set; }
-    string postImage { get; set; }
-    string postContent { get; set; }
-    User currentUser { get; set; }
-    DateTime DateTime { get; set; }
-    bool postAddedResult;
-    string errorLabel;
+    private string postTitle { get; set; }
+    private string postImage { get; set; }
+    private string postContent { get; set; }
+    private User currentUser { get; set; }
+    private DateTime DateTime { get; set; }
+    private bool postAddedResult;
+    private string errorLabel;
 
     protected override async Task OnInitializedAsync()
     {
