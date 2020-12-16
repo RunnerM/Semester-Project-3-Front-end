@@ -373,6 +373,10 @@
 
     private string GetTheImage()
     {
+        if (CurrentUser==null)
+        {
+            return "extra/user-empty-avatar.png";
+        }
         profilePicture = CurrentUser.UserImageSrc;
         if (profilePicture != null)
         {
