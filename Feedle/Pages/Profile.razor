@@ -17,12 +17,10 @@
         <AuthorizeView>
             <Authorized>
                 <div class="row">
-                    <div class="d-flex align-items-start">
-                        <RadzenIcon Icon="person"></RadzenIcon>
+                    <img src="@GetTheImage()" class="avatar">
+                    <div class="col-md">
+                        <h3>@GetUserName()</h3>
                     </div>
-                <div class="col-md">
-                    <h3>@GetUserName()</h3>
-                </div>
                     <div class="d-flex align-items-end">
                         <button @onclick="ChangePassword" class="btn btn-light" type="submit">Change Password</button>
                         <button @onclick="ChangePicture" class="btn btn-light" type="submit">Change picture</button>
@@ -215,7 +213,8 @@
 @code {
     private string pageState = "default";
     private User CurrentUser;
-    
+    private string profilePicture;
+
     //lists section
     bool collapseNavMenu0 = false;
     bool collapseNavMenu1 = true;
@@ -259,9 +258,8 @@
         CurrentUser = await UserService.GetCurrentUser();
     }
 
-    public  List<UserFriend> GetUserFriend()
+    public List<UserFriend> GetUserFriend()
     {
-        
         if (CurrentUser == null)
         {
             return new List<UserFriend>();
@@ -307,7 +305,7 @@
             return CurrentUser.UserName;
         }
     }
-    
+
     private List<FriendRequestNotification> GetRightNotifications()
     {
         if (CurrentUser == null)
@@ -354,7 +352,7 @@
         await OnInitializedAsync();
         InvokeAsync(StateHasChanged);
     }
-    
+
     void EditPost(Post post)
     {
         NavigationManager.NavigateTo("/EditPost/" + post.Id);
@@ -372,4 +370,15 @@
     {
         NavigationManager.NavigateTo("/");
     }
+
+    private string GetTheImage()
+    {
+        profilePicture = CurrentUser.UserImageSrc;
+        if (profilePicture != null)
+        {
+            return profilePicture;
+        }
+        return "extra/user-empty-avatar.png";
+    }
+
 }
