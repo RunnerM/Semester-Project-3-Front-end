@@ -52,7 +52,8 @@
     {
         try
         {
-    //savedState = await currentUser.UpdateImage...
+            currentUser.UserImageSrc = postImage;
+            await UserService.UpdateCurrentUser(currentUser);
             savedState = true;
             StartTimer();
         }
