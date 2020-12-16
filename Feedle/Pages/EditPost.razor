@@ -67,7 +67,7 @@ else
             currentPost = posts.FirstOrDefault(p => p.Id == Id);
             postTitle = currentPost.Title;
             postContent = currentPost.Content;
-    //postImage = currentPost.Image;
+            postImage = currentPost.PostImageSrc;
         }
         catch (Exception e)
         {

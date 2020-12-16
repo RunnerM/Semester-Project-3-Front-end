@@ -7,19 +7,21 @@
 <AuthorizeView>
     <Authorized>
         <h3>@GetOtherUserUserName()</h3>
-        <div class="oi oi-person"></div>
+        <div>
+            <img src="@GetProfileImage()" class="avatar">
+        </div>
         <p>@id</p>
         @if (GetIsFriend())
         {
-            <button type="button" class="btn btn-outline-danger" @onclick="RemoveFriend">Remove friend</button>  
+            <button type="button" class="btn btn-outline-danger" @onclick="RemoveFriend">Remove friend</button>
         }
         else if (IsFriendRequestSent() && !GetIsFriend())
         {
-            <button type="button" class="btn btn-outline-success">Friend request sent</button>  
+            <button type="button" class="btn btn-outline-success">Friend request sent</button>
         }
         else
         {
-            <button type="button" class="btn btn-success" @onclick="AddFriend">Send friend request</button>  
+            <button type="button" class="btn btn-success" @onclick="AddFriend">Send friend request</button>
         }
         @if (IsSubscribed())
         {
@@ -29,7 +31,7 @@
         {
             <button class="btn btn-warning" @onclick="Subscribe">Subscribe</button>
         }
-        
+
         @if (GetIsFriend() && GetUserConversation() != null)
         {
             @if (messages == null)
@@ -75,11 +77,10 @@
     </Authorized>
     <NotAuthorized>
         <h3>OtherProfile</h3>
-        <div class="oi oi-person"></div>
+        <div>
+            <img src="@GetProfileImage()" class="avatar">
+        </div>
         <p>@id</p>
-        <a class="btn btn-outline-secondary" href="LogIn">Send friend request</a>
-        <a class="btn btn-outline-secondary" href="LogIn">Subscribe</a>
-        <a class="btn btn-outline-secondary" href="LogIn">Send message</a>
         <em>To subscribe / send friend request / send message, <a href="LogIn">log in</a> first</em>
     </NotAuthorized>
 </AuthorizeView>
@@ -90,7 +91,7 @@
     [Parameter]
     public int id { get; set; }
 
-    
+    private string profileImage;
     private UserInformation otherUser;
     private User currentUser;
     private List<Message> messages;
@@ -101,6 +102,7 @@
     {
         currentUser = await UserService.GetCurrentUser();
         otherUser = await UserService.GetUserInformationById(id);
+        profileImage = otherUser.UserImageSrc;
         messages = new List<Message>();
         Message tmp = new Message();
         tmp.Content = "hui";
@@ -136,12 +138,11 @@
 
     public async Task RemoveFriend()
     {
-        
     }
 
     async Task Subscribe()
     {
-      UserSubscription userSubscription = new UserSubscription();
+        UserSubscription userSubscription = new UserSubscription();
         userSubscription.UserId = currentUser.Id;
         userSubscription.SubscriptionId = id;
         userSubscription.UserName = currentUser.UserName;
@@ -163,13 +164,22 @@
         }
     }
 
+    string GetProfileImage()
+    {
+        if (profileImage != null)
+        {
+            return profileImage;
+        }
+        return "extra/user-empty-avatar.png";
+    }
+
     public async Task SendMessage()
     {
         Message message = new Message();
         message.Content = messageText;
         message.UserId = currentUser.Id;
         message.ConversationId = GetUserConversation().ConversationId;
-        DateTime dateTime= DateTime.Now;
+        DateTime dateTime = DateTime.Now;
         message.Second = dateTime.Second;
         message.Minute = dateTime.Minute;
         message.Hour = dateTime.Hour;
