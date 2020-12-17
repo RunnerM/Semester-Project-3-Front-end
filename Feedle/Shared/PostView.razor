@@ -25,6 +25,15 @@
         @foreach (Post p in displayedPosts)
         {
             <div class="card">
+                <div class="card-header">
+                    <div class="d-flex flex-row align-items-center">
+                        <div>
+                            <img src="@GetTheImage(p)" width="40" style="border-radius: 50%" @onclick="@(e => NavigateToProfile(p))" class="cursor-pointer">
+                        </div>
+                        <div style="margin-left: 1%">@p.AuthorUserName</div>
+                    </div>
+                </div>
+                <img class="img-fluid" src=@p.PostImageSrc alt="Image of @p.Title" width="25%">
                 <div class="card-body">
                     <a href="ReadPost/@p.Id">
                         <h5 class="card-title">@p.Title</h5>
@@ -72,7 +81,6 @@
     }
 </div>
 
-
 @code {
     IList<Post> posts;
     List<Post> displayedPosts;
@@ -92,10 +100,10 @@
         posts = await NewsService.GetAllNews();
         currentUser = await UserService.GetCurrentUser();
         displayedPosts = (List<Post>) posts;
-        // = currentUser.UserSubscriptions;
+    // = currentUser.UserSubscriptions;
         UserInformationList = await GetUserInformation();
     }
-    
+
     public async Task<List<UserInformation>> GetUserInformation()
     {
         List<UserInformation> result = new List<UserInformation>();
