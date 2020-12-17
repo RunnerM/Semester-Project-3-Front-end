@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Feedle.Models;
 using Microsoft.AspNetCore.Http;
@@ -22,13 +24,13 @@ namespace Feedle.Data
         public CloudUserService()
         {
             Client = new HttpClient();
+            Client.Timeout = TimeSpan.FromMilliseconds(Timeout.Infinite);
             LastMessageId = 0;
             LastNotificationId = 0;
         }
 
         public async Task<User> ValidateUser(string userName, string password)
         {
-            //todo: fix this.
             string message =
                 await Client.GetStringAsync("http://localhost:5002/feedle/user?username=" + userName + "&password=" + password);
             Console.WriteLine(message);
@@ -182,7 +184,7 @@ namespace Feedle.Data
 
         public async Task<List<UserConversation>> GetMessageUpdate(int lastMessageId, int userId)
         {
-            String userConversations = await Client.GetStringAsync(
+            /*String userConversations = await Client.GetStringAsync(
                 "http://localhost:5002/feedle/getMessages?lastMessageId=" + lastMessageId + "&userId" +
                 userId);
             List<UserConversation> userConversationsResult =
@@ -194,6 +196,20 @@ namespace Feedle.Data
             }
 
             return CurrentUser.UserConversations;
+            */
+            
+            var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:5002/feedle/getMessages?lastMessageId=" + lastMessageId + "&userId=" +
+                                                                 userId);
+            using (var response = await Client.SendAsync(
+                request, 
+                HttpCompletionOption.ResponseHeadersRead))
+            {
+                using (var body = await response.Content.ReadAsStreamAsync())
+                using (var reader = new StreamReader(body))
+                    while (!reader.EndOfStream)
+                        Console.WriteLine(reader.ReadLine());
+                return null;
+            }
         }
 
         public int GetLastNotificationId()
@@ -204,6 +220,13 @@ namespace Feedle.Data
         public int GetLastMessageNotificationId()
         {
             return LastMessageId;
+        }
+
+        public async Task<bool> RemoveFriend(int id)
+        {
+            HttpResponseMessage httpResponseMessage = 
+                await Client.DeleteAsync("http://localhost:5002/feedle/deleteFriend?userFriendId="+id);
+            return httpResponseMessage.IsSuccessStatusCode;
         }
 
         private int GetLastMessageId(List<UserConversation> userConversations)

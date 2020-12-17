@@ -89,21 +89,45 @@ namespace Feedle.Data
             return httpResponseMessage.IsSuccessStatusCode;
         }
         
-        public Task<bool> IsPostThumbUpByUser(Post post, User user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> IsPostThumbDownByUser(Post post, User user)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<bool> DeleteComment(int postId, int commentId)
         {
             HttpResponseMessage httpResponseMessage = await Client.DeleteAsync("http://localhost:5002/feedle/posts/comment?commentId=" +
                                                        commentId + "&postId=" + postId);
             return httpResponseMessage.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> DeletePostReaction(int postReactionId)
+        {
+            HttpResponseMessage httpResponseMessage = await Client.DeleteAsync("http://localhost:5002/feedle/posts/reaction?postReactionId=" +
+                                                                              postReactionId);
+            return httpResponseMessage.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> MakePostReaction(PostReaction postReaction)
+        {
+            String postReactionAsJson = JsonSerializer.Serialize(postReaction);
+            StringContent stringContent = new StringContent(
+                postReactionAsJson,
+                Encoding.UTF8,
+                "application/json"
+            );
+            HttpResponseMessage responseMessage =
+                await Client.PostAsync("http://localhost:5002/feedle/posts/reaction", stringContent);
+            return responseMessage.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> UpdatePostReaction(PostReaction postReaction)
+        {
+            String postReactionAsJson = JsonSerializer.Serialize(postReaction);
+            StringContent stringContent = new StringContent(
+                postReactionAsJson,
+                Encoding.UTF8,
+                "application/json"
+            );
+            HttpResponseMessage responseMessage =
+                await Client.PatchAsync("http://localhost:5002/feedle/posts/reaction", stringContent);
+            return responseMessage.IsSuccessStatusCode;
         }
     }
 }

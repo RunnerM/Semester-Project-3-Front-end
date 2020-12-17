@@ -160,5 +160,10 @@ namespace Feedle.Data
         {
             throw new NotImplementedException();
         }
+
+        public Task<bool> RemoveFriend(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

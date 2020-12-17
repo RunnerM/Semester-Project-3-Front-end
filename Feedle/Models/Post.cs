@@ -19,8 +19,10 @@ namespace Feedle.Models
         [JsonPropertyName("minute")] public int Minute { get; set; }
 
         [JsonPropertyName("second")] public int Second { get; set; }
-        [JsonPropertyName("approvals")] public int Approvals { get; set; }
-        [JsonPropertyName("disapprovals")] public int Disapprovals { get; set; }
+        
+        [JsonPropertyName("postReactions")]
+        public List<PostReaction> PostReactions { get; set; }
+        
 
 // public byte[] images;
         [JsonPropertyName("comments")] public List<Comment> Comments { get; set; }
@@ -28,6 +30,7 @@ namespace Feedle.Models
         public Post()
         {
             Comments = new List<Comment>();
+            PostReactions = new List<PostReaction>();
         }
         [JsonPropertyName("postImageSrc")] public string PostImageSrc { get; set; }
     }

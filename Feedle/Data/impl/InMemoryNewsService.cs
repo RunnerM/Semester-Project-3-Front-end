@@ -137,5 +137,20 @@ namespace Feedle.Data
         {
             throw new System.NotImplementedException();
         }
+
+        public Task<bool> DeletePostReaction(int postReactionId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> MakePostReaction(PostReaction postReaction)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UpdatePostReaction(PostReaction postReaction)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

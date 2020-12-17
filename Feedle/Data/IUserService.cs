@@ -31,6 +31,8 @@ namespace Feedle.Data
 
         Task<UserInformation> GetUserInformationById(int id);
 
+        Task<bool> RemoveFriend(int id);
+
         int GetLastNotificationId();
 
         int GetLastMessageNotificationId();

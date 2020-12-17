@@ -1,6 +1,7 @@
 @page "/OtherProfile/{id:int}"
 @using Feedle.Models
 @using Feedle.Data
+@using System.Threading
 @inject INewsService NewsService;
 @inject IUserService UserService;
 
@@ -34,13 +35,13 @@
 
         @if (GetIsFriend() && GetUserConversation() != null)
         {
-            @if (messages == null)
+            @if (GetMessages() == null)
             {
                 <p>
                     <em>Loading...</em>
                 </p>
             }
-            else if (!messages.Any())
+            else if (!GetMessages().Any())
             {
                 <p>
                     <em>No messages between u 2.</em>
@@ -49,7 +50,7 @@
             else
             {
                 <ul class="list-group">
-                    @foreach (var i in messages)
+                    @foreach (var i in  GetMessages())
                     {
                         <li class="list-group-item">
                             @i.UserId
@@ -94,7 +95,6 @@
     private string profileImage;
     private UserInformation otherUser;
     private User currentUser;
-    private List<Message> messages;
     private string messageText;
 
 
@@ -103,11 +103,6 @@
         currentUser = await UserService.GetCurrentUser();
         otherUser = await UserService.GetUserInformationById(id);
         profileImage = otherUser.UserImageSrc;
-        messages = new List<Message>();
-        Message tmp = new Message();
-        tmp.Content = "hui";
-        tmp.UserId = 69;
-        messages.Add(tmp);
     //TODO get the converstation
     }
 
@@ -119,6 +114,36 @@
         }
         return "Uknown";
     }
+
+    public async Task GetMessageUpdates()
+    {
+        if (currentUser != null)
+        {
+            currentUser.UserConversations = await UserService.GetMessageUpdate(UserService.GetLastMessageNotificationId(), currentUser.Id);
+            GetMessageUpdates();
+        }
+    }
+
+    public async Task GetMessageShort()
+    {
+       currentUser = await UserService.GetCurrentUser();
+    }
+
+    public List<Message> GetMessages()
+    {
+        if (currentUser == null)
+        {
+            return null;
+        }
+        var uc = currentUser.UserConversations.FirstOrDefault(c => c.WithWhomUserId == id);
+        if (uc!=null)
+        {
+            return uc.Conversation.Messages;
+        }
+        return new List<Message>();
+        
+    }
+    
 
     public async Task AddFriend()
     {
@@ -138,6 +163,12 @@
 
     public async Task RemoveFriend()
     {
+        bool result = await UserService.RemoveFriend(id);
+        if (result)
+        {
+            currentUser = await UserService.GetCurrentUser();
+            otherUser = await UserService.GetUserInformationById(id);
+        }
     }
 
     async Task Subscribe()
@@ -145,7 +176,7 @@
         UserSubscription userSubscription = new UserSubscription();
         userSubscription.UserId = currentUser.Id;
         userSubscription.SubscriptionId = id;
-        userSubscription.UserName = currentUser.UserName;
+        userSubscription.UserName = otherUser.UserName;
         bool result = await UserService.SubscribeToUser(userSubscription);
         if (result)
         {
@@ -187,6 +218,7 @@
         message.Month = dateTime.Month;
         message.Year = dateTime.Year;
         await UserService.SendMessage(message);
+        currentUser = await UserService.GetCurrentUser();
     }
 
     public async Task AddConversation()

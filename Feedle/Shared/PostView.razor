@@ -32,22 +32,37 @@
                         <img class="img-fluid img-thumbnail" src=@p.PostImageSrc alt="Image of @p.Title" width="25%">
                         <!--<img class="img-fluid img-thumbnail"  src="p.Image" alt="Image of p.Title" width="25%"> -->
                     </a>
-                    @{
-                        var copy = p;
+                   @{ var clone = p; }
+                    <span>@GetTime(clone)</span>
+                    @if (CheckIfLikeThumbIsPressed(clone))
+                    {
+                        <span class="oi oi-arrow-circle-top cursor-pointer" @onclick="@(e => DeleteThumb(clone))"></span>
+                        <span>(</span><span>@GetAppCount(clone)</span><span>)</span>
+                        <span class="oi oi-arrow-bottom cursor-pointer" @onclick="@(e => DeleteThumb(clone))"></span>
+                        <span>(</span><span>@GetDisCount(clone)</span><span>)</span>
                     }
-                    <span>@GetTime(p)</span>
-                    <span class=@GetDisplayedThumbUp(copy) @onclick="@(e => ThumbUp(copy))"></span>
-                    <span>(</span><span>@p.Approvals</span><span>)</span>
-                    <span class=@GetDisplayedThumbDown(copy) @onclick="@(e => ThumbDown(copy))"></span>
-                    <span>(</span><span>@p.Disapprovals</span><span>)</span>
+                    else if (CheckIfDislikeThumbPressed(clone))
+                    {
+                        <span class="oi oi-arrow-top cursor-pointer" @onclick="@(e => DeleteThumb(clone))"></span>
+                        <span>(</span><span>@GetAppCount(clone)</span><span>)</span>
+                        <span class="oi oi-arrow-circle-bottom cursor-pointer" @onclick="@(e => DeleteThumb(clone))"></span>
+                        <span>(</span><span>@GetDisCount(clone)</span><span>)</span>
+                    }
+                    else
+                    {
+                        <span class="oi oi-arrow-top cursor-pointer" @onclick="@(e => ThumbUp(clone))"></span>
+                        <span>(</span><span>@GetAppCount(clone)</span><span>)</span>
+                        <span class="oi oi-arrow-bottom cursor-pointer" @onclick="@(e => ThumbDown(clone))"></span>
+                        <span>(</span><span>@GetDisCount(clone)</span><span>)</span>
+                    }
                     @if (IsAuthor(p))
                     {
-                        <span class="oi oi-trash cursor-pointer" @onclick="@(e => DeletePost(copy))"></span>
-                        <span class="oi oi-pencil cursor-pointer" @onclick="@(e => EditPost(copy))"></span>
+                        <span class="oi oi-trash cursor-pointer" @onclick="@(e => DeletePost(clone))"></span>
+                        <span class="oi oi-pencil cursor-pointer" @onclick="@(e => EditPost(clone))"></span>
                     }
-                    <a @onclick="@(e => NavigateToProfile(copy))" class="cursor-pointer">
+                    <a @onclick="@(e => NavigateToProfile(p))" class="cursor-pointer">
                         <div class="card-footer text-muted">
-                            <img src="@GetTheImage(copy)" class="avatar">
+                            <img src="@GetTheImage(p)" class="avatar">
                             <span>@p.AuthorUserName</span>
                         </div>
                     </a>
@@ -89,6 +104,32 @@
             result.Add(await UserService.GetUserInformationById(post.UserId));
         }
         return result;
+    }
+
+    public int GetAppCount(Post post)
+    {
+        int count = 0;
+        foreach (var reaction in post.PostReactions)
+        {
+            if (reaction.Status == 1)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int GetDisCount(Post post)
+    {
+        int count = 0;
+        foreach (var reaction in post.PostReactions)
+        {
+            if (reaction.Status == -1)
+            {
+                count++;
+            }
+        }
+        return count;
     }
 
     public List<Post> GetSubscribedPosts()
@@ -194,15 +235,90 @@
         }
     }
 
-    async Task ThumbUp(Post post)
+    private async Task ThumbUp(Post post)
     {
-    //TODO: thumb up
+        if (currentUser != null)
+        {
+            var postReaction = new PostReaction();
+            postReaction.Status = 1;
+            postReaction.PostId = post.Id;
+            postReaction.UserId = currentUser.Id;
+            var result = await NewsService.MakePostReaction(postReaction);
+            if (result)
+            {
+                posts = await NewsService.GetAllNews();
+            }
+        }
     }
 
-    async Task ThumbDown(Post post)
+    private async Task ThumbDown(Post post)
     {
-    //TODO: thumb down
+        if (currentUser != null)
+        {
+            var postReaction = new PostReaction();
+            postReaction.Status = -1;
+            postReaction.PostId = post.Id;
+            postReaction.UserId = currentUser.Id;
+            var result = await NewsService.MakePostReaction(postReaction);
+            if (result)
+            {
+                posts = await NewsService.GetAllNews();
+            }
+        }
+
     }
+
+    private async Task DeleteThumb(Post post)
+    {
+        foreach (var pr in post.PostReactions)
+        {
+            if (pr != null)
+            {
+                if (pr.UserId == currentUser.Id)
+                {
+                    var result = await NewsService.DeletePostReaction(pr.PostReactionId);
+                    if (result)
+                    {
+                        posts = await NewsService.GetAllNews();
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    private bool CheckIfLikeThumbIsPressed(Post post)
+    {
+        if (currentUser == null)
+        {
+            return false;
+        }
+        foreach (var pr in post.PostReactions) 
+        {
+            if (pr.UserId == currentUser.Id && pr.Status == 1)
+                {
+                    return true;
+                }
+        }
+        return false;
+    }
+
+    private bool CheckIfDislikeThumbPressed(Post post)
+    {
+        if (currentUser == null)
+        {
+            return false;
+        }
+        foreach (var pr in post.PostReactions) 
+        {
+            if (pr.UserId == currentUser.Id && pr.Status == -1)
+                {
+                    return true;
+                }
+        }
+        return false;
+    }
+
 
     string GetDisplayedThumbUp(Post post)
     {
