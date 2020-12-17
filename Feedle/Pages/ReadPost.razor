@@ -124,6 +124,7 @@ else
     private string commentText;
     DateTime DateTime { get; set; }
     bool postDeletedResult;
+    private UserInformation OtherUserInformation;
 
     protected override async Task OnInitializedAsync()
     {
@@ -134,6 +135,7 @@ else
         {
             NavigationManager.NavigateTo("/Error");
         }
+        OtherUserInformation = await UserService.GetUserInformationById(post.UserId);
     }
 
     private async Task writeComment()
@@ -275,8 +277,7 @@ else
     {
         await writeComment();
     }
-
-    //TODO: clear field after comment has been posted
+    
     private string GetTheImage()
     {
         return "extra/user-empty-avatar.png";
@@ -284,7 +285,11 @@ else
 
     private string GetTheImageOfCommentAuthor()
     {
-        return "extra/user-empty-avatar.png";
+        if (OtherUserInformation == null)
+        {
+            return "extra/user-empty-avatar.png";
+        }
+        return OtherUserInformation.UserImageSrc;
     }
 
 }

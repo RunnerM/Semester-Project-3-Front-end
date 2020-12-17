@@ -94,9 +94,9 @@
                                     <ul class="list-group">
                                         @foreach (var i in GetUserFriend())
                                         {
-                                            <li class="list-group-item">
-                                                <p>@i.UserName</p>
-                                            </li>
+                                            <a @onclick="@(e => NavigateToProfile(i.FriendId))">
+                                               <li class="list-group-item">@i.UserName</li>
+                                            </a>
                                         }
                                     </ul>
                                 }
@@ -130,7 +130,9 @@
                                     <ul class="list-group">
                                         @foreach (var i in GetUserSubscriptions())
                                         {
-                                            <li class="list-group-item">@i.UserName</li>
+                                            <a @onclick="@(e => NavigateToProfile(i.SubscriptionId))">
+                                        <li class="list-group-item">@i.UserName</li>
+                                           </a>
                                         }
                                     </ul>
                                 }
@@ -164,14 +166,9 @@
                                     <ul class="list-group">
                                         @foreach (var i in GetRightNotifications())
                                         {
-                                            @if (CurrentUser.UserName.Equals(i.CreatorUserName))
-                                            {
-                                                <li class="list-group-item">Your request to + i.PotentialFriendUserName</li>
-                                            }
-                                            else
-                                            {
-                                                <li class="list-group-item">@i.PotentialFriendUserName</li>
-                                            }
+                                            <a href="/Notifications">
+                                             <li class="list-group-item">@i.PotentialFriendUserName</li>
+                                            </a>
                                         }
                                     </ul>
                                 }
@@ -321,6 +318,11 @@
             }
         }
         return result;
+    }
+
+    public void NavigateToProfile(int id)
+    {
+        NavigationManager.NavigateTo("/OtherProfile/" + id);
     }
 
     public async Task DeleteProfile()
