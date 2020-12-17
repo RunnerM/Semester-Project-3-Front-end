@@ -60,10 +60,10 @@
                     }
                 </ul>
             }
-            <input @bind="messageText" placeholder="type here pidor"/>
+            <input @bind="messageText" placeholder="type here"/>
             @if (messageText != null)
             {
-                <button type="button" class="btn btn-primary" @onclick="SendMessage">Send nahui</button>
+                <button type="button" class="btn btn-primary" @onclick="SendMessage">Send</button>
             }
             else
             {
