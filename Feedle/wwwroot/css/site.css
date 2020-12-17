@@ -150,3 +150,21 @@ body {
 {
     background-color: #ffffff;
 }
+
+.card
+{
+    min-width: 235px !important;
+    width: 75% !important;
+    margin: 0;
+}
+.card-body
+{
+    min-width: 225px !important;
+    width: 100% !important;
+    margin: 0;
+}
+.instagram-media {
+    min-width: 200px !important;
+    width: 100% !important;
+    margin: 0;
+}

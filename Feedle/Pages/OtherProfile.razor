@@ -8,7 +8,7 @@
 <AuthorizeView>
     <Authorized>
         <h3>@GetOtherUserUserName()</h3>
-        <div>
+        <div align="center">
             <img src="@GetProfileImage()" class="avatar">
         </div>
         <p>@id</p>
@@ -61,7 +61,7 @@
                 </ul>
             }
             <input @bind="messageText" placeholder="type here pidor"/>
-            @if (CheckForMessageToBeSent())
+            @if (messageText != null)
             {
                 <button type="button" class="btn btn-primary" @onclick="SendMessage">Send nahui</button>
             }
@@ -69,8 +69,9 @@
             {
                 <button type="button" class="btn btn-primary">Nothing to sent</button>
             }
+            <button type="button" class="btn btn-primary" @onclick="UpdateMessages">UpdateChat</button>
         }
-        else
+        else if (GetIsFriend())
         {
             <button type="button" class="btn btn-primary" @onclick="AddConversation">Start coversation</button>
         }
@@ -94,6 +95,7 @@
 
     private string profileImage;
     private UserInformation otherUser;
+    private UserConversation userConversation;
     private User currentUser;
     private string messageText;
 
@@ -103,7 +105,18 @@
         currentUser = await UserService.GetCurrentUser();
         otherUser = await UserService.GetUserInformationById(id);
         profileImage = otherUser.UserImageSrc;
-    //TODO get the converstation
+        if (currentUser!=null)
+        {
+            UserConversation userConversation = currentUser.UserConversations.FirstOrDefault(u => u.WithWhomUserId == id);
+        }
+        if (userConversation == null)
+        {
+            userConversation = new UserConversation();
+        }
+        else if (userConversation.Conversation == null)
+        {
+            userConversation.Conversation = new Conversation();
+        }
     }
 
     public string GetOtherUserUserName()
@@ -113,6 +126,11 @@
             return otherUser.UserName;
         }
         return "Uknown";
+    }
+
+    public async Task UpdateMessages()
+    {
+        currentUser = await UserService.GetCurrentUser();
     }
 
     public async Task GetMessageUpdates()
@@ -163,7 +181,13 @@
 
     public async Task RemoveFriend()
     {
-        bool result = await UserService.RemoveFriend(id);
+        var userT = await UserService.GetUserInformationById(id);
+        var userFriendToRemove = userT.UserFriends.FirstOrDefault(uf => uf.FriendId == currentUser.Id);
+        bool result = false;
+        if (userFriendToRemove != null)
+        {
+             result = await UserService.RemoveFriend(userFriendToRemove.UserFriendId);
+        }
         if (result)
         {
             currentUser = await UserService.GetCurrentUser();
@@ -206,19 +230,23 @@
 
     public async Task SendMessage()
     {
-        Message message = new Message();
-        message.Content = messageText;
-        message.UserId = currentUser.Id;
-        message.ConversationId = GetUserConversation().ConversationId;
-        DateTime dateTime = DateTime.Now;
-        message.Second = dateTime.Second;
-        message.Minute = dateTime.Minute;
-        message.Hour = dateTime.Hour;
-        message.Day = dateTime.Day;
-        message.Month = dateTime.Month;
-        message.Year = dateTime.Year;
-        await UserService.SendMessage(message);
-        currentUser = await UserService.GetCurrentUser();
+        if (messageText!=null || messageText != "")
+        {
+            Message message = new Message();
+            message.Content = messageText;
+            message.UserId = currentUser.Id;
+            message.ConversationId = GetUserConversation().ConversationId;
+            DateTime dateTime = DateTime.Now;
+            message.Second = dateTime.Second;
+            message.Minute = dateTime.Minute;
+            message.Hour = dateTime.Hour;
+            message.Day = dateTime.Day;
+            message.Month = dateTime.Month;
+            message.Year = dateTime.Year;
+            bool Result = await UserService.SendMessage(message);
+            currentUser = await UserService.GetCurrentUser();
+        }
+        
     }
 
     public async Task AddConversation()

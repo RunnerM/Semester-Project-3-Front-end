@@ -41,5 +41,7 @@ namespace Feedle.Data
         // Task saveCachedUser(User user);
         void RemoveCachedUser();
         // Task<User> getCachedUSer();
+        
+        Task<bool> RemoveUser(int userId);
     }
 }

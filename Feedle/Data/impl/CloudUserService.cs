@@ -56,7 +56,8 @@ namespace Feedle.Data
                 );
             HttpResponseMessage responseMessage =
                 await Client.PostAsync("http://localhost:5002/feedle/user", stringContent);
-            return responseMessage.IsSuccessStatusCode;
+            string result  = await responseMessage.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<bool>(result);
         }
         
         public async Task<User> GetCurrentUser()
@@ -242,8 +243,12 @@ namespace Feedle.Data
                     }
                 }
             }
-
             return max;
+        }
+        public async Task<bool> RemoveUser(int userId)
+        {
+            HttpResponseMessage httpResponseMessage = await Client.DeleteAsync("http://localhost:5002/feedle/user?Id=" +userId);
+            return httpResponseMessage.IsSuccessStatusCode;;
         }
     }
 }

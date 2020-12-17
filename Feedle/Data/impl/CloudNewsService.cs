@@ -129,5 +129,24 @@ namespace Feedle.Data
                 await Client.PatchAsync("http://localhost:5002/feedle/posts/reaction", stringContent);
             return responseMessage.IsSuccessStatusCode;
         }
+
+        public async Task<Post> GetPostById(int postId)
+        {
+            String response = await Client.GetStringAsync("http://localhost:5002/feedle/postsById?postId=" + postId);
+            Post post = JsonSerializer.Deserialize<Post>(response);
+            if (post != null)
+            {
+                Post postToChange = CurrentPosts.FirstOrDefault(p => p.Id == postId);
+                if (postToChange != null)
+                {
+                    postToChange = post;
+                }
+
+                return post;
+            }
+            return null;
+        }
+
+        
     }
 }

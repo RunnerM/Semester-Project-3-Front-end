@@ -152,5 +152,15 @@ namespace Feedle.Data
         {
             throw new NotImplementedException();
         }
+
+        public Task<Post> GetPostById(int posId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> RemoveUser(int userId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

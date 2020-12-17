@@ -22,5 +22,8 @@ namespace Feedle.Data
         Task<bool> DeletePostReaction(int postReactionId);
 
         Task<bool> UpdatePostReaction(PostReaction postReaction);
+
+        Task<Post> GetPostById(int posId);
+        
     }
 }

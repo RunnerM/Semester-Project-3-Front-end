@@ -24,59 +24,62 @@
     {
         @foreach (Post p in displayedPosts)
         {
-            <div class="card">
-                <div class="card-header">
-                    <div class="d-flex flex-row align-items-center">
-                        <div>
-                            <img src="@GetTheImage(p)" width="40" style="border-radius: 50%" @onclick="@(e => NavigateToProfile(p))" class="cursor-pointer">
+            <div align="center">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex flex-row align-items-center">
+                            <div>
+                                <img src="@GetTheImage(p)" width="40" style="border-radius: 50%" @onclick="@(e => NavigateToProfile(p))" class="cursor-pointer">
+                            </div>
+                            <div style="margin-left: 1%">@p.AuthorUserName</div>
                         </div>
-                        <div style="margin-left: 1%">@p.AuthorUserName</div>
+                    </div>
+                    <div class="card-body" align="center">
+                        <a href="ReadPost/@p.Id">
+                            <h5 class="card-title">@p.Title</h5>
+                        </a>
+                        <p class="card-text">@p.Content</p>
+                        <div align="center">
+                            <img class="img-fluid instagram-media" src=@p.PostImageSrc alt="Image of @p.Title">
+                        </div>
+                   
+                        @{ var clone = p; }
+                        <span>@GetTime(clone)</span>
+                        @if (CheckIfLikeThumbIsPressed(clone))
+                        {
+                            <span class="oi oi-arrow-circle-top cursor-pointer" @onclick="@(e => DeleteThumb(clone))"></span>
+                            <span>(</span><span>@GetAppCount(clone)</span><span>)</span>
+                            <span class="oi oi-arrow-bottom cursor-pointer" @onclick="@(e => UpdateThumb(clone))"></span>
+                            <span>(</span><span>@GetDisCount(clone)</span><span>)</span>
+                        }
+                        else if (CheckIfDislikeThumbPressed(clone))
+                        {
+                            <span class="oi oi-arrow-top cursor-pointer" @onclick="@(e => UpdateThumb(clone))"></span>
+                            <span>(</span><span>@GetAppCount(clone)</span><span>)</span>
+                            <span class="oi oi-arrow-circle-bottom cursor-pointer" @onclick="@(e => DeleteThumb(clone))"></span>
+                            <span>(</span><span>@GetDisCount(clone)</span><span>)</span>
+                        }
+                        else
+                        {
+                            <span class="oi oi-arrow-top cursor-pointer" @onclick="@(e => ThumbUp(clone))"></span>
+                            <span>(</span><span>@GetAppCount(clone)</span><span>)</span>
+                            <span class="oi oi-arrow-bottom cursor-pointer" @onclick="@(e => ThumbDown(clone))"></span>
+                            <span>(</span><span>@GetDisCount(clone)</span><span>)</span>
+                        }
+                        @if (IsAuthor(p))
+                        {
+                            <span class="oi oi-trash cursor-pointer" @onclick="@(e => DeletePost(clone))"></span>
+                            <span class="oi oi-pencil cursor-pointer" @onclick="@(e => EditPost(clone))"></span>
+                        }
+                        <a @onclick="@(e => NavigateToProfile(p))" class="cursor-pointer">
+                            <div class="card-footer text-muted">
+                                <img src="@GetTheImage(p)" class="avatar">
+                                <span>@p.AuthorUserName</span>
+                            </div>
+                        </a>
                     </div>
                 </div>
-                <img class="img-fluid" src=@p.PostImageSrc alt="Image of @p.Title" width="25%">
-                <div class="card-body">
-                    <a href="ReadPost/@p.Id">
-                        <h5 class="card-title">@p.Title</h5>
-                        <p class="card-text">@p.Content</p>
-                        <img class="img-fluid img-thumbnail" src=@p.PostImageSrc alt="Image of @p.Title" width="25%">
-                        <!--<img class="img-fluid img-thumbnail"  src="p.Image" alt="Image of p.Title" width="25%"> -->
-                    </a>
-                   @{ var clone = p; }
-                    <span>@GetTime(clone)</span>
-                    @if (CheckIfLikeThumbIsPressed(clone))
-                    {
-                        <span class="oi oi-arrow-circle-top cursor-pointer" @onclick="@(e => DeleteThumb(clone))"></span>
-                        <span>(</span><span>@GetAppCount(clone)</span><span>)</span>
-                        <span class="oi oi-arrow-bottom cursor-pointer" @onclick="@(e => DeleteThumb(clone))"></span>
-                        <span>(</span><span>@GetDisCount(clone)</span><span>)</span>
-                    }
-                    else if (CheckIfDislikeThumbPressed(clone))
-                    {
-                        <span class="oi oi-arrow-top cursor-pointer" @onclick="@(e => DeleteThumb(clone))"></span>
-                        <span>(</span><span>@GetAppCount(clone)</span><span>)</span>
-                        <span class="oi oi-arrow-circle-bottom cursor-pointer" @onclick="@(e => DeleteThumb(clone))"></span>
-                        <span>(</span><span>@GetDisCount(clone)</span><span>)</span>
-                    }
-                    else
-                    {
-                        <span class="oi oi-arrow-top cursor-pointer" @onclick="@(e => ThumbUp(clone))"></span>
-                        <span>(</span><span>@GetAppCount(clone)</span><span>)</span>
-                        <span class="oi oi-arrow-bottom cursor-pointer" @onclick="@(e => ThumbDown(clone))"></span>
-                        <span>(</span><span>@GetDisCount(clone)</span><span>)</span>
-                    }
-                    @if (IsAuthor(p))
-                    {
-                        <span class="oi oi-trash cursor-pointer" @onclick="@(e => DeletePost(clone))"></span>
-                        <span class="oi oi-pencil cursor-pointer" @onclick="@(e => EditPost(clone))"></span>
-                    }
-                    <a @onclick="@(e => NavigateToProfile(p))" class="cursor-pointer">
-                        <div class="card-footer text-muted">
-                            <img src="@GetTheImage(p)" class="avatar">
-                            <span>@p.AuthorUserName</span>
-                        </div>
-                    </a>
                 </div>
-            </div>
         }
     }
 </div>
@@ -157,6 +160,7 @@
             }
         }
         return tmpPosts;
+        
     }
 
     protected async override void OnParametersSet()
@@ -183,14 +187,20 @@
                 if (sortBy.Equals("newestFirst"))
                 {
                     await OnInitializedAsync();
-                    displayedPosts = GetSubscribedPosts();
+                    if (currentUser != null)
+                    {
+                        displayedPosts = await NewsService.GetPostsForRegisteredUser(currentUser.Id);
+                    }
                     displayedPosts.Reverse();
                     InvokeAsync(StateHasChanged);
                 }
                 else
                 {
                     await OnInitializedAsync();
-                    displayedPosts = GetSubscribedPosts();
+                    if (currentUser != null)
+                    {
+                        displayedPosts = await NewsService.GetPostsForRegisteredUser(currentUser.Id);
+                    }
                     InvokeAsync(StateHasChanged);
                 }
                 break;
@@ -254,7 +264,9 @@
             var result = await NewsService.MakePostReaction(postReaction);
             if (result)
             {
+                Console.WriteLine("hheeeeeeeee");
                 posts = await NewsService.GetAllNews();
+                displayedPosts = (List<Post>) posts;
             }
         }
     }
@@ -271,6 +283,7 @@
             if (result)
             {
                 posts = await NewsService.GetAllNews();
+                displayedPosts = (List<Post>) posts;
             }
         }
 
@@ -279,18 +292,47 @@
     private async Task DeleteThumb(Post post)
     {
         foreach (var pr in post.PostReactions)
-        {
-            if (pr != null)
+            if (pr.UserId == currentUser.Id)
             {
-                if (pr.UserId == currentUser.Id)
+                var result = await NewsService.DeletePostReaction(pr.PostReactionId);
+                if (result)
                 {
-                    var result = await NewsService.DeletePostReaction(pr.PostReactionId);
+                    posts = await NewsService.GetAllNews();
+                    displayedPosts = (List<Post>) posts;
+                }
+                break;
+            }
+    }
+
+    private async Task UpdateThumb(Post post)
+    {
+        foreach (var pr in post.PostReactions)
+        {
+            if (pr.UserId == currentUser.Id)
+            {
+                if (pr.Status == 1)
+                {
+                    var clone = pr;
+                    clone.Status = -1;
+                    var result = await NewsService.UpdatePostReaction(clone);
                     if (result)
                     {
                         posts = await NewsService.GetAllNews();
+                        displayedPosts = (List<Post>) posts;
                     }
-                    break;
                 }
+                else
+                {
+                    var clone = pr;
+                    clone.Status = 1;
+                    var result = await NewsService.UpdatePostReaction(clone);
+                    if (result)
+                    {
+                        posts = await NewsService.GetAllNews();
+                        displayedPosts = (List<Post>) posts;
+                    }
+                }
+                
             }
         }
     }
@@ -326,39 +368,6 @@
         }
         return false;
     }
-
-
-    string GetDisplayedThumbUp(Post post)
-    {
-    /*
-        if (currentUser != null)
-        {
-            if (await NewsService.IsPostThumbUpByUser(post, currentUser))
-            {
-                return "oi oi-arrow-circle-top cursor-pointer";
-            }
-            return "oi oi-arrow-top cursor-pointer";
-        }
-        */
-    //TODO: display correctly if already rated
-        return "oi oi-arrow-top cursor-pointer";
-    }
-
-    string GetDisplayedThumbDown(Post post)
-    {
-    /*
-        if (currentUser != null)
-        {
-            if (await NewsService.IsPostThumbDownByUser(post, currentUser))
-            {
-                return "oi oi-arrow-circle-bottom cursor-pointer";
-            }
-            return "oi oi-arrow-bottom cursor-pointer";
-        }
-        */
-        return "oi oi-arrow-bottom cursor-pointer";
-    }
-
     string GetTheImage(Post post)
     {
         int userId = post.UserId;
